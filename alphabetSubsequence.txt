@@ -1,0 +1,26 @@
+Check whether the given string is a subsequence of the plaintext alphabet.
+
+Example
+
+For s = "effg", the output should be
+alphabetSubsequence(s) = false;
+For s = "cdce", the output should be
+alphabetSubsequence(s) = false;
+For s = "ace", the output should be
+alphabetSubsequence(s) = true;
+For s = "bxz", the output should be
+alphabetSubsequence(s) = true.
+
+================================================================
+
+bool alphabetSubsequence(std::string s)
+{
+    for (int i = 1; i < s.size(); i++) 
+    {
+        if (s[i] - 1 < s[i - 1]) 
+        {
+            return false;
+        }
+    }
+    return true;
+}
