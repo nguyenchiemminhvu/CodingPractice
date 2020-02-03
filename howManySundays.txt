@@ -1,0 +1,27 @@
+We need a function that calculates the number of Sundays after a specific day for a given period.
+
+Example
+
+For n = 9 and startDay = "Saturday", the output should be
+howManySundays(n, startDay) = 2;
+For n = 7 and startDay = "Sunday", the output should be
+howManySundays(n, startDay) = 1.
+
+=======================================================================
+
+int howManySundays(int n, std::string s) 
+{
+    int cnt = 0, d;
+    string dd[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    for (int i = 0; i < 7; i++)
+        if (s == dd[i])
+            d = i;
+    
+    while (n--)
+    {
+        d = (d + 1) % 7;
+        if (d == 0)
+            cnt++;
+    }
+    return cnt;
+}

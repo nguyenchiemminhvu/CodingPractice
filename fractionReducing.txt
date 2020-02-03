@@ -1,0 +1,32 @@
+Implement a function that can reduce a fraction.
+
+Example
+
+For fraction = [2, 6], the output should be
+fractionReducing(fraction) = [1, 3];
+For fraction = [4, 1], the output should be
+fractionReducing(fraction) = [4, 1].
+
+===============================================================
+
+std::vector<int> fractionReducing(std::vector<int> fraction) {
+
+  struct Helper {
+    int gcd(int a, int b) {
+      if (a > b) {
+        return gcd(b, a);
+      }
+      if (a == 0) {
+        return b;
+      }
+      return gcd(b % a, a);
+    }
+  };
+  Helper h;
+
+  int commonDivisor = h.gcd(fraction[0], fraction[1]);
+  fraction[0] /= commonDivisor;
+  fraction[1] /= commonDivisor;
+
+  return fraction;
+}

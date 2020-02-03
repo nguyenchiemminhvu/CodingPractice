@@ -1,0 +1,24 @@
+Compare the two given fractions.
+
+Example
+
+For a = [3, 4] and b = [6, 8], the output should be
+fractionComparison(a, b) = '=';
+For a = [3, 2] and b = [2, 5], the output should be
+fractionComparison(a, b) = '>';
+For a = [3, 5] and b = [2, 3], the output should be
+fractionComparison(a, b) = '<'.
+
+==========================================================
+
+char fractionComparison(std::vector<int> a, std::vector<int> b)
+{
+    int x = a[0] * b[1];
+    int y = b[0] * a[1];
+    
+    if (x < y)
+        return '<';
+    if (x > y)
+        return '>';
+    return '=';
+}

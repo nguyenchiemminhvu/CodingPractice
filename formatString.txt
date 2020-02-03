@@ -1,0 +1,43 @@
+Remove extra white-spaces from the given string.
+
+Example
+
+For input = " abc   a aa  a a ", the output should be
+formatString(input) = "abc a aa a a".
+
+===========================================================
+
+std::string formatString(std::string s)
+{
+    int sbegin = 0;
+    for (char c : s)
+    {
+        if (c != ' ')
+            break;
+        sbegin++;
+    }
+    s = std::string(s.begin() + sbegin, s.end());
+    
+    int send = 0;
+    for (int i = s.length() - 1; i >= 0; i++)
+    {
+        if(s[i] != ' ')
+            break;
+        send++;
+    }
+    s = std::string(s.begin(), s.end() - send);
+    
+    std::string res;
+    for(char c : s)
+    {
+        if (res.length() && res.back() == ' ' && c == ' ')
+            continue;
+        
+        res += c;
+    }
+    
+    if (res.back() == ' ')
+        res.pop_back();
+    
+    return res;
+}

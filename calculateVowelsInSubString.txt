@@ -1,0 +1,54 @@
+Input
+
+First line contains an integer T, denoting the number of test cases.
+
+Each of the next lines contains a string, string contains both lower case and upper case .
+
+Output
+
+Print the vowel sum
+Answer for each test case should be printed in a new line.
+
+Input Constraints
+
+1<=T<=10
+
+1<=|S|<=100000
+
+=======================================================================
+
+bool isVowel(char c)
+{
+    return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' ||
+            c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U');
+}
+
+long long vowel_calc(string s) 
+{ 
+    long long n = s.length(); 
+    vector<long long> prefix; 
+  
+    for (long long i = 0; i < n; i++) { 
+  
+        if (i == 0) 
+            // No. of occurrences of 0th character 
+            // in all the substrings 
+            prefix.push_back(n); 
+  
+        else
+            // No. of occurrences of the ith character 
+            // in all the substrings 
+            prefix.push_back((n - i) + prefix[i - 1] - i); 
+    } 
+  
+    long long sum = 0; 
+    for (long long i = 0; i < n; i++) 
+  
+        // Check if ith character is a vowel 
+        if (isVowel(s[i])) 
+            sum += prefix[i]; 
+  
+    // Return the total sum 
+    // of occurrences of vowels 
+    return sum; 
+}

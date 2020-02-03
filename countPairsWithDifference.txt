@@ -1,0 +1,25 @@
+Given an array a of positive integers, find the number of pairs of integers for which the difference between the two numbers is equal to a given number k. Since the number of pairs could be quite large, take it modulo 109 + 7 for your output.
+
+Example
+
+For k = 3 and a = [1, 6, 8, 2, 4, 9, 12], the output should be
+countPairsWithDifference(k, a) = 3.
+
+There are three pairs of integers whose difference is equal to 3: (1, 4), (6, 9) and (9, 12).
+
+===================================================================================
+
+#define M (1000000007)
+int countPairsWithDifference(int k, std::vector<int> a)
+{
+    int res = 0;
+    
+    sort(a.begin(), a.end());
+    
+    for (int i = 0; i < a.size(); i++)
+    {
+        auto it = std::equal_range(a.begin(), a.end(), a[i] + k);
+        res = ((res % M) + (it.second - it.first) % M) % M;
+    }
+    return res % M;
+}

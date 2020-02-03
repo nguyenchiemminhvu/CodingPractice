@@ -1,0 +1,103 @@
+You have an array of integers a. Let's call aj a surpasser of ai if i < j and ai < aj. Calculate the number of surpassers for each element in a and return the sum of these numbers modulo 109 + 7.
+
+Example
+
+For a = [1, 2, 3, 4, 5], the output should be
+surpasserCount(a) = 10.
+
+For each element in this array, all elements to the right are its surpassers, so the answer is 4 + 3 + 2 + 1 = 10.
+
+============================================================================================
+
+#define null 0
+
+struct Node 
+{
+    int value;
+    Node *right, *left;
+    int childRight;
+    int overlap;
+};
+
+Node pool[50000];
+int indexPool, countResult;
+Node *root;
+
+void init() 
+{
+    indexPool = 0;
+    root = null;
+    countResult = 0;
+}
+
+Node *createNewNode(int data) 
+{
+    Node *newNode = &pool[indexPool++];
+    newNode->value = data;
+    newNode->left = null;
+    newNode->right = null;
+    newNode->childRight = 0;
+    return newNode;
+}
+
+void buildTree(int data) 
+{
+    int countTmp = 0;
+    Node *cur = root;
+    Node *newNode = createNewNode(data);
+    while(true) 
+    {
+        //cout<<"cur->value: "<<cur->value<<endl;
+        if (data > cur->value) 
+        {
+            cur->childRight++;
+            if (!cur->right) 
+            {
+                cur->right = newNode;
+                break;
+            }
+            else 
+            {
+                cur = cur->right;
+            }
+        }
+        else if (data < cur->value) 
+        {
+            countTmp = countTmp + cur->childRight + cur->overlap + 1;
+            if (!cur->left)
+            {
+                cur->left = newNode;
+                break;
+            }
+            else 
+            {
+                cur = cur->left;
+            }
+        }
+        else if (data == cur->value) 
+        {
+            countTmp = countTmp + cur->childRight;
+            cur->overlap++;
+            break;
+        }
+        
+    }
+    //cout<<data<<" : "<<countTmp<<endl;
+    countResult += countTmp;
+}
+
+int surpasserCount(std::vector<int> a) 
+{
+    init();
+    int lastIndex = a.size() - 1;
+    
+    root = createNewNode(a[lastIndex]);
+    //cout<<root->value<<endl;
+    
+    for (int i = lastIndex - 1; i >= 0; i--) 
+    {
+        buildTree(a[i]);
+    }
+    
+    return countResult;
+}

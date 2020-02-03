@@ -1,0 +1,24 @@
+Given array of integers, check if it represents either a strictly increasing or a strictly decreasing sequence.
+
+Example
+
+For sequence = [1, 4, 5, 7, 9], the output should be
+isMonotonous(sequence) = true;
+For sequence = [0], the output should be
+isMonotonous(sequence) = true;
+For sequence = [3, 3], the output should be
+isMonotonous(sequence) = false.
+
+==========================================================================
+
+bool isMonotonous(std::vector<int> a)
+{
+    bool b1 = true, b2 = true;
+    for (int i = 1; i < a.size(); i++)
+    {
+        b1 &= (a[i] > a[i-1]);
+        b2 &= (a[i] < a[i-1]);
+    }
+    
+    return b1 | b2;
+}

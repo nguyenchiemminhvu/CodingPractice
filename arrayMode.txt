@@ -1,0 +1,31 @@
+Given array of integers, find its mode.
+
+Example
+
+For sequence = [1, 3, 3, 3, 1], the output should be
+arrayMode(sequence) = 3;
+For sequence = [1, 3, 2, 1], the output should be
+arrayMode(sequence) = 1.
+
+=============================================================
+
+int arrayMode(std::vector<int> a)
+{
+    std::map<int, int> m;
+    
+    for (int n : a)
+        m[n]++;
+    
+    int maxvalue = 0;
+    int maxfreq = 0;
+    for (auto p : m)
+    {
+        if (p.second > maxfreq)
+        {
+            maxfreq = p.second;
+            maxvalue = p.first;
+        }
+    }
+    
+    return maxvalue;
+}

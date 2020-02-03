@@ -1,0 +1,16 @@
+Given a string inputString and an integer distance, find the number of pairs of equal characters in the inputString delimited by exactly distance characters.
+
+========================================================
+
+int countDistantPairs(std::string s, int d)
+{
+    int res = 0;
+    
+    for (int i = 0; i <= s.length() - d; i++)
+    {
+        if (s[i] == s[i + d + 1])
+            res++;
+    }
+    
+    return res;
+}

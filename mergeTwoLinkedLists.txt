@@ -1,0 +1,63 @@
+Given two singly linked lists sorted in non-decreasing order, your task is to merge them. In other words, return a singly linked list, also sorted in non-decreasing order, that contains the elements from both original lists.
+
+Example
+
+For l1 = [1, 2, 3] and l2 = [4, 5, 6], the output should be
+mergeTwoLinkedLists(l1, l2) = [1, 2, 3, 4, 5, 6];
+For l1 = [1, 1, 2, 4] and l2 = [0, 3, 5], the output should be
+mergeTwoLinkedLists(l1, l2) = [0, 1, 1, 2, 3, 4, 5].
+
+=================================================================================
+
+// Singly-linked lists are already defined with this interface:
+// template<typename T>
+// struct ListNode {
+//   ListNode(const T &v) : value(v), next(nullptr) {}
+//   T value;
+//   ListNode *next;
+// };
+//
+ListNode<int> * mergeTwoLinkedLists(ListNode<int> * l1, ListNode<int> * l2)
+{
+    ListNode<int> *res = new ListNode<int>(0);
+    ListNode<int> *p = res;
+
+    while (l1 && l2)
+    {
+        if (l1->value <= l2->value)
+        {
+            p->next = l1;
+            l1 = l1->next;
+            p = p->next;
+        }
+        else
+        {
+            p->next = l2;
+            l2 = l2->next;
+            p = p->next;
+        }
+    }
+
+    while (l1)
+    {
+        p->next = l1;
+        l1 = l1->next;
+        p = p->next;
+    }
+
+    while (l2)
+    {
+        p->next = l2;
+        l2 = l2->next;
+        p = p->next;
+    }
+
+    if (res)
+    {
+        p = res;
+        res = res->next;
+        delete p;
+    }
+
+    return res;
+}
