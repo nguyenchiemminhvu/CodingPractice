@@ -1,0 +1,24 @@
+Write an algorithm that constructs an array of non unique prime factors of a number n.
+
+Example
+
+For n = 100, the output should be
+primeFactors(n) = [2, 2, 5, 5].
+
+=======================================================
+
+std::vector<int> primeFactors(int n)
+{
+    std::vector<int> res;
+
+    for (int i = 2; n > 1; i++)
+    {
+        while (n % i == 0)
+        {
+            res.push_back(i);
+            n /= i;
+        }
+    }
+
+    return res;
+}
