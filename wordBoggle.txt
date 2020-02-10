@@ -1,0 +1,89 @@
+Boggle is a popular word game in which players attempt to find words in sequences of adjacent letters on a rectangular board.
+
+Given a two-dimensional array board that represents the character cells of the Boggle board and an array of unique strings words, find all the possible words from words that can be formed on the board.
+
+Note that in Boggle when you're finding a word, you can move from a cell to any of its 8 neighbors, but you can't use the same cell twice in one word.
+
+Example
+
+For
+
+board = [
+    ['R', 'L', 'D'],
+    ['U', 'O', 'E'],
+    ['C', 'S', 'O']
+]
+and words = ["CODE", "SOLO", "RULES", "COOL"], the output should be
+wordBoggle(board, words) = ["CODE", "RULES"].
+
+=======================================================
+
+void checkingUtil(
+    int i, int j,
+    std::vector<std::vector<char>> &board,
+    std::vector<std::vector<bool>> &visited,
+    std::string &test,
+    std::vector<std::string> &words,
+    std::unordered_map<std::string, int> &check,
+    std::set<std::string> &res)
+{
+    visited[i][j] = true;
+    test.push_back(board[i][j]);
+    
+    if (check[test])
+    {
+        res.insert(test);
+    }
+    
+    bool isSub = false;
+    for (std::string &word : words)
+    {
+        // if there is a word start with current test pattern, keep checking
+        isSub |= (test.empty() ? true : (word.find(test) == 0));
+    }
+    
+    for (int row = i - 1; row <= i + 1; row++)
+    {
+        for (int col = j - 1; col <= j + 1; col++)
+        {
+            if (row >= 0 && row < board.size() && col >= 0 && col < board[row].size() && !visited[row][col])
+            {
+                if (isSub)
+                    checkingUtil(row, col, board, visited, test, words, check, res);
+            }
+        }
+    }
+    
+    test.pop_back();
+    visited[i][j] = false;
+}
+
+void checking(
+    std::vector<std::vector<char>> &board, 
+    std::vector<std::string> &words,
+    std::unordered_map<std::string, int> &check, 
+    std::set<std::string> &res)
+{
+    std::string test;
+    std::vector<std::vector<bool>> visited(board.size(), std::vector<bool>(board[0].size(), false));
+    for (int i = 0; i < board.size(); i++)
+    {
+        for (int j = 0; j < board[i].size(); j++)
+        {
+            checkingUtil(i, j, board, visited, test, words, check, res);
+        }
+    }
+}
+
+std::vector<std::string> wordBoggle(std::vector<std::vector<char>> board, std::vector<std::string> words)
+{
+    std::set<std::string> res;
+    
+    std::unordered_map<std::string, int> check;
+    for (std::string word : words)
+        check[word]++;
+    
+    checking(board, words, check, res);
+    
+    return std::vector<std::string>(res.begin(), res.end());
+}
