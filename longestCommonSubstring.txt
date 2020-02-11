@@ -1,0 +1,166 @@
+Given two strings, s and t, find the length of their longest common substring.
+
+Example
+
+For s = "abcdxyz" and t = "xyzabcd", the output should be
+longestCommonSubstring(s, t) = 4;
+
+For s = "zxabcdezy" and t = "yzabcdezx", the output should be
+longestCommonSubstring(s, t) = 6.
+
+The longest common substring is "abcdez" and has a length of 6.
+
+=======================================================================
+
+struct Suffix {
+    int index;
+    int rank[2];
+
+    bool operator<(const Suffix& other) {
+        return this->rank[0] == other.rank[0] ? this->rank[1] < other.rank[1] : this->rank[0] < other.rank[0]; 
+    }
+};
+
+std::vector<int> buildSuffixArray(const std::string& txt) 
+{
+    int n = txt.size();
+    Suffix suffixes[n];
+
+    for (int i = 0; i < n; ++i) 
+    {
+        suffixes[i].index = i;
+        suffixes[i].rank[0] = txt[i];
+        suffixes[i].rank[1] = i + 1 < n ? txt[i + 1] : -1;
+    }
+
+    std::sort(suffixes, suffixes + n);
+
+    int ind[n];
+
+    for (int k = 4; k < 2 * n; k = k << 1)
+    {
+        int rank = 0;
+        int prev_rank = suffixes[0].rank[0];
+        suffixes[0].rank[0] = rank;
+        ind[suffixes[0].index] = 0;
+
+        for (int i = 1; i < n; ++i) 
+        {
+            if (suffixes[i].rank[0] == prev_rank && suffixes[i].rank[1] == suffixes[i - 1].rank[1])
+            {
+                prev_rank = suffixes[i].rank[0];
+                suffixes[i].rank[0] = rank;
+            } 
+            else 
+            {
+                prev_rank = suffixes[i].rank[0];
+                suffixes[i].rank[0] = ++rank;
+            }
+            ind[suffixes[i].index] = i;
+        }
+
+        for (int i = 0; i < n; ++i) 
+        {
+            int nextIndex = suffixes[i].index + k / 2;
+            suffixes[i].rank[1] = nextIndex < n ? suffixes[ind[nextIndex]].rank[0] : -1;
+        }
+
+        std::sort(suffixes, suffixes + n);
+    }
+
+    std::vector<int> res(n);
+    for (int i = 0; i < n; ++i) 
+    {
+        res[i] = suffixes[i].index;
+    }
+    return res;
+}
+
+std::vector<int> kasai(const std::string& txt, const std::vector<int> suffixArr) 
+{
+    int n = suffixArr.size();
+    std::vector<int> lcp(n, 0);
+
+    std::vector<int> invSuff(n, 0);
+    for (int i = 0; i < n; ++i) 
+    {
+        invSuff[suffixArr[i]] = i;
+    }
+
+    int k = 0;
+    for (int i = 0; i < n; ++i) 
+    {
+        if (invSuff[i] == n - 1) 
+        {
+            k = 0;
+            continue;
+        }
+
+        int j = suffixArr[invSuff[i] + 1];
+
+        while (i + k < n && j + k < n && txt[i + k] == txt[j + k]) 
+        {
+            ++k;
+        }
+
+        lcp[invSuff[i]] = k;
+
+        if (k > 0) 
+        {
+            --k;
+        }
+    }
+
+    return lcp;
+}
+
+int longestCommonSubstring(std::string s, std::string t) 
+{
+    std::stringstream ss;
+    ss << s << "#" << t;
+    std::string str = ss.str();
+
+    std::vector<int> suffixArr = buildSuffixArray(str);
+    std::vector<int> lcp = kasai(str, suffixArr);
+   
+    int n = s.size();
+    int res = 0;
+    for (int i = 1, end = lcp.size(); i < end; ++i) 
+    {
+        if ((suffixArr[i] < n && suffixArr[i-1] < n) || (suffixArr[i] > n && suffixArr[i-1] > n))
+        {
+            continue;
+        }
+        res = std::max(res, lcp[i-1]);
+    }
+
+    return res;
+
+    // int *prev = new int[s.size() + 1];
+    // int *curr = new int[s.size() + 1];
+
+    // memset(prev, 0, sizeof(int) * (s.size() + 1));
+    // curr[0] = 0;
+
+    // int res = 0;
+    // for (int i = 0, i_end = t.size(), j_end = s.size(); i < i_end; ++i) 
+    //  {
+    //     for (int j = 0; j < j_end; ) 
+    //      {
+    //         if (s[j] == t[i]) 
+    //          {
+    //             curr[j + 1] = prev[j] + 1;
+    //             res = std::max(res, curr[++j]);
+    //         } 
+    //          else 
+    //          {
+    //             curr[++j] = 0;
+    //         }
+    //     }
+    //     int *temp = prev;
+    //     prev = curr;
+    //     curr = temp;
+    // }
+    // return res;
+}
+
