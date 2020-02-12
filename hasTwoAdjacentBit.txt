@@ -1,0 +1,8 @@
+A number is known as special bit number if its binary representation contains atleast two consecutive 1's or set bits. For example  with binary representation  is a special bit number. Similarly   is also a special bit number as it contains atleast two consecutive set bits or ones.
+
+=======================================================================
+
+bool hasTwoAdjacentBit(int n)
+{
+    return (n & (n >> 1));
+}
