@@ -1,0 +1,10 @@
+In competitive programming, it is important to read input as fast as possible so we save valuable time.
+
+You must have seen various problem statements saying: “Warning: Large I/O data, be careful with certain languages (though most should be OK if the algorithm is well designed)”. Key for such problems is to use Faster I/O techniques.
+
+It is often recommended to use scanf/printf instead of cin/cout for a fast input and output. However, you can still use cin/cout and achieve the same speed as scanf/printf by including the following two lines in your main() function:
+
+================================================================================
+
+ios_base::sync_with_stdio(false);
+cin.tie(NULL);
