@@ -1,0 +1,117 @@
+With a number N and a sequence of non-negative integers. Rearrange the sequence to create a biggest number that smaller than N. Return 0 if there is no posible result. (N <= 1,000,000,000)
+
+(Cho một số N và 1 dãy số nguyên dương. Xắp sếp dãy số để tạo ra 1 số lớn nhất có thể nhưng nhỏ hơn N. Trả về 0 nếu không có kết quả. Với N <= 1,000,000,000.)
+
+Input:
+N
+Length V1 V2 V3 ... Vn
+
+For Example:
+
+Input:
+876543
+6
+56 12 7 1 99 23
+
+Output: 799561
+
+(7 - 99 - 56 - 1)
+
+==========================================================================
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <math.h>
+using namespace std;
+
+int main()
+{
+    // your code goes here    
+    long int N;
+    int len;
+    vector<int> numbers;
+    numbers.resize(0);
+    vector<int> result;
+    cin >> N;
+    cin >> len;
+    for (int i=0; i<len; i++)
+    {
+        //Read the array and do sort first
+        int temp;
+        cin >> temp;
+        bool inserted = false;
+        for (int j=0; j<numbers.size(); j++)
+        {
+            int num1 = std::atoi((std::to_string(temp) + std::to_string(numbers[j])).c_str());
+            int num2 = std::atoi((std::to_string(numbers[j]) + std::to_string(temp)).c_str());
+            if (num1 > num2)
+            {
+                numbers.insert(numbers.begin() + j, temp);
+                inserted = true;
+                break;
+            }
+        }
+        if (inserted == false)
+        {
+            numbers.push_back(temp);
+        }
+    }
+    
+    int N_len = std::to_string(N).length();
+    int index = 0, min_len = 9;
+    bool canFreePick = false;
+    while (true)
+    {
+        bool hadPicked = false;
+        int size = numbers.size();
+        for ( int j=0; j<size; j++)
+        {
+            int len_b = to_string(numbers[j]).length();
+            if (len_b < min_len)
+                min_len = len_b;
+            long int a = N % (long int)pow(10, (N_len - index));
+            if (N_len - len_b - index > 0) 
+            {
+                a /= (long int)pow(10, N_len - len_b - index);
+            }
+            if ((!canFreePick && numbers[j]<=a && len_b <= N_len-index)
+                || (canFreePick && len_b <= N_len-index)
+            )
+            {
+                if (numbers[j]<a)
+                {    
+                    canFreePick = true;
+                }
+                result.push_back(numbers[j]);
+                numbers.erase(numbers.begin()+j);
+                index += len_b;
+                hadPicked = true;
+                break;
+            }
+        }
+        if (hadPicked == false)
+        {
+            if (result.size()==0 && N_len>1 && min_len < N_len)
+            {
+                index ++;
+                canFreePick = true;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    
+    if (result.size()==0)
+    {
+        cout << "0";
+    }
+    for (int i=0; i<result.size(); i++)
+    {
+        cout << result[i];    
+    }
+    
+    return 0;
+}
