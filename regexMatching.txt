@@ -1,0 +1,28 @@
+Given a pattern string and a test string, your task is to implement regex substring matching. If pattern is preceded by a ^, the pattern, excluding the ^, will be matched with the starting position of the test string. If pattern is followed by a $, the pattern, excluding the $, will be matched with the ending position of the test string. If no such markers are present, check whether pattern is a substring of test, regardless of its position.
+
+Example
+
+For pattern = "^code" and test = "codesignal", the output should be
+regexMatching(pattern, test) = true;
+For pattern = "nal$" and test = "codesignal", the output should be
+regexMatching(pattern, test) = true;
+For pattern = "hello" and test = "world", the output should be
+regexMatching(pattern, test) = false.
+
+===============================================================================
+
+bool regexMatching(std::string pattern, std::string test)
+{
+    if (pattern.front() == '^')
+    {
+        pattern.erase(pattern.begin());
+        return test.find(pattern) == 0;
+    }
+    else if (pattern.back() == '$')
+    {
+        pattern.pop_back();
+        return test.find(pattern) == test.length() - pattern.length();
+    }
+
+    return test.find(pattern) != std::string::npos;
+}
