@@ -1,0 +1,31 @@
+Given a string of digits, return all of the possible non-empty letter combinations that the number could represent. The mapping of digits to letters is the same as you would find on a telephone's buttons, as in the example below:
+
+The resulting array should be sorted lexicographically.
+
+Example
+
+For buttons = "42", the output should be
+pressingButtons(buttons) = ["ga", "gb", "gc", "ha", "hb", "hc", "ia", "ib", "ic"].
+
+==========================================================================
+
+std::vector<std::string> pressingButtons(std::string buttons) 
+{
+    if (buttons.size() == 0) return std::vector<std::string>();
+
+    std::vector<std::string> mapping{ "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+    std::vector<std::string> res{""};
+    for (char c : buttons) 
+    {
+        std::vector<std::string> next;
+        for (std::string s : res) 
+        {
+            for (char l : mapping[c - '0']) 
+            {
+                next.emplace_back(s + l);
+            }
+        }
+        res = next;
+    }
+    return res;
+}
