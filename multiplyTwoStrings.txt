@@ -1,0 +1,46 @@
+Multiply two numbers that have been given to you as strings, s1 and s2, and return the result as a string. Neither s1 nor s2 contain leading zeros, and your answer shouldn't either.
+
+Example
+
+For s1 = "15" and s2 = "3", the output should be
+multiplyTwoStrings(s1, s2) = "45";
+For s1 = "13" and s2 = "13", the output should be
+multiplyTwoStrings(s1, s2) = "169".
+
+=======================================================================
+
+std::string multiplyTwoStrings(std::string s1, std::string s2)
+{
+    if ((s1.length() == 1 && s1[0] == '0') || (s2.length() == 1 && s2[0] == '0'))
+        return "0";
+
+    if (s1.length() < s2.length())
+        std::swap(s1, s2);
+    s1 = std::string(s1.rbegin(), s1.rend());
+    s2 = std::string(s2.rbegin(), s2.rend());
+
+    std::vector<int> v(s1.length() + s2.length() + 2, 0);
+    for (int i = 0; i < s1.length(); i++)
+    {
+        for (int j = 0; j < s2.length(); j++)
+        {
+            int x = s1[i] - '0';
+            int y = s2[j] - '0';
+
+            v[i + j] += x * y;
+            v[i + j + 1] = v[i + j + 1] + v[i + j] / 10;
+            v[i + j] %= 10;
+        }
+    }
+
+    std::string res;
+    for (int n : v)
+    {
+        res += (char)(n + '0');
+    }
+
+    res = std::string(res.rbegin(), res.rend());
+    while (res.front() == '0')
+        res.erase(res.begin());
+    return res;
+}
