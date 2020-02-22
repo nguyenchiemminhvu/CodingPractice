@@ -1,0 +1,43 @@
+Given a binary tree t, construct a sum tree from it. A sum tree is a tree that has the same structure as t, but the value of each vertex (except leaves) is equal to the sum of the old value plus the sum of the left and right subtrees in the original tree. If there is no such subtree, put 0 instead. The values of leaf nodes are changed to 0.
+
+===============================================================================
+
+bool isLeaf(Tree<int> * t) 
+{
+    return t->left == nullptr && t->right == nullptr;
+}
+
+Tree<int> * constructSumTree(Tree<int> * t) 
+{
+    if (t == nullptr) return t;
+
+    if (isLeaf(t)) 
+    {
+        t->value = 0;
+        return t;
+    }
+
+    if (t->left != nullptr && isLeaf(t->left)) 
+    {
+        t->value += t->left->value;
+        constructSumTree(t->left);
+    } 
+    else if (t->left != nullptr) 
+    {
+        constructSumTree(t->left);
+        t->value += t->left->value;
+    }
+
+    if (t->right != nullptr && isLeaf(t->right)) 
+    {
+        t->value += t->right->value;
+        constructSumTree(t->right);
+    } 
+    else if (t->right != nullptr) 
+    {
+        constructSumTree(t->right);
+        t->value += t->right->value;
+    }
+    
+    return t;
+}
