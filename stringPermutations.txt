@@ -1,0 +1,55 @@
+Given a string s, find all its potential permutations. The output should be sorted in lexicographical order.
+
+Example
+
+For s = "CBA", the output should be
+stringPermutations(s) = ["ABC", "ACB", "BAC", "BCA", "CAB", "CBA"];
+For s = "ABA", the output should be
+stringPermutations(s) = ["AAB", "ABA", "BAA"].
+
+========================================================
+
+/*
+The idea is based on the following facts:
+1) An sequence sorted in descending order does not have next permutation. For example edcba” does not have next permutation.
+2) For a sequence which is not sorted in descending order for example “abedc”, we can follow below steps.
+……….a) Traverse from right and find the first item that is not following the descending order. For example in “abedc”, the character ‘b’ does not follow the descending order.
+……….b) Swap the found character with closest greater (or smallest greater) element on right side of it. In case of “abedc”, we have ‘c’ as the closest greater element. After swapping ‘b’ and ‘c’, string becomes “acedb”.
+……….c) After swapping, sort the string after the position of character found in step a. After sorting the substring “edb” of “acedb”, we get “acbde” which is the required next permutation.
+*/
+
+std::vector<std::string> stringPermutations(std::string s)
+{
+    std::vector<std::string> res;
+
+    std::sort(s.begin(), s.end());
+    std::string next = s;
+    std::string last = std::string(s.rbegin(), s.rend());
+
+    while (next != last)
+    {
+        res.push_back(next);
+
+        int firstNotDesc = next.length() - 2;
+        while (firstNotDesc >= 0 && next[firstNotDesc] > next[firstNotDesc + 1])
+            firstNotDesc--;
+        
+        int closetGreater = firstNotDesc + 1;
+        char minCloset = next[closetGreater];
+        for (int i = closetGreater; i < next.length(); i++)
+        {
+            if (next[i] > next[firstNotDesc] && next[i] < minCloset)
+            {
+                closetGreater = i;
+                minCloset = next[i];
+            }
+        }
+        std::swap(next[firstNotDesc], next[closetGreater]);
+
+        // this partition already sorted in descending order, just need to reverse it
+        std::reverse(next.begin() + firstNotDesc + 1, next.end());
+    }
+    res.push_back(last);
+
+    return res;
+}
