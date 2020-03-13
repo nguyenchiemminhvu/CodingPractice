@@ -1,0 +1,15 @@
+unsigned long Hash(const char *s) 
+{
+	unsigned long id = 0;
+	const char *ptr = s;
+	int index = 0;
+	while(*ptr) 
+	{
+		if(*ptr >= 'A' && *ptr <= 'Z') 
+			id = (id + (++index) * (*ptr + 'a' - 'A')) % 0x8000000b * 0xffffffef;
+		else 
+			id = (id + (++index) * (*ptr)) % 0x8000000b * 0xffffffef;
+		ptr++;
+	}
+	return (id ^ 0x12345678);
+}
