@@ -1,0 +1,52 @@
+In chess, queens can move any number of squares vertically, horizontally, or diagonally. Find all the possible coordinates on an 8 × 8 chessboard that would be safe from the attack of a queen positioned at coordinate q. Return the coordinates sorted in lexicographical order.
+
+Note: The coordinates should be given in the standard chess form: a1, a2 ... h8.
+
+Example
+
+For q = "d4", the output should be
+
+chessQueen(q) =
+["a2", "a3", "a5", "a6", "a8",
+ "b1", "b3", "b5", "b7", "b8",
+ "c1", "c2", "c6", "c7", "c8",
+ "e1", "e2", "e6", "e7", "e8",
+ "f1", "f3", "f5", "f7", "f8",
+ "g2", "g3", "g5", "g6", "g8",
+ "h1", "h2", "h3", "h5", "h6", "h7"]
+
+==================================================================
+
+std::vector<std::string> chessQueen(std::string q)
+{
+    std::vector<std::string> res;
+
+    int qc = q[0] - 'a' + 1;
+    int qr = q[1] - '0';
+    
+    std::map<int, bool> checkRow;
+    std::map<int, bool> checkCol;
+    std::map<int, bool> checkLeftDiag;
+    std::map<int, bool> checkRightDiag;
+
+    checkRow[qr] = true;
+    checkCol[qc] = true;
+    checkLeftDiag[qc + qr] = true;
+    checkRightDiag[qc - qr] = true;
+
+    for (int c = 1; c <= 8; c++)
+    {
+        for (int r = 1; r <= 8; r++)
+        {
+            if (!checkRow[r] && !checkCol[c] && !checkLeftDiag[c + r] && !checkRightDiag[c - r])
+            {
+                std::string safePos;
+                safePos += (char)('a' + c - 1);
+                safePos += (char)('0' + r);
+                res.push_back(safePos);
+            }
+        }
+    }
+
+    return res;
+}
