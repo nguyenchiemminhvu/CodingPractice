@@ -1,0 +1,75 @@
+You are given an undirected weighted graph, which is represented as an adjacency matrix. Find the shortest path between a start node and a finish node in the graph. You are allowed to add at most one edge of a given weight between any two nodes that are not directly connected to each other.
+
+Example
+
+For start = 1, finish = 4, weight = 2, and
+
+   graph = [[0, 2, 0, 4, 0],
+            [2, 0, 1, 0, 0], 
+            [0, 1, 0, 3, 0], 
+            [4, 0, 3, 0, 1], 
+            [0, 0, 0, 1, 0]]
+the output should be
+shortestPathWithEdge(start, finish, weight, graph) = 3.
+
+In the original graph, the shortest distance between nodes 1 and 4 is equal to 4. But you can add an edge of weight 2 between nodes 1 and 5, making the resulting distance 3.
+
+=============================================================
+
+std::vector<long long> bfs(int start, const std::vector<std::vector<int>> &graph ) 
+{
+    int n = graph.size();
+    const long long inf = 1l<<50;
+    // zero based
+    std::vector<long long> result(n, inf);
+
+    result[start] = 0;
+    queue<int> q;
+    q.push(start);
+
+
+    while(q.size()) 
+    {
+        int cur = q.front();
+        q.pop();
+
+        for(int nxt = 0; nxt < n; nxt++)
+        {
+            int cost = graph[cur][nxt];
+            if(cost == 0 || nxt == cur) continue;
+            if(result[cur] + cost < result[nxt]) 
+            {
+                result[nxt] = result[cur] + cost;
+                q.push(nxt);
+            }
+        }
+    }
+    return result;
+}
+
+
+int shortestPathWithEdge(int start, int finish, int weight, std::vector<std::vector<int>> graph) 
+{
+    start--;
+    finish--;
+    std::vector<long long> start_dest = bfs(start, graph);
+    std::vector<long long> finish_dest = bfs(finish , graph);
+
+    long long res = start_dest[finish];
+
+    int n = graph.size();
+
+    for(int u = 0; u < n; u++)
+    {
+        for(int v = u + 1; v < n ; v++)
+        {
+            if(graph[u][v] == 0)
+            {
+                res = min(res, weight + start_dest[u] + finish_dest[v]);
+                res = min(res, weight + start_dest[v] + finish_dest[u]);
+            }
+        }
+    }
+    
+    return res;
+}
