@@ -11,34 +11,27 @@ The optimal way to get the most money in one night is to rob the first and the t
 
 =====================================================
 
-int maxValue(std::vector<int> nums, int n)
+int robbing(std::vector<int> values)
 {
-    if (n == 0) 
-        return 0; 
-  
-    int value1 = nums[0]; 
-    if (n == 1) 
-        return value1; 
-  
-    int value2 = max(nums[0], nums[1]); 
-    if (n == 2) 
-        return value2; 
-  
-    // contains maximum stolen value at the end 
-    int max_val; 
-  
-    // Fill remaining positions 
-    for (int i = 2; i < n; i++) 
-    { 
-        max_val = max(nums[i] + value1, value2); 
-        value1 = value2; 
-        value2 = max_val; 
-    } 
-  
-    return max_val; 
+    if (values.size() == 0) return 0;
+    if (values.size() == 1) return values[0];
+    if (values.size() == 2) return std::max(values[0], values[1]);
+
+    int curVal = values[0];
+    int nextVal = std::max(values[0], values[1]);
+    int curMax = curVal;
+
+    for (int i = 2; i < values.size(); i++)
+    {
+        curMax = std::max(curVal + values[i], nextVal);
+        curVal = nextVal;
+        nextVal = curMax;
+    }
+
+    return curMax;
 }
 
-int houseRobber(std::vector<int> nums) 
+int houseRobber(std::vector<int> nums)
 {
-    return maxValue(nums, nums.size());
+    return robbing(nums);
 }
