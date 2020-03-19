@@ -1,0 +1,93 @@
+Given a boolean expression with the following symbols:
+
+T - true
+F - false
+and the following operators between the symbols:
+
+& - boolean AND
+| - boolean OR
+^ - boolean XOR
+Count the number of ways that you can parenthesize the expression so that the expression evaluates to true, and return this answer modulo 1003.
+
+Example
+
+For expression = "T&T|F^F", the output should be
+booleanParenthesization(expression) = 5.
+
+Here are all of the possible combinations:
+
+((T&T)|(F^F))
+(T&((T|F)^F))
+(((T&T)|F)^F)
+((T&(T|F))^F)
+(T&(T|(F^F)))
+For expression = "F|T^F", the output should be
+booleanParenthesization(expression) = 2.
+
+Here are all of the possible combinations:
+
+(F|(T^F))
+((F|T)^F)
+
+==========================================================================
+
+int booleanParenthesization(std::string expression) 
+{
+    string s = expression;
+    int n = s.size();
+    int dp[n][n][2];
+    for(int len = 1; len <= n; ++len) 
+    {
+        for(int i = 0; i + len - 1 < n; ++i) 
+        {
+            int j = i + len - 1;
+            dp[i][j][0] = 0;
+            dp[i][j][1] = 0;
+            if((s[i] != 'T' && s[i] != 'F') || (s[j] != 'T' && s[j] != 'F')) 
+            {
+                continue;
+            }
+            if(len == 1) 
+            {
+                if(s[i] == 'T') 
+                {
+                    dp[i][j][1] = 1;
+                }
+                else 
+                {
+                    dp[i][j][0] = 1;
+                }
+                continue;
+            }
+            for(int k = i + 1; k < j; ++k) 
+            {
+                if(s[k] == '&') 
+                {
+                    dp[i][j][0] += (dp[i][k - 1][0]) * (dp[k + 1][j][0] + dp[k + 1][j][1]); 
+                    dp[i][j][0] += (dp[k + 1][j][0]) * (dp[i][k - 1][1]);
+                    dp[i][j][0] %= 1003;
+                    dp[i][j][1] += dp[i][k - 1][1] * dp[k + 1][j][1];
+                    dp[i][j][1] %= 1003;
+                }
+                else if(s[k] == '|') 
+                {
+                    dp[i][j][1] += (dp[i][k - 1][1]) * (dp[k + 1][j][0] + dp[k + 1][j][1]); 
+                    dp[i][j][1] += (dp[k + 1][j][1]) * (dp[i][k - 1][0]);
+                    dp[i][j][1] %= 1003;
+                    dp[i][j][0] += dp[i][k - 1][0] * dp[k + 1][j][0];
+                    dp[i][j][0] %= 1003;
+                }
+                else if(s[k] == '^') 
+                {
+                    dp[i][j][1] += dp[i][k - 1][1] * dp[k + 1][j][0];
+                    dp[i][j][1] += dp[i][k - 1][0] * dp[k + 1][j][1];
+                    dp[i][j][1] %= 1003;
+                    dp[i][j][0] += dp[i][k - 1][0] * dp[k + 1][j][0];
+                    dp[i][j][0] += dp[i][k - 1][1] * dp[k + 1][j][1];
+                    dp[i][j][0] %= 1003;
+                }
+            }
+        }
+    }
+    return dp[0][n - 1][1];
+}
