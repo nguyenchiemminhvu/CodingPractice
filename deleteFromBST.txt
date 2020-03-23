@@ -38,50 +38,50 @@ You're given a binary search tree t and an array of numbers queries. Your task i
 
 ==========================================================================================
 
-Tree<int>* GetMaxLeft(Tree<int>* t)
+Tree<int> * getMaxLeft(Tree<int> *t)
 {
-    while (t->right != nullptr)
+    while (t->right)
         t = t->right;
     return t;
 }
 
-Tree<int>* DeleteMax(Tree<int>* x)
+Tree<int>* DeleteMax(Tree<int>* t)
 {
-    if (x->right == nullptr)
+    if (t->right == nullptr)
     {
-        return x->left;
+        return t->left;
     }
-    x->right = DeleteMax(x->right);
-    return x;
+    t->right = DeleteMax(t->right);
+    return t;
 }
 
 Tree<int>* DeleteFromBST(Tree<int>* t, const int query)
 {
-    if (t == nullptr)
+    if (t == NULL)
         return t;
     
-    if (t->value == query)
+    if (query < t->value)
+        t->left = DeleteFromBST(t->left, query);
+    else if (query > t->value)
+        t->right = DeleteFromBST(t->right, query);
+    else
     {
-        if (t->left == nullptr)
+        if (t->left == NULL)
         {
-            Tree<int>* node_to_return = t->right;
+            Tree<int> * temp = t->right;
             delete t;
-            return node_to_return;
+            return temp;
         }
         else
         {
-            Tree<int>* left_max = GetMaxLeft(t->left);
-            left_max->left = DeleteMax(t->left);
-            left_max->right = t->right;
+            Tree<int> *maxLeft = getMaxLeft(t->left);
+            maxLeft->left = DeleteMax(t->left);
+            maxLeft->right = t->right;
             delete t;
-            return left_max;
+            return maxLeft;
         }
     }
-    else
-    {
-        t->left = DeleteFromBST(t->left, query);
-        t->right = DeleteFromBST(t->right, query);
-    }
+
     return t;
 }
 
