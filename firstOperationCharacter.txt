@@ -1,0 +1,65 @@
+Given a string which represents a valid arithmetic expression, find the index of the character in the given expression corresponding to the arithmetic operation which needs to be computed first.
+
+Note that several operations of the same type with equal priority are computed from left to right.
+
+See the explanation of the third example for more details about the operations priority in this problem.
+
+Example
+
+For expr = "(2 + 2) * 2", the output should be
+firstOperationCharacter(expr) = 3.
+
+There are two operations in the expression: + and *. The result of + should be computed first, since it is enclosed in parentheses. Thus, the output is the index of the '+' sign, which is 3.
+
+For expr = "2 + 2 * 2", the output should be
+firstOperationCharacter(expr) = 6.
+
+There are two operations in the given expression: + and *. Since there are no parentheses, * should be computed first as it has higher priority. The answer is the position of '*', which is 6.
+
+For expr = "((2 + 2) * 2) * 3 + (2 + (2 * 2))", the output should be firstOperationCharacter(expr) = 28.
+
+There are two operations which are enclosed in two parentheses: + at the position 4, and * at the position 28. Since * has higher priority than +, the answer is 28.
+
+======================================================================
+
+int firstOperationCharacter(std::string s)
+{
+    int priority = 1;
+
+    std::vector<std::pair<int, int>> v; // pair<index, priority>
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (s[i] == '(')
+        {
+            priority += 2;
+        }
+        else if (s[i] == ')')
+        {
+            priority -= 2;
+        }
+        else
+        {
+            if (s[i] == '+' || s[i] == '-')
+            {
+                v.push_back(std::pair<int, int>(i, priority + 1));
+            }
+            else if (s[i] == '*' || s[i] == '/')
+            {
+                v.push_back(std::pair<int, int>(i, priority + 2));
+            }
+        }
+    }
+
+    int res = 0;
+    int maxPriority = 0;
+    for (std::pair<int, int> p : v)
+    {
+        if (maxPriority < p.second)
+        {
+            res = p.first;
+            maxPriority = p.second;
+        }
+    }
+
+    return res;
+}
