@@ -1,0 +1,97 @@
+You have a binary tree t. Your task is to find the largest value in each row of this tree. In a tree, a row is a set of nodes that have equal depth. For example, a row with depth 0 is a tree root, a row with depth 1 is composed of the root's children, etc.
+
+Return an array in which the first element is the largest value in the row with depth 0, the second element is the largest value in the row with depth 1, the third element is the largest element in the row with depth 2, etc.
+
+Example
+
+For
+
+t = {
+    "value": -1,
+    "left": {
+        "value": 5,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 7,
+        "left": null,
+        "right": {
+            "value": 1,
+            "left": null,
+            "right": null
+        }
+    }
+}
+the output should be largestValuesInTreeRows(t) = [-1, 7, 1].
+
+The tree in the example looks like this:
+
+    -1
+   / \
+  5   7
+       \
+        1
+In the row with depth 0, there is only one vertex - the root with value -1;
+In the row with depth 1, there are two vertices with values 5 and 7, so the largest value here is 7;
+In the row with depth 2, there is only one vertex with value 1.
+
+==========================================================================
+
+//
+// Binary trees are already defined with this interface:
+// template<typename T>
+// struct Tree {
+//   Tree(const T &v) : value(v), left(nullptr), right(nullptr) {}
+//   T value;
+//   Tree *left;
+//   Tree *right;
+// };
+std::vector<int> BFS(Tree<int> * t)
+{
+    std::vector<int> res;
+    if (!t)
+        return res;
+
+    std::queue<Tree<int> *> q;
+    q.push(t);
+
+    int curLevel = 1;
+    int nextLevel = 0;
+    while (!q.empty())
+    {
+        int maxRow = INT_MIN;
+        while (curLevel)
+        {
+            Tree<int> * p = q.front();
+            if (p->value > maxRow)
+                maxRow = p->value;
+
+            if (p->left)
+            {
+                q.push(p->left);
+                nextLevel++;
+            }
+            if (p->right)
+            {
+                q.push(p->right);
+                nextLevel++;
+            }
+
+            q.pop();
+            curLevel--;
+        }
+
+        curLevel = nextLevel;
+        nextLevel = 0;
+
+        res.push_back(maxRow);
+    }
+
+    return res;
+}
+
+std::vector<int> largestValuesInTreeRows(Tree<int> * t)
+{
+    return BFS(t);
+}
