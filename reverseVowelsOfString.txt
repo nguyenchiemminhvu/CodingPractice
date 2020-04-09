@@ -1,0 +1,42 @@
+Write a function that takes a string as input and returns the string with only the vowels reversed.
+Note: The letters "a", "e", "i", "o", and "u" are vowels. The letter "y" is not a vowel.
+
+Example
+
+For s = "hello, world", the output should be
+reverseVowelsOfString(s) = "hollo, werld";
+For s = "codesignal", the output should be
+reverseVowelsOfString(s) = "cadisegnol";
+For s = "eIaOyU", the output should be
+reverseVowelsOfString(s) = "UOaIye".
+
+=============================================================
+
+std::string reverseVowelsOfString(std::string s)
+{
+    std::map<char, int> m;
+    m['a'] = m['e'] = m['i'] = m['o'] = m['u'] = 1;
+    m['A'] = m['E'] = m['I'] = m['O'] = m['U'] = 1;
+
+    std::string temp;
+    for (char c : s)
+    {
+        if (m[c])
+        {
+            temp += c;
+        }
+    }
+
+    std::reverse(temp.begin(), temp.end());
+    
+    int i = 0;
+    for (char &c : s)
+    {
+        if (m[c])
+        {
+            c = temp[i++];
+        }
+    }
+
+    return s;
+}
