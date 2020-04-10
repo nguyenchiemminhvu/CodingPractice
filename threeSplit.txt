@@ -18,6 +18,8 @@ Here are all possible ways:
 
 int threeSplit(std::vector<int> nums) 
 {
+    int res = 0;
+
     long long sum = 0;
     for (auto num: nums)
     {
@@ -25,7 +27,6 @@ int threeSplit(std::vector<int> nums)
     }
     sum /= 3;
 
-    int res = 0;
     long long s1 = 0;
     for (int i = 0; i < nums.size(); i++)
     {
