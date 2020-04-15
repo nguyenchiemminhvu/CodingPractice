@@ -37,33 +37,58 @@ f o r m a t i o n       c     q               c         s
 
 ======================================================================
 
-int check (std::string a, std::string b, std::string c, std::string d) 
+int crosswordFormation(std::string const& top,
+                       std::string const& bottom,
+                       std::string const& left,
+                       std::string const& right) 
 {
-    int t = 0;
-    for (int a1 = 0; a1 < a.length(); a1++)
+    int total = 0;
+    for (std::size_t tl_top = 0; tl_top < top.size(); ++tl_top) 
     {
-        for (int a2 = a1+2; a2 < a.length(); a2++)
+        char tl = top[tl_top];
+        for (std::size_t tl_left = 0; tl_left < left.size(); ++tl_left) 
         {
-            for (int b1 = 0; b1 < b.length(); b1++)
+            if (left[tl_left] != tl) 
             {
-                for (int b2 = b1+2; b2 < b.length(); b2++)
+                continue;
+            }
+            for (std::size_t tr_top = tl_top + 2; tr_top < top.size(); ++tr_top) 
+            {
+                char tr = top[tr_top];
+                for (std::size_t tr_right = 0; tr_right < right.size(); ++tr_right) 
                 {
-                    for (int c1 = 0; c1 < c.length(); c1++)
+                    if (right[tr_right] != tr) 
                     {
-                        for (int d1 = 0; d1 < d.length(); d1++) 
+                        continue;
+                    }
+                    for (std::size_t bl_left = tl_left + 2; bl_left < left.size(); ++bl_left) 
+                    {
+                        char bl = left[bl_left];
+                        std::size_t br_right = tr_right + (bl_left - tl_left);
+                        if (br_right >= right.size()) 
                         {
-                            int c2 = c1 + (a2-a1);
-                            int d2 = d1 + (b2-b1);
-                            if (c2 < c.length() && d2 < d.length()) 
+                            continue;
+                        }
+
+                        char br = right[br_right];
+                        for (std::size_t bl_bottom = 0; bl_bottom < bottom.size(); ++bl_bottom) 
+                        {
+                            if (bottom[bl_bottom] != bl) 
                             {
-                                if (a.at(a1)==b.at(b1)
-                                    && a.at(a2)==d.at(d1)
-                                    && c.at(c1)==b.at(b2)
-                                    && c.at(c2)==d.at(d2))
-                                {
-                                    t++;
-                                }
+                                continue;
                             }
+                            
+                            std::size_t br_bottom = bl_bottom + (tr_top - tl_top);
+                            if (br_bottom >= bottom.size()) 
+                            {
+                                continue;
+                            }
+                            if (bottom[br_bottom] != br) 
+                            {
+                                continue;
+                            }
+                            
+                            ++total;
                         }
                     }
                 }
@@ -71,29 +96,39 @@ int check (std::string a, std::string b, std::string c, std::string d)
         }
     }
 
-    return t;
+    return total;
 }
 
-int crosswordFormation(std::vector<std::string> words) 
+int crosswordFormation(std::vector<std::string> const& words) 
 {
-    int t = 0;
-    for (int i = 0; i < words.size(); i++)
+    if (words.size() != 4) 
     {
-        for (int j = 0; j < words.size(); j++)
+        return -1;
+    }
+
+    int total = 0;
+    for (std::size_t top = 0; top < 4; ++top) 
+    {
+        for (std::size_t bottom = 0; bottom < 4; ++bottom) 
         {
-            for (int k = 0; k < words.size(); k++)
+            if (bottom == top) 
             {
-                for (int l = 0; l < words.size(); l++)
+                continue;
+            }
+            for (std::size_t left = 0; left < 4; ++left) 
+            {
+                if (left == top || left == bottom) 
                 {
-                    if (i != j && i != k && i != l && 
-                        j != k && j != l && k != l)
-                    {
-                        t+=check(words[i],words[j],words[k],words[l]);
-                    }
+                    continue;
                 }
+                std::size_t right = 0 + 1 + 2 + 3 - top - bottom - left;
+                total += crosswordFormation(words[top],
+                                            words[bottom],
+                                            words[left],
+                                            words[right]);
             }
         }
     }
-    
-    return t;
+
+    return total;
 }
