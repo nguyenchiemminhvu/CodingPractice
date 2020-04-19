@@ -1,0 +1,51 @@
+Yesterday you found some shoes in the back of your closet. Each shoe is described by two values:
+
+type indicates if it's a left or a right shoe;
+size is the size of the shoe.
+Your task is to check whether it is possible to pair the shoes you found in such a way that each pair consists of a right and a left shoe of an equal size.
+
+Example
+
+For
+
+shoes = [[0, 21], 
+         [1, 23], 
+         [1, 21], 
+         [0, 23]]
+the output should be
+pairOfShoes(shoes) = true;
+
+For
+
+shoes = [[0, 21], 
+         [1, 23], 
+         [1, 21], 
+         [1, 23]]
+the output should be
+pairOfShoes(shoes) = false.
+
+=============================================================
+
+bool pairOfShoes(std::vector<std::vector<int>> shoes)
+{
+    std::vector<std::vector<int>> pairs(2, std::vector<int>());
+    for (std::vector<int> v : shoes)
+    {
+        pairs[v[0]].push_back(v[1]);
+    }
+
+    sort(pairs[0].begin(), pairs[0].end());
+    sort(pairs[1].begin(), pairs[1].end());
+
+    int i;
+    for (i = 0; i < pairs[0].size() && i < pairs[1].size(); i++)
+    {
+        if (pairs[0][i] != pairs[1][i])
+            return false;
+    }
+
+    if (i < pairs[0].size() || i < pairs[1].size())
+        return false;
+
+    return true;
+}
