@@ -1,0 +1,30 @@
+All DNA is composed of a series of nucleotides abbreviated as A, C, G, and T. In research, it can be useful to identify repeated sequences within DNA.
+
+Write a function to find all the 10-letter sequences (substrings) that occur more than once in a DNA molecule s, and return them in lexicographical order. These sequences can overlap.
+
+Example
+
+For s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT", the output should be
+repeatedDNASequences(s) = ["AAAAACCCCC", "CCCCCAAAAA"].
+
+================================================
+
+std::vector<std::string> repeatedDNASequences(std::string s) 
+{
+    std::set<std::string> res;
+
+    if (s.length() < 10)
+        return std::vector<std::string>();
+    
+    for (int i = 0; i <= s.length() - 10; i++)
+    {
+        std::string toCheck = std::string(s.begin() + i, s.begin() + i + 10);
+        for (int j = i + 1; j <= s.length() - 10; j++)
+        {
+            if (toCheck == std::string(s.begin() + j, s.begin() + j + 10))
+                res.insert(toCheck);
+        }
+    }
+
+    return std::vector<std::string>(res.begin(), res.end());
+}
