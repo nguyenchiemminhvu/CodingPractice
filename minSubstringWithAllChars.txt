@@ -1,0 +1,50 @@
+You have two strings, s and t. The string t contains only unique elements. Find and return the minimum consecutive substring of s that contains all of the elements from t.
+
+It's guaranteed that the answer exists. If there are several answers, return the one which starts from the smallest index.
+
+Example
+
+For s = "adobecodebanc" and t = "abc", the output should be
+minSubstringWithAllChars(s, t) = "banc".
+
+=======================================================
+
+std::string minSubstringWithAllChars(std::string s, std::string t) 
+{
+    if (t == "") 
+        return "";
+
+    std::set<char> char_set;
+    std::map<char, int> idxs;
+    for (char c : t) 
+    {
+        char_set.insert(c);
+        idxs[c] = -1;
+    }
+    
+    int start = 0, end = s.size()-1, count = 0;
+    for (int i = 0; i < s.size(); ++i) 
+    {
+        if (char_set.count(s[i]) == 1 && idxs[s[i]] == -1) 
+        {
+            count++;
+        }
+        idxs[s[i]] = i;
+        if (count == t.size()) 
+        {
+            int min = i, max = 0;
+            for (char c : t) 
+            {
+                min = std::min(min, idxs[c]);
+                max = std::max(max, idxs[c]);
+            }
+            if (min <= max && min != -1 && max - min < end - start) 
+            {
+                start = min;
+                end = max;
+            }
+        }
+    }
+    
+    return s.substr(start, end - start + 1);
+}
