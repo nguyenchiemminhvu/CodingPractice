@@ -1,0 +1,46 @@
+Note: Try to solve this task in O(list size) time using O(1) additional space, since this is what you'll be asked during an interview.
+
+Given a singly linked list of integers l and a non-negative integer n, move the last n list nodes to the beginning of the linked list.
+
+Example
+
+For l = [1, 2, 3, 4, 5] and n = 3, the output should be
+rearrangeLastN(l, n) = [3, 4, 5, 1, 2];
+For l = [1, 2, 3, 4, 5, 6, 7] and n = 1, the output should be
+rearrangeLastN(l, n) = [7, 1, 2, 3, 4, 5, 6].
+
+=============================================================
+
+// Singly-linked lists are already defined with this interface:
+// template<typename T>
+// struct ListNode {
+//   ListNode(const T &v) : value(v), next(nullptr) {}
+//   T value;
+//   ListNode *next;
+// };
+//
+ListNode<int> * rearrangeLastN(ListNode<int> * l, int n)
+{
+    if (!l || !l->next || n == 0)
+        return l;
+
+    int count = 1;
+    ListNode<int> * p = l;
+    while (p->next)
+    {
+        p = p->next;
+        count++;
+    }
+    
+    p->next = l;
+    n %= count;
+    for (int i = 0; i < count - n; i++)
+    {
+        p = p->next;
+    }
+
+    l = p->next;
+    p->next = NULL;
+
+    return l;
+}
