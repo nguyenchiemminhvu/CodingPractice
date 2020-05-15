@@ -30,7 +30,7 @@ int countDecoding(const char *digits, int n)
     count[1] = 1; 
     //for base condition "01123" should return 0  
     if(digits[0]=='0')   
-         return 0; 
+        return 0; 
     for (int i = 2; i <= n; i++) 
     { 
         count[i] = 0; 
