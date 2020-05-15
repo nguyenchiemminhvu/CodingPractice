@@ -1,0 +1,56 @@
+A top secret message containing uppercase letters from 'A' to 'Z' has been encoded as numbers using the following mapping:
+
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+You are an FBI agent and you need to determine the total number of ways that the message can be decoded.
+
+Since the answer could be very large, take it modulo 109 + 7.
+
+Example
+
+For message = "123", the output should be
+mapDecoding(message) = 3.
+
+"123" can be decoded as "ABC" (1 2 3), "LC" (12 3) or "AW" (1 23), so the total number of ways is 3.
+
+====================================================================================================
+
+#define MOD 1000000007
+
+// Given a digit sequence of length n,  
+// returns count of possible decodings by 
+// replacing 1 with A, 2 woth B, ... 26 with Z 
+int countDecoding(const char *digits, int n) 
+{ 
+    // A table to store results of subproblems 
+    int count[n+1];  
+    count[0] = 1; 
+    count[1] = 1; 
+    //for base condition "01123" should return 0  
+    if(digits[0]=='0')   
+         return 0; 
+    for (int i = 2; i <= n; i++) 
+    { 
+        count[i] = 0; 
+  
+        // If the last digit is not 0,  
+        // then last digit must add to the number of words 
+        if (digits[i-1] > '0') 
+            count[i] = count[i-1] % MOD; 
+  
+        // If second last digit is smaller  
+        // than 2 and last digit is smaller than 7, 
+        // then last two digits form a valid character  
+        if (digits[i-2] == '1' ||  
+            (digits[i-2] == '2' && digits[i-1] < '7') ) 
+        count[i] = (count[i] % MOD + count[i-2] % MOD) % MOD; 
+    } 
+    return count[n]; 
+} 
+
+int mapDecoding(std::string message)
+{
+    return countDecoding(message.c_str(), message.length());
+}
