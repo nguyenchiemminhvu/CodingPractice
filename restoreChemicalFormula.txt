@@ -1,0 +1,79 @@
+For your chemistry homework, you wrote out a long chemical formula without any spaces between the elements. But then your little brother found your paper and messed up the formula by changing all the lowercase letters to uppercase. It's impossible to figure out where one element ends and the next begins! Now you have to restore the formula. If there are several possible answers, return the one with the smallest number of elements. If there are still several answers, return the lexicographically smallest one.
+
+Example
+
+For elements = ["Si", "Ar", "K", "S", "I", "C", "Sc"] and formula = "SCCIARK", the output should be
+restoreChemicalFormula(elements, formula) = "ScCIArK".
+
+There are 2 possible chemical formulas that can be obtained from the given one:
+
+SCCIArK;
+ScCIArK.
+The second one is lexicographically smaller than the first one, so the answer is ScCIArK.
+
+=================================================================================
+
+void getPrefixes(vector<string> &prefixes, const vector<string> &elements, string formula)
+{
+    for(auto elem : elements) 
+    {
+        int i;
+        for(i=0; i<elem.size(); i++) 
+        {
+            if(elem[i] != formula[i] && (elem[i]+'A'-'a') != formula[i]) 
+            {
+                break;
+            }
+        }
+        
+        if(i==elem.size()) 
+        {
+            prefixes.push_back(elem);
+        }
+    }
+}
+
+vector<pair<int, string>> possibleSolutions;
+
+void backTrack(const vector<string> &elements, string formula, vector<string> so_far) 
+{
+    vector<string> prefixes;
+
+    if(formula == "") 
+    { // found solution
+        string solution = "";
+        for(auto x : so_far) 
+        {
+            solution += x;
+        }
+        possibleSolutions.push_back(make_pair(so_far.size(), solution));
+        return;
+    }
+
+    getPrefixes(prefixes, elements, formula);
+    for(auto prefix : prefixes) 
+    {
+        so_far.push_back(prefix);
+        backTrack(elements, formula.substr(prefix.size()), so_far);
+        so_far.pop_back();
+    }
+}
+
+std::string restoreChemicalFormula(std::vector<std::string> elements, std::string formula) 
+{
+    vector<string> so_far;
+    backTrack(elements, formula, so_far);
+
+    std::sort(
+        possibleSolutions.begin(), 
+        possibleSolutions.end(),
+        [](const pair<int, string> &ps1, const pair<int, string> ps2) 
+        {
+            if(ps1.first != ps2.first) 
+                return ps1.first < ps2.first;
+            return ps1.second < ps2.second;
+        }
+    );
+
+    return possibleSolutions[0].second;
+}
