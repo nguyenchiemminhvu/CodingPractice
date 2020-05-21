@@ -1,0 +1,104 @@
+You're given 2 huge integers represented by linked lists. Each linked list element is a number from 0 to 9999 that represents a number with exactly 4 digits. The represented number might have leading zeros. Your task is to add up these huge integers and return the result in the same format.
+
+Example
+
+For a = [9876, 5432, 1999] and b = [1, 8001], the output should be
+addTwoHugeNumbers(a, b) = [9876, 5434, 0].
+
+Explanation: 987654321999 + 18001 = 987654340000.
+
+For a = [123, 4, 5] and b = [100, 100, 100], the output should be
+addTwoHugeNumbers(a, b) = [223, 104, 105].
+
+Explanation: 12300040005 + 10001000100 = 22301040105.
+
+====================================================================================================
+
+// Singly-linked lists are already defined with this interface:
+// template<typename T>
+// struct ListNode {
+//   ListNode(const T &v) : value(v), next(nullptr) {}
+//   T value;
+//   ListNode *next;
+// };
+//
+std::string sumTwoBigInteger(std::string a, std::string b)
+{
+    if(a.length() > b.length())
+        swap(a, b);
+
+    while (a.length() < b.length())
+        a = "0" + a;
+        
+    int carry = 0;
+    int i = a.length() - 1, j = b.length() - 1;
+    while (i >= 0 && j >= 0)
+    {
+        int temp = a[i] - '0' + b[j] - '0' + carry;
+        carry = 0;
+        if (temp > 9)
+        {
+            carry = temp / 10;
+            temp = temp % 10;
+        }
+        
+        a[i] = (char)(temp + '0');
+        
+        i--;
+        j--;
+    }
+    
+    if (carry)
+    {
+        a = std::to_string(carry) + a;
+    }
+        
+    return a;
+}
+
+std::string ListToString(ListNode<int> * l)
+{
+    std::string res;
+
+    while (l)
+    {
+        int n = l->value;
+        std::string temp = std::to_string(n);
+        while (temp.length() < 4)
+            temp.insert(temp.begin(), '0');
+        res += temp;
+
+        l = l->next;
+    }
+
+    return res;
+}
+
+ListNode<int> * StringToList(std::string s)
+{
+    ListNode<int> * res = NULL;
+
+    for (int i = s.length() - 1; i >= 0; i -= 4)
+    {
+        std::string temp(s.begin() + i - 3, s.begin() + i + 1);
+        int n = std::stoi(temp);
+
+        ListNode<int> * node = new ListNode<int>(n);
+        node->next = res;
+        res = node;
+    }
+
+    return res;
+}
+
+ListNode<int> * addTwoHugeNumbers(ListNode<int> * a, ListNode<int> * b)
+{
+    std::string sa = ListToString(a);
+    std::string sb = ListToString(b);
+
+    std::string sum = sumTwoBigInteger(sa, sb);
+    while (sum.length() % 4)
+        sum.insert(sum.begin(), '0');
+
+    return StringToList(sum);
+}
