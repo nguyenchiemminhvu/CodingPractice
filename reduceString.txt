@@ -1,0 +1,27 @@
+You are given a string. Remove its first and last characters until the string is empty or the first and the last characters are not equal. Output the resulting string.
+
+Example
+
+For inputString = "abacaba", the output should be
+reduceString(inputString) = "".
+
+Explanation: "bacab" -> "aca" -> "c" -> "".
+
+For inputString = "12133221", the output should be
+reduceString(inputString) = "1332".
+
+===========================================================================
+
+std::string reduceString(std::string s)
+{
+    while (!s.empty() && s.front() == s.back())
+    {
+        if (s.length() == 1)
+            return "";
+            
+        s.pop_back();
+        s.erase(s.begin());
+    }
+
+    return s;
+}
