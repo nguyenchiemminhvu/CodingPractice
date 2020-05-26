@@ -1,0 +1,46 @@
+Given a sorted integer array in which the range of elements is in the inclusive range [l, r], return its missing inner ranges.
+
+Example
+
+For nums = [-5, 10, 12, 13, 50], l = -5, and r = 88, the output should be
+innerRanges(nums, l, r) = ["-4->9", "11", "14->49", "51->88"].
+
+==================================================================================================
+
+string getRange(int n1, int n2) 
+{
+    return n1 == n2 ? to_string(n1) : to_string(n1) + "->" + to_string(n2);
+}
+
+std::vector<std::string> innerRanges(std::vector<int> nums, int l, int r) 
+{
+    vector<string> re = {};
+    int next = l;
+
+    for (int i = 0; i < nums.size(); i++) 
+    {
+        if (l == INT_MAX) 
+            return re;
+
+        if (nums[i] < next) 
+            continue;
+
+        if (nums[i] == next) 
+        {
+            next++;
+            continue;
+        }
+
+        re.push_back(getRange(next, nums[i] - 1));
+
+        if (nums[i] == INT_MAX) 
+            return re;
+
+        next = nums[i] + 1;
+    }
+
+    if (next <= r) 
+        re.push_back(getRange(next, r));
+
+    return re;
+}

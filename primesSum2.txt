@@ -1,0 +1,45 @@
+Given a positive integer n, calculate the sum of all the prime numbers from 1 to n, inclusive. Because this number may be very big, return it modulo 109 + 7 in your output.
+
+Example
+
+For n = 6, the output should be
+primesSum2(n) = 10.
+
+The sum of the prime numbers from 1 to 6, inclusive, (2 + 3 + 5) is 10.
+
+For n = 11, the output should be
+primesSum2(n) = 28.
+
+The sum of the prime numbers from 1 to 11, inclusive, (2 + 3 + 5 + 7 + 11) is 28.
+
+=====================================================================================
+
+#define MOD 1000000007
+
+bool isPrime(int n)
+{
+    if (n < 2)
+        return false;
+    
+    int s = sqrt(n);
+    for (int i = 2; i <= s; i++)
+    {
+        if (n % i == 0)
+            return false;
+    }
+
+    return true;
+}
+
+int primesSum2(int n)
+{
+    int res = 0;
+
+    for (int i = 2; i <= n; i++)
+    {
+        if (isPrime(i))
+            res = (res % MOD + i % MOD) % MOD;
+    }
+
+    return res;
+}

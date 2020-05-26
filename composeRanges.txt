@@ -1,0 +1,50 @@
+Given a sorted integer array that does not contain any duplicates, return a summary of the number ranges it contains.
+
+Example
+
+For nums = [-1, 0, 1, 2, 6, 7, 9], the output should be
+composeRanges(nums) = ["-1->2", "6->7", "9"].
+
+==================================================================
+
+std::vector<std::string> composeRanges(std::vector<int> nums) 
+{
+    if (nums.size()==0)
+    {
+        return {};
+    }
+
+    if (nums.size()==1)
+    {
+        return {to_string(nums[0])};
+    }
+
+    std::vector<std::string> v;
+    int s = nums[0];
+    for (int i = 0; i < nums.size() - 1; i++)
+    {
+        if (nums[i] < nums[i + 1] - 1)
+        {
+            if (nums[i] == s)
+            {
+                v.push_back(to_string(s));
+            }
+            else
+            {
+                v.push_back(to_string(s) + "->" + to_string(nums[i]));
+            }
+            s = nums[i + 1];
+        }
+    }
+
+    if (s != nums[nums.size() - 1])
+    {
+        v.push_back(to_string(s) + "->" + to_string(nums[nums.size() - 1]));
+    }
+    else
+    {
+        v.push_back(to_string(nums[nums.size() - 1]));
+    }
+
+    return v;
+}
