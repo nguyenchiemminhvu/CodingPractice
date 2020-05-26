@@ -1,0 +1,25 @@
+You have been watching a video for some time. Knowing the total video duration find out what portion of the video you have already watched.
+
+Example
+
+For part = "02:20:00" and total = "07:00:00", the output should be
+videoPart(part, total) = [1, 3].
+
+You have watched 1 / 3 of the whole video.
+
+===============================================================
+
+std::vector<int> videoPart(std::string part, std::string total) {
+    int sp = 0;
+    sp += (std::atoi( std::string(part.begin(), part.begin() + 2).c_str() ) * 3600);
+    sp += (std::atoi( std::string(part.begin() + 3, part.begin() + 5).c_str() ) * 60);
+    sp += std::atoi( std::string(part.begin() + 6, part.end()).c_str() );
+    
+    int st = 0;
+    st += (std::atoi( std::string(total.begin(), total.begin() + 2).c_str() ) * 3600);
+    st += (std::atoi( std::string(total.begin() + 3, total.begin() + 5).c_str() ) * 60);
+    st += std::atoi( std::string(total.begin() + 6, total.end()).c_str() );
+    
+    int c = std::gcd(sp, st);
+    return { sp / c, st / c };
+}
