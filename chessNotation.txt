@@ -1,0 +1,107 @@
+John has always had trouble remembering chess game positions. To help himself with remembering, he decided to store game positions in strings. He came up with the following position notation:
+
+The notation is built for the current game position row by row from top to bottom, with '/' separating each row notation;
+Within each row, the contents of each square are described from the leftmost column to the rightmost;
+Each piece is identified by a single letter taken from the standard English names ('P' = pawn, 'N' = knight, 'B' = bishop, 'R' = rook, 'Q' = queen, 'K' = king);
+White pieces are designated using upper-case letters ("PNBRQK") while black pieces use lowercase ("pnbrqk");
+Empty squares are noted using digits 1 through 8 (the number of empty squares from the last piece);
+Empty lines are noted as "8".
+For example, for the initial position (shown in the picture below) the notation will look like this:
+
+"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+
+After the white pawn moves from e2 to e4, the notation will be as follows:
+
+"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"
+
+John has written down some positions using his notation, and now he wants to rotate the board 90 degrees clockwise and see what notation for the new board would look like. Help him with this task.
+
+Example
+
+For notation = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR", the output should be
+chessNotation(notation) = "RP4pr/NP4pn/BP4pb/QP4pq/K2P2pk/BP4pb/NP4pn/RP4pr".
+
+The notation corresponds to the initial position with one move made (white pawn from e2 to e4).
+After rotating the board, it will look like this:
+
+So, the notation of the new position is "RP4pr/NP4pn/BP4pb/QP4pq/K2P2pk/BP4pb/NP4pn/RP4pr".
+
+======================================================================================
+
+std::vector<std::string> convertToBoard(std::string notation)
+{
+    if (notation.back() != '/') notation += '/';
+    std::vector<std::string> res(8, std::string(8, '-'));
+    int iRes = 0;
+    
+    std::regex rLine("(.*?)/");
+    for (std::sregex_iterator i = std::sregex_iterator(notation.begin(), notation.end(), rLine); 
+         i != std::sregex_iterator(); 
+         i++)
+    {
+        std::smatch match = *i;
+        std::string mStr = match.str(1);
+        std::string &line = res[iRes];
+        int j = 0;
+        for (int k = 0; k < mStr.length(); k++)
+        {
+            if (std::isalpha(mStr[k]))
+                line[j++] = mStr[k];
+            else if (std::isdigit(mStr[k]))
+                j += (mStr[k] - 48);
+        }
+        iRes++;
+    }
+    
+    return res;
+}
+
+std::string convertToNotation(std::vector<std::string> board)
+{
+    std::string res;
+    for (std::string s : board)
+    {
+        int nEmpty = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s[i] == '-')
+                nEmpty++;
+            else
+            {
+                if (nEmpty)
+                    res += std::to_string(nEmpty);
+                nEmpty = 0;
+                res += s[i];
+            }
+        }
+        if (nEmpty)
+            res += std::to_string(nEmpty);
+        res += '/';
+    }
+    res.pop_back();
+    return res;
+}
+
+void rotateBoard(std::vector<std::string> &board)
+{
+    int n = board.size();
+    for (int i = 0; i < n / 2; i++) 
+    { 
+        for (int j = i; j < n - i - 1; j++) 
+        { 
+            char temp = board[i][j]; 
+            board[i][j] = board[n-1-j][i]; 
+            board[n-1-j][i] = board[n-1-i][n-1-j]; 
+            board[n-1-i][n-1-j] = board[j][n-1-i]; 
+            board[j][n-1-i] = temp; 
+        } 
+    }
+}
+
+std::string chessNotation(std::string notation)
+{
+    std::vector<std::string> board = convertToBoard(notation);
+    rotateBoard(board);
+    std::string res = convertToNotation(board);
+    return res;
+}

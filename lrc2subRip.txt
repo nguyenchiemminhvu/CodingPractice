@@ -1,0 +1,76 @@
+During your most recent trip to Codelandia you decided to buy a brand new CodePlayer, a music player that (allegedly) can work with any possible media format. As it turns out, this isn't true: the player can't read lyrics written in the LRC format. It can, however, read the SubRip format, so now you want to translate all the lyrics you have from LRC to SubRip.
+
+Since you are a pro programmer (no noob would ever get to Codelandia!), you're happy to implement a function that, given lrcLyrics and songLength, returns the lyrics in SubRip format.
+
+Example
+
+For
+
+lrcLyrics = ["[00:12.00] Happy birthday dear coder,",
+             "[00:17.20] Happy birthday to you!"]
+and songLength = "00:00:20", the output should be
+
+lrc2subRip(lrcLyrics, songLength) = [
+  "1",
+  "00:00:12,000 --> 00:00:17,200",
+  "Happy birthday dear coder,",
+  "",
+  "2",
+  "00:00:17,200 --> 00:00:20,000",
+  "Happy birthday to you!"
+]
+
+===============================================================================================
+
+std::string r, to_HHMMSS(std::string s)
+{
+    int hh, mm, ss, xx;
+    hh = std::stoi(s);
+    mm = std::stoi(s.substr(3));
+    ss = std::stoi(s.substr(6));
+    
+    mm += ss / 60;
+    ss %= 60;
+    hh += mm / 60;
+    mm %= 60;
+    
+    r.clear();
+    r = std::to_string(hh) + ":" + std::to_string(mm) + ":" + std::to_string(ss) + "," + s.substr(9) + std::string(1, '0');
+    r = std::regex_replace(r, std::regex("(?:\\b[\\D]{0}([\\d]{1})\\b)"), "0$1");
+    while (std::string(r.begin() + 9, r.end()).length() < 3) r += "0";
+    return r;
+}
+
+std::vector<std::string> lrc2subRip(std::vector<std::string> lrcLyrics, std::string songLength)
+{
+    std::vector<std::string> r(lrcLyrics.size() * 4);
+    
+    std::string startTime, endTime, lyric;
+    for (int i = 0; i < lrcLyrics.size(); i++)
+    {
+        startTime = std::string(lrcLyrics[i].begin() + 1, lrcLyrics[i].begin() + 9);
+        startTime = "00:" + startTime;
+        startTime = to_HHMMSS(startTime);
+        if (i == lrcLyrics.size() - 1)
+        {
+            endTime = songLength;
+            endTime += ",000";
+        }
+        else
+        {
+            endTime = std::string(lrcLyrics[i+1].begin() + 1, lrcLyrics[i+1].begin() + 9);
+            endTime = "00:" + endTime;
+            endTime = to_HHMMSS(endTime);
+        }
+        
+        lyric.clear();
+        if (lrcLyrics[i].length() > 11)
+            lyric = lrcLyrics[i].substr(11);
+        
+        r[i*4 + 0] = std::to_string(i + 1);
+        r[i*4 + 1] = startTime + " --> " + endTime;
+        r[i*4 + 2] = lyric;
+    }
+    r.erase(r.end() - 1);
+    return r;
+}

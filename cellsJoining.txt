@@ -1,0 +1,65 @@
+You are writing a spreadsheet application for an ancient operating system. The system runs on a computer so old that it can only display ASCII graphics. Currently you are stuck with implementing the cells joining algorithm.
+
+You are given a table in ASCII graphics, where the following characters are used for borders: +, -, |. The rows can have different heights and the columns can have different widths. Each cell has an area greater than 1 (excluding the borders) and can contain any ASCII characters excluding +, - and |.
+
+The algorithm you want to implement should merge the cells within a given rectangular part of the table into a single cell by removing the borders between them (i.e. replace them with space characters (' ') and replace redundant +s with correct border symbols). The cells to join are represented by the coordinates of the cells at the extreme bottom-left and top-right of the area.
+
+Example
+For
+
+table = ["+----+--+-----+----+",
+         "|abcd|56|!@#$%|qwer|",
+         "|1234|78|^&=()|tyui|",
+         "+----+--+-----+----+",
+         "|zxcv|90|77777|stop|",
+         "+----+--+-----+----+",
+         "|asdf|~~|ghjkl|100$|",
+         "+----+--+-----+----+"]
+and coords = [[2, 0], [1, 1]], the output should be
+
+cellsJoining(table, coords) = ["+----+--+-----+----+",
+                               "|abcd|56|!@#$%|qwer|",
+                               "|1234|78|^&=()|tyui|",
+                               "+----+--+-----+----+",
+                               "|zxcv 90|77777|stop|",
+                               "|       +-----+----+",
+                               "|asdf ~~|ghjkl|100$|",
+                               "+-------+-----+----+"]
+
+====================================================================================================
+
+std::vector<std::string> cellsJoining(std::vector<std::string> table, const std::vector<std::vector<int> >& coords) {
+    std::vector<int> cols;
+    std::vector<int> rows;
+    const size_t width = table[0].length();
+    const size_t height = table.size();
+    for (size_t w = 0; w < width; ++w) { if (table[0][w] == '+') cols.push_back(w); }
+    for (size_t h = 0; h < height; ++h) { if (table[h][0] == '+') rows.push_back(h); }
+    for (size_t h = rows[coords[1][0]] + 1; h < rows[coords[0][0] + 1]; ++h) {
+        for (size_t w = cols[coords[0][1]] + 1; w < cols[coords[1][1] + 1]; ++w) {
+            if (table[h][w] == '|' || table[h][w] == '-' || table[h][w] == '+')
+                table[h][w] = ' ';
+        }
+    }
+    if (coords[0][1] == 0) {
+        for (size_t h = rows[coords[1][0]] + 1; h < rows[coords[0][0] + 1]; ++h) {
+            if (table[h][0] == '+') table[h][0] = '|';
+        }
+    }
+    if (coords[1][0] == 0) {
+        for (size_t w = cols[coords[0][1]] + 1; w < cols[coords[1][1] + 1]; ++w) {
+            if (table[0][w] == '+') table[0][w] = '-';
+        }
+    }
+    if (coords[0][0] == rows.size() - 2) {
+        for (size_t w = cols[coords[0][1]] + 1; w < cols[coords[1][1] + 1]; ++w) {
+            if (table[height - 1][w] == '+') table[height - 1][w] = '-';
+        }
+    }
+    if (coords[1][1] == cols.size() - 2) {
+        for (size_t h = rows[coords[1][0]] + 1; h < rows[coords[0][0] + 1]; ++h) {
+            if (table[h][width  - 1] == '+') table[h][width  - 1] = '|';
+        }
+    }
+    return table;
+}
