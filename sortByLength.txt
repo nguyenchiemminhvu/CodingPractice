@@ -1,0 +1,49 @@
+Given an array of strings, sort them in the order of increasing lengths. If two strings have the same length, their relative order must be the same as in the initial array.
+
+Example
+
+For
+
+inputArray = ["abc",
+              "",
+              "aaa",
+              "a",
+              "zz"]
+the output should be
+
+sortByLength(inputArray) = ["",
+                            "a",
+                            "zz",
+                            "abc",
+                            "aaa"]
+
+========================================================================
+
+std::vector<std::string> r, sortByLength(std::vector<std::string> input)
+{
+    std::map<int, std::vector<std::string>> m;
+    for (std::string s : input)
+    {
+        if (m.count(s.length()))
+        {
+            std::vector<std::string> &v = m[s.length()];
+            v.push_back(s);
+        }
+        else
+        {
+            std::vector<std::string> v;
+            v.push_back(s);
+            m[s.length()] = v;
+        }
+    }
+    
+    std::map<int, std::vector<std::string>>::iterator iter = m.begin();
+    while (iter != m.end())
+    {
+        std::pair<int, std::vector<std::string>> p = *iter++;
+        for (std::string s : p.second)
+            r.push_back(s);
+    }
+    
+    return r;
+}
