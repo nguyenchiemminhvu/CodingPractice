@@ -1,0 +1,79 @@
+Once upon a time, in a kingdom far, far away, there lived a King Byteasar VII. Since he reigned during the Dark Times, very little is known about his reign. It is known that when he ascended the throne, there were n cities in the kingdom, connected by several two-way roads. But before the young king managed to start ruling, an enemy arrived at the gates: the evil emperor Bugoleon invaded the kingdom and started to conquer the cities, advancing day after day.
+
+It is not known how long it took to capture each of the cities, but you've recently discovered an ancient manuscript describing that each day, Bugoleon captured all the cities that had at most 1 neighboring free city at that given moment. Knowing this fact, the number of cities n and all the roads of the kingdom, determine in how many days each of the cities was conquered.
+
+Example
+
+For n = 10 and
+
+roads = [[1, 0], [1, 2], [8, 5], [9, 7], 
+         [5, 6], [5, 4], [4, 6], [6, 7]]
+the output should be
+citiesConquering(n, roads) = [1, 2, 1, 1, -1, -1, -1, 2, 1, 1].
+
+Here's how the cities were conquered:
+
+=======================================================================
+
+void removeRoads(int city, std::map<std::pair<int,int>, int> &roads)
+{
+    for (std::map<std::pair<int, int>, int>::iterator i = roads.begin(); i != roads.end(); )
+    {
+        if (i->first.first == city || i->first.second == city)
+        {
+            roads.erase(i++);
+        }
+        else
+        {
+            i++;
+        }
+    }
+}
+
+void invading(int n, std::map<std::pair<int, int>, int> roadSystem, std::vector<bool> invaded, std::vector<int> &res, int day = 1)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (invaded[i])
+        {
+            removeRoads(i, roadSystem);
+        }
+    }
+    
+    std::vector<int> freq(n, 0);
+    for (std::map<std::pair<int, int>, int>::iterator i = roadSystem.begin(); i != roadSystem.end(); i++)
+    {
+        freq[i->first.first]++;
+    }
+    
+    int count = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (!invaded[i] && freq[i] < 2)
+        {
+            invaded[i] = true;
+            res[i] = day;
+            count++;
+        }
+    }
+    
+    if (count)
+        invading(n, roadSystem, invaded, res, day + 1);
+}
+
+std::vector<int> citiesConquering(int n, std::vector<std::vector<int>> roads)
+{
+    std::vector<int> res(n, -1);
+    
+    std::map<std::pair<int, int>, int> roadSystem;
+    for (std::vector<int> road : roads)
+    {
+        roadSystem[std::pair<int, int>(road[0], road[1])] = 1;
+        roadSystem[std::pair<int, int>(road[1], road[0])] = 1;
+    }
+    
+    std::vector<bool> invaded(n, false);
+    invading(n, roadSystem, invaded, res);
+    
+    return res;
+}

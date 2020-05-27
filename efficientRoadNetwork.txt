@@ -1,0 +1,87 @@
+Once upon a time, in a kingdom far, far away, there lived a King Byteasar III. As a smart and educated ruler, he did everything in his (unlimited) power to make every single system within his kingdom efficient. The king went down in history as a great road builder: during his reign a great number of roads were built, and the road system he created was the most efficient during those dark times.
+
+When you started learning about Byteasar's III deeds in your history classes, a creeping doubt crawled into the back of your mind: what if the famous king wasn't so great after all? According to the most recent studies, there were n cities in Byteasar's kingdom, connected by two-way roads. You managed to get information about these roads from the university library, so now you can write a function that will determine whether the road system in Byteasar's kingdom was efficient or not.
+
+A road system is considered efficient if it is possible to travel from any city to any other city by traversing at most 2 roads.
+
+Example
+
+For n = 6 and
+
+roads = [[3, 0], [0, 4], [5, 0], [2, 1],
+          [1, 4], [2, 3], [5, 2]]
+the output should be
+efficientRoadNetwork(n, roads) = true.
+
+Here's how the road system can be represented:
+
+For n = 6 and
+
+roads = [[0, 4], [5, 0], [2, 1],
+          [1, 4], [2, 3], [5, 2]]
+the output should be
+efficientRoadNetwork(n, roads) = false.
+
+Here's how the road system can be represented:
+
+As you can see, it's only possible to travel from city 3 to city 4 by traversing at least 3 roads.
+
+======================================================================
+
+bool BFS(std::vector<std::vector<int>> graph, int src, int dest, std::vector<bool> visited)
+{
+    std::queue<int> Q;
+    Q.push(src);
+    visited[src] = true;
+    
+    int time = 0;
+    int curLevel = 1, nextLevel = 0;
+    while (!Q.empty() && time < 2)
+    {   
+        while (curLevel)
+        {
+            int v = Q.front();
+
+            for (int i = 0; i < graph.size(); i++)
+            {
+                if (!visited[i] && graph[v][i])
+                {
+                    visited[i] = true;
+                    Q.push(i);
+                    nextLevel++;
+                }
+            }
+            
+            Q.pop();
+            curLevel--;
+        }
+        
+        time++;
+        curLevel = nextLevel;
+        nextLevel = 0;
+    }
+    
+    return visited[dest];
+}
+
+bool efficientRoadNetwork(int n, std::vector<std::vector<int>> roads)
+{
+    std::vector<std::vector<int>> graph(n, std::vector<int>(n, 0));
+    for (std::vector<int> road : roads)
+        graph[road[0]][road[1]] = graph[road[1]][road[0]] = 1;
+    
+    std::vector<bool> visited(n, false);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (i == j)
+                continue;
+            
+            if (!BFS(graph, i, j, visited))
+                return false;
+        }
+    }
+    
+    return true;
+}
