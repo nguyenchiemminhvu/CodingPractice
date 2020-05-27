@@ -1,0 +1,165 @@
+Let's play Tetris! But first we need to define the rules, especially since they probably differ from the way you've played Tetris before.
+
+There is an empty field with 20 rows and 10 columns, which is initially empty. Random pieces appear on the field, each composed of four square blocks. You can't change the piece's shape, but you can rotate it 90 degree clockwise (possibly several times) and choose which columns it will appear within. Once you've rotated the piece and have set its starting position, it appears at the topmost row where you placed it and falls down until it can't fall any further. The objective of the game is to create horizontal lines composed of 10 blocks. When such a line is created, it disappears, and all lines above the deleted one move down. The player receives 1 point for each deleted row.
+
+Your task is to implement an algorithm that places each new piece optimally. The piece is considered to be placed optimally if:
+
+The total number of blocks in the rows this piece will occupy after falling down is maximized;
+Among all positions with that value maximized, this position requires the least number of rotations;
+Among all positions that require the minimum number of rotations, this one is the leftmost one (i.e. the leftmost block's position is as far to the left as possible).
+The piece can't leave the field. It is guaranteed that it is always possible to place the Tetris piece in the field.
+
+Implement this algorithm and calculate the number of points that you will get for the given set of pieces.
+
+Example
+
+For
+
+pieces = [[[".", "#", "."], 
+           ["#", "#", "#"]],
+          [["#", ".", "."], 
+           ["#", "#", "#"]],
+          [["#", "#", "."], 
+           [".", "#", "#"]],
+          [["#", "#", "#", "#"]],
+          [["#", "#", "#", "#"]],
+          [["#", "#"], 
+           ["#", "#"]]]
+the output should be
+tetrisGame(pieces) = 1.
+
+For this explanation, we are representing each block by the index of the piece it belongs to. After the first 5 blocks fall, the field looks like this:
+
+...
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . 3 4
+. . . . . . . . 3 4
+. 0 . 1 . 2 2 . 3 4
+0 0 0 1 1 1 2 2 3 4
+
+Note that the 0th, 1st, and 2nd pieces all fell down without rotating, while the 3rd and the 4th pieces were rotated one time each.
+
+Since there is now a row composed of 10 blocks, it is deleted, and you get 1 point.
+
+When the last piece falls, the final field looks like this:
+
+...
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+5 5 . . . . . . 3 4
+5 5 . . . . . . 3 4
+. 0 . 1 . 2 2 . 3 4
+
+
+=======================================================================================================
+
+vector<string> f = vector<string>(20, string(10, '.'));
+
+int place2(const vector<string> &p, int y, int x) {
+    for (int i = 0; i < p.size(); ++i) {
+        for (int j = 0; j < p[0].size(); ++j) {
+            if (p[i][j]=='#') {
+                f[y+i][x+j]=p[i][j];
+            }
+        }
+    }
+    
+    for (int i = y+p.size()-1; i >= y; --i) {
+        int is_full=1;
+        for (int j = 0; j < 10; ++j) {
+            if (f[i][j]!='#') {
+                is_full = 0;
+                break;
+            }
+        }
+        if (is_full) {
+            f.erase(f.begin() + i);
+        }
+    }
+    int res = 0;
+    while (f.size()<20) {
+        ++res;
+        f.insert(f.begin(), string(10, '.'));
+    }
+    return res;
+}
+
+void rotate(vector<string> &p) {
+    vector<string> r;
+    for (int j = 0; j < p[0].size(); ++j) {
+        string s;
+        for (int i = 0; i < p.size(); ++i) {
+            s.push_back(p[p.size()-i-1][j]);
+        }
+        r.push_back(s);
+    }
+    p=r;
+}
+
+int is_ok(const vector<string> &p, int y, int x) {
+    for (int i = 0; i < p.size(); ++i) {
+        for (int j = 0; j < p[0].size(); ++j) {
+            if (p[i][j] == '#' && f[i+y][x+j] == '#') {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+pair<int,int> place(const vector<string> &p, int pos) {
+    pair<int,int> bad=make_pair(-1,-1);
+    if (pos+p[0].size()>10) {
+        return bad;
+    }
+    for (int i = 0; i < 20 - p.size() + 1; ++i) {
+        if (!is_ok(p, i, pos)) {
+            return bad;
+        }
+        int fff=0;
+        for (int j = 0; j < p.size(); ++j) {
+            for (int k = 0; k < 10; ++k) {
+                fff+=f[j+i][k]=='#';
+            }
+        }
+        bad=make_pair(fff,i);
+    }
+    return bad;
+}
+
+int tetrisGame(std::vector<std::vector<std::vector<char>>> pieces) {
+    int res=0;
+    for (int i = 0; i < pieces.size(); ++i) {
+        pair<int,int> b = make_pair(-1,-1);
+        vector<string> bp;
+        int bpx=-1;
+        vector<string> p;
+        for (int k = 0; k < pieces[i].size(); ++k) {
+            p.push_back(
+                string(pieces[i][k].begin(), pieces[i][k].end()));
+        }
+        for (int j = 0; j < 4; ++j) {
+            for (int k = 0; k < 10; ++k) {
+                pair<int,int> r = place(p, k);
+                if (r.first < 0) {
+                    continue;
+                }
+                if (r.first > b.first) {
+                    b=r;
+                    bp=p;
+                    bpx=k;
+                }
+            }
+            rotate(p);
+        }
+        res += place2(bp,b.second, bpx);
+    }
+    return res;
+}
+
