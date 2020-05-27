@@ -1,0 +1,32 @@
+Given an array of strings, return another array containing all of its longest strings.
+
+Example
+
+For inputArray = ["aba", "aa", "ad", "vcd", "aba"], the output should be
+allLongestStrings(inputArray) = ["aba", "vcd", "aba"].
+
+====================================================
+
+std::vector<std::string> allLongestStrings(std::vector<std::string> vs)
+{
+    sort(vs.begin(), vs.end(), [](std::string s1, std::string s2){ return s1.length() > s2.length(); });
+
+    std::vector<std::string> res;
+
+    for (std::string s : vs)
+    {
+        if (res.empty())
+        {
+            res.push_back(s);
+        } 
+        else
+        {
+            if (s.length() < res[0].length())
+                break;
+            
+            res.push_back(s);
+        }
+    }
+
+    return res;
+}
