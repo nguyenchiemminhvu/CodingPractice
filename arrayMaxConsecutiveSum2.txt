@@ -1,0 +1,30 @@
+Given an array of integers, find the maximum possible sum you can get from one of its contiguous subarrays. The subarray from which this sum comes must contain at least 1 element.
+
+Example
+
+For inputArray = [-2, 2, 5, -11, 6], the output should be
+arrayMaxConsecutiveSum2(inputArray) = 7.
+
+The contiguous subarray that gives the maximum possible sum is [2, 5], with a sum of 7.
+
+================================================================================
+
+int arrayMaxConsecutiveSum2(std::vector<int> const& inputArray) 
+{
+    auto m = *std::max_element(inputArray.begin(), inputArray.end());
+    if (m < 0) 
+    {
+        return m;
+    }
+
+    int local = 0;
+    int best = 0;
+    for (int x : inputArray) 
+    {
+        local += x;
+        local = std::max(0, local);
+        best = std::max(best, local);
+    }
+    
+    return best;
+}
