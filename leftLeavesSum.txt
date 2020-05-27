@@ -1,0 +1,67 @@
+In a binary tree, a leaf node is considered to be a left leaf if it is a left child of its parent. Given a binary tree t, return the sum of values in its left leaves. A tree that consists only of a root node doesn't have any leaves.
+
+Example
+
+For
+
+t = {
+    "value": 5,
+    "left": {
+        "value": 2,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": -3,
+        "left": {
+            "value": 10,
+            "left": null,
+            "right": null
+        },
+        "right": {
+            "value": 4,
+            "left": null,
+            "right": null
+        }
+    }
+}
+the output should be
+leftLeavesSum(t) = 12.
+The given tree looks like:
+
+    5
+   / \
+  2  -3
+     / \
+    10  4
+The two left leaves in this tree are 2 + 10 = 12.
+
+===============================================================================
+
+//
+// Binary trees are already defined with this interface:
+// template<typename T>
+// struct Tree {
+//   Tree(const T &v) : value(v), left(nullptr), right(nullptr) {}
+//   T value;
+//   Tree *left;
+//   Tree *right;
+// };
+int Sum(Tree<int> * t, bool isLeft = false)
+{
+    if (t)
+    {
+        int s = isLeft && !t->left && !t->right ? t->value : 0;
+        s += Sum(t->left, true);
+        s += Sum(t->right, false);
+
+        return s;
+    }
+
+    return 0;
+}
+
+int leftLeavesSum(Tree<int> * t)
+{
+    return Sum(t, false);
+}
