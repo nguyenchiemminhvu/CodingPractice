@@ -1,0 +1,158 @@
+Mark got a rectangular array matrix for his birthday, and now he's thinking about all the fun things he can do with it. He likes shifting a lot, so he decides to shift all of its i-contours in a clockwise direction if i is even, and counterclockwise if i is odd.
+
+Here is how Mark defines i-contours:
+
+the 0-contour of a rectangular array as the union of left and right columns as well as top and bottom rows;
+consider the initial matrix without the 0-contour: its 0-contour is the 1-contour of the initial matrix;
+define 2-contour, 3-contour, etc. in the same manner by removing 0-contours from the obtained arrays.
+Implement a function that does exactly what Mark wants to do to his matrix.
+
+Example
+
+For
+
+matrix = [[ 1,  2,  3,  4],
+           [ 5,  6,  7,  8],
+           [ 9, 10, 11, 12],
+           [13, 14, 15, 16],
+           [17, 18, 19, 20]]
+the output should be
+
+contoursShifting(matrix) = [[ 5,  1,  2,  3],
+                             [ 9,  7, 11,  4],
+                             [13,  6, 15,  8],
+                             [17, 10, 14, 12],
+                             [18, 19, 20, 16]]
+For matrix = [[238, 239, 240, 241, 242, 243, 244, 245]],
+the output should be
+contoursShifting(matrix) = [[245, 238, 239, 240, 241, 242, 243, 244]].
+
+Note, that if a contour is represented by a 1 × n array, its center is considered to be below it.
+
+For
+
+matrix = [[238],
+           [239],
+           [240],
+           [241],
+           [242],
+           [243],
+           [244],
+           [245]]
+the output should be
+
+contoursShifting(matrix) = [[245],
+                             [238],
+                             [239],
+                             [240],
+                             [241],
+                             [242],
+                             [243],
+                             [244]]
+If a contour is represented by an n × 1 array, its center is considered to be to the left of it.
+
+=============================================================================================
+
+std::vector<std::vector<int>> contoursShifting(std::vector<std::vector<int>> matrix) 
+{
+    int left  = 0;
+    int right = matrix[0].size() - 1;
+    int top   = 0;
+    int bottom = matrix.size() - 1;
+    
+    bool clockwise = true;
+    
+    while (left < right && top < bottom)
+    {
+        if (clockwise)
+        {
+            int temp = matrix[top][right];
+            
+            for (size_t c = right; c > left; --c)
+                matrix[top][c] = matrix[top][c - 1];
+            
+            for (size_t r = top + 1; r <= bottom; ++r)
+                matrix[r - 1][left] = matrix[r][left];
+            
+            for (size_t c = left + 1; c <= right; ++c)
+                matrix[bottom][c - 1] = matrix[bottom][c];
+            
+            for (size_t r = bottom; r > top; --r)
+                matrix[r][right] = matrix[r - 1][right];
+            
+            if (matrix.size() > 1 && matrix[0].size() > 1)
+                matrix[top + 1][right] = temp;
+        }
+        else
+        {
+            int temp = matrix[top][left];
+            
+            for (size_t c = left + 1; c <= right; ++c)
+                matrix[top][c - 1] = matrix[top][c];
+            
+            for (size_t r = top + 1; r <= bottom; ++r)
+                matrix[r - 1][right] = matrix[r][right];
+            
+            for (size_t c = right; c > top; --c)
+                matrix[bottom][c] = matrix[bottom][c - 1];
+            
+            for (size_t r = bottom; r > top; --r)
+                matrix[r][left] = matrix[r - 1][left];
+            
+            if (matrix.size() > 1 && matrix[0].size() > 1)
+                matrix[top + 1][left] = temp;
+        }
+        
+        ++top;
+        ++left;
+        --right;
+        --bottom;
+        
+        clockwise = (clockwise) ? false : true;
+    }
+    
+    if (left == right && top < bottom)
+    {
+        if (clockwise)
+        {
+            int temp = matrix[bottom][left];
+            
+            for (size_t r = bottom; r > top; --r)
+                matrix[r][left] = matrix[r - 1][left];
+            
+            matrix[top][left] = temp;
+        }
+        else
+        {
+            int temp = matrix[top][left];
+            
+            for (size_t r = top; r < bottom; ++r)
+                matrix[r][left] = matrix[r + 1][left];
+            
+            matrix[bottom][left] = temp;
+        }
+    }
+    else if (top == bottom && left < right)
+    {
+        if (clockwise)
+        {
+            int temp = matrix[top][right];
+            
+            for (size_t c = right; c > left; --c)
+                matrix[top][c] = matrix[top][c - 1];
+            
+            matrix[top][left] = temp;
+        }
+        else
+        {
+            int temp = matrix[top][left];
+            
+            for (size_t c = left; c < right; ++c)
+                matrix[top][c] = matrix[top][c + 1];
+            
+            matrix[top][right] = temp;
+        }
+    }
+    
+    return matrix;
+}

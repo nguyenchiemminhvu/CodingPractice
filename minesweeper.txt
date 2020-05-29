@@ -1,0 +1,41 @@
+In the popular Minesweeper game you have a board with some mines and those cells that don't contain a mine have a number in it that indicates the total number of mines in the neighboring cells. Starting off with some arrangement of mines we want to create a Minesweeper game setup.
+
+Example
+
+For
+
+matrix = [[true, false, false],
+          [false, true, false],
+          [false, false, false]]
+the output should be
+
+minesweeper(matrix) = [[1, 2, 1],
+                       [2, 1, 1],
+                       [1, 1, 1]]
+
+==========================================================================================
+
+bool check(int m, int n, int x, int y)
+{
+    return (x >= 0 && x < m && y >= 0 && y < n);
+}
+
+std::vector<std::vector<int>> minesweeper(std::vector<std::vector<bool>> m)
+{
+    std::vector<std::vector<int>> r(m.size(), std::vector<int>(m[0].size(), 0));
+    for (int i = 0; i < m.size(); i++)
+    {
+        for (int j = 0; j < m[i].size(); j++)
+        {
+            r[i][j] += check(m.size(), m[i].size(), i-1, j-1)   ? m[i-1][j-1]   : 0;
+            r[i][j] += check(m.size(), m[i].size(), i-1, j)     ? m[i-1][j]     : 0;
+            r[i][j] += check(m.size(), m[i].size(), i-1, j+1)   ? m[i-1][j+1]   : 0;
+            r[i][j] += check(m.size(), m[i].size(), i, j-1)     ? m[i][j-1]     : 0;
+            r[i][j] += check(m.size(), m[i].size(), i, j+1)     ? m[i][j+1]     : 0;
+            r[i][j] += check(m.size(), m[i].size(), i+1, j-1)   ? m[i+1][j-1]   : 0;
+            r[i][j] += check(m.size(), m[i].size(), i+1, j)     ? m[i+1][j]     : 0;
+            r[i][j] += check(m.size(), m[i].size(), i+1, j+1)   ? m[i+1][j+1]   : 0;
+        }
+    }
+    return r;
+}
