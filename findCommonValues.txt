@@ -1,0 +1,113 @@
+Note: Try to solve this task in O(n) time, where n is the number of nodes in both trees, since this is what you would be asked to do in an interview.
+
+A tree is considered a binary search tree (BST) if for each of its nodes the following is true:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and the right subtrees must also be binary search trees.
+An empty tree (a tree with no nodes) is also considered to be BST.
+
+Given two binary search trees t1 and t2, return all values that are contained in both trees, sorted in ascending order.
+
+Example
+
+For
+t1 = {
+    "value": 2,
+    "left": {
+        "value": 1,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 3,
+        "left": null,
+        "right": null
+    }
+}
+and
+
+t2 = {
+    "value": 3,
+    "left": {
+        "value": 2,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 9,
+        "left": null,
+        "right": null
+    }
+}
+the output should be
+findCommonValues(t1, t2) = [2, 3];
+
+For
+t1 = {
+    "value": 1,
+    "left": {
+        "value": 0,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 2,
+        "left": null,
+        "right": null
+    }
+}
+and
+
+t2 = {
+    "value": 5,
+    "left": {
+        "value": 4,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 6,
+        "left": null,
+        "right": null
+    }
+}
+the output should be
+findCommonValues(t1, t2) = [].
+
+==============================================================
+
+//
+// Binary trees are already defined with this interface:
+// template<typename T>
+// struct Tree {
+//   Tree(const T &v) : value(v), left(nullptr), right(nullptr) {}
+//   T value;
+//   Tree *left;
+//   Tree *right;
+// };
+void traversal(Tree<int> * t, std::unordered_map<int, int> &out)
+{
+    if (t)
+    {
+        out[t->value]++;
+        traversal(t->left, out);
+        traversal(t->right, out);
+    }
+}
+
+std::vector<int> findCommonValues(Tree<int> * t1, Tree<int> * t2)
+{
+    std::vector<int> res;
+
+    std::unordered_map<int, int> check;
+    traversal(t1, check);
+    traversal(t2, check);
+    
+    for (std::pair<int, int> p : check)
+        if (p.second > 1)
+            res.push_back(p.first);
+
+    sort(res.begin(), res.end());
+    return res;
+}
