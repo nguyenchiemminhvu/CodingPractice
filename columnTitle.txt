@@ -1,0 +1,39 @@
+Spreadsheet software uses a consistent naming pattern for columns, in which the first column is named A, the second column is named B, the 27th column is named AA, the 28th is named AB, and so on.
+Given a positive integer number, return the corresponding column title as it would appear in a spreadsheet.
+
+Example
+
+For number = 27, the output should be
+columnTitle(number) = "AA";
+For number = 2, the output should be
+columnTitle(number) = "B".
+
+=============================================================================
+
+std::string columnTitle(int n)
+{
+    char str[50]; // To store result (Excel column name) 
+    int i = 0; // To store current index in str which is result 
+  
+    while (n > 0) { 
+        // Find remainder 
+        int rem = n % 26; 
+  
+        // If remainder is 0, then a 'Z' must be there in output 
+        if (rem == 0) { 
+            str[i++] = 'Z'; 
+            n = (n / 26) - 1; 
+        } 
+        else // If remainder is non-zero 
+        { 
+            str[i++] = (rem - 1) + 'A'; 
+            n = n / 26; 
+        } 
+    } 
+    str[i] = '\0'; 
+  
+    // Reverse the string and print result 
+    reverse(str, str + strlen(str)); 
+    
+    return str;
+}
