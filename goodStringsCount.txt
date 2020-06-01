@@ -1,0 +1,69 @@
+Given an integer len, count the number of different good strings that have a length of exactly len. A good string is a string for which the following conditions are true:
+
+A good string contains only lowercase English letters.
+Each character in a good string is unique.
+Exactly one character in a good string is lexicographically greater than the character that precedes it.
+Example
+
+For len = 2, the output should be
+goodStringsCount(len) = 325.
+
+If the first symbol is 'a', there are 25 possible good strings: "ab", "ac", ...
+If the first symbol is 'b', there are 24 possible good strings: "bc", "bd", ...
+...
+If the first symbol is 'z', there are 0 possible good strings because there is no character that is lexicographically greater.
+There are 25 + 24 + 23 + ... + 0 = 325 good strings that have a length of 2.
+
+For len = 1, the output should be
+goodStringsCount(len) = 0.
+
+The 3rd rule for good strings can't be true if there is only one character in the string.
+
+======================================================================================================
+
+unsigned long long choose(unsigned long long n, unsigned long long k)
+{
+    // n! / (n-k)!k!
+    unsigned long long result = 1;
+    // reduce overflow by dividing as soon as possible to keep numbers small
+    for (unsigned long long invK = 1; invK <= k; invK++)
+    {
+        result *= n;
+        result /= invK;
+        n--;
+    }
+    return result;
+}
+
+// count number words with n characters
+unsigned long long count(unsigned int n, unsigned int alphabet)
+{
+    // invalid parameters: must not use each letter of the alphabet more than once
+    if (n > alphabet)
+        return 0;
+
+    // count how many word with n characters use the characters 1..n
+    unsigned long long result = 0;
+    // there are n places where the "break" between s1 and s2 can occur
+    // count all possible characters chosen for s1 and s2
+    for (unsigned int i = 1; i < n; i++)
+        result += choose(n, i) - 1; // minus 1 because there is always one combination with no break between s1 and s2
+
+    // general case: use characters 1..Alphabet instead of 1..n
+    return result * choose(alphabet, n);
+}
+
+int goodStringsCount(int len) 
+{
+    unsigned int alphabet = 26;
+    unsigned int size     =  len;
+    unsigned long long best = 0;
+    for (unsigned int i = 2; i <= size; i++)
+    {
+        unsigned long long current = count(i, alphabet);
+        // more than before ?
+        if (best < current)
+            best = current;
+    }
+    return best;
+}
