@@ -1,0 +1,29 @@
+You are given two strings s and t of the same length, consisting of uppercase English letters. Your task is to find the minimum number of "replacement operations" needed to get some anagram of the string t from the string s. A replacement operation is performed by picking exactly one character from the string s and replacing it by some other character.
+
+Example
+
+For s = "AABAA" and t = "BBAAA", the output should be
+createAnagram(s, t) = 1;
+For s = "OVGHK" and t = "RPGUC", the output should be
+createAnagram(s, t) = 4.
+
+=================================================================
+
+int createAnagram(string s, string t) 
+{
+    int cnt1[26] = {0};
+    int cnt2[26] = {0};
+    for (int i = 0; i < s.length(); i++) 
+    {
+        cnt1[s[i] - 'A']++;
+        cnt2[t[i] - 'A']++;
+    }
+ 
+    int ans = 0;
+    for (int i = 0; i < 26; i++) 
+    {
+        ans += std::abs(cnt1[i] - cnt2[i]);
+    }
+ 
+    return ans / 2;
+}
