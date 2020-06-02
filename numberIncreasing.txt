@@ -1,0 +1,30 @@
+Initially a number 1 is written on a board. It is possible to do the following operations with it:
+
+multiply the number by 3;
+increase the number by 5.
+Using this two operations, is it possible to obtain number N?
+[execution time limit] 0.5 seconds (cpp)
+
+[input] integer N
+
+positive integer, N ≤ 10⁵
+
+[output] boolean
+
+true if N can be obtained using given operations, false otherwise
+
+===============================================
+
+bool numberIncreasing(int N) 
+{
+    int a = 1;
+    while(a <= N)
+    {
+        if(!((N - a) % 5))
+            return true;
+
+        a *= 3;
+    }
+    
+    return false;
+}
