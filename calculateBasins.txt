@@ -1,0 +1,118 @@
+A group of farmers has some elevation data that we are going to use to help them understand how rainfall flows over their farmland. We represent the farmland as a 2D array of altitudes, the grid, and use the following model, based on the fact that water flows downhill:
+
+If a cell's four neighboring cells all have altitudes not lower that its own, this cell is a sink in which water collects.
+Otherwise, water will flow into the neighboring cell with the lowest altitude. If a cell is not a sink, you can assume it has a unique lowest neighbor and that this neighbor will be lower than the cell.
+Cells that drain into the same sink, directly or indirectly, are part of the same basin.
+Given an n × n grid of elevations, your goal is to partition the map into basins and output the sizes of the basins, in descending order.
+
+Example
+
+For
+
+grid = [[1, 5, 2], 
+        [2, 4, 7], 
+        [3, 6, 9]]
+the output should be
+calculateBasins(grid) = [7, 2].
+
+The two basins in this map, labeled as As and Bs, are:
+
+  A A B 
+  A A B 
+  A A A 
+The size of the basin labeled as As is 7 cells and the size of the basin labeled as Bs is 2 cells. The A basin drains into the sink with an altitude of 1 located at grid[0][0] and the B basin drains into the sink with an altitude of 2 located at grid[0][2].
+
+==================================================================================
+
+vector<vector<int>> dir = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+vector<vector<int>> path;
+vector<vector<vector<int>>> adj;
+
+int H, W;
+int size;
+int basin = 1;
+
+void Solve(vector<vector<int>> &grid, int y, int x)
+{    
+    size--;
+    grid[y][x] = -basin;
+    
+    for(auto d : dir)
+    {
+        int next_y = y + d[0];
+        int next_x = x + d[1];
+        
+        if(next_y < 0 || next_x < 0 || next_y >= H || next_x >= W)
+        {
+            continue;
+        }        
+        if(adj[next_y][next_x] == vector<int>({y, x}))
+        {
+            Solve(grid, next_y, next_x);
+        }
+    }
+}
+
+std::vector<int> calculateBasins(std::vector<std::vector<int>> grid) 
+{           
+    H = grid.size();
+    W = grid[0].size();
+    size = H * W;
+    
+    adj.resize(H, vector<vector<int>>(W, vector<int>(2, -1)));        
+    
+    for(int i = 0; i < H; i++)
+    {
+        for(int j = 0; j < W; j++)
+        {
+            int lowest = grid[i][j];
+            vector<int> cell(2, -1);
+            
+            for(auto d : dir)
+            {
+                int y = i + d[0];
+                int x = j + d[1];
+                
+                if(y < 0 || x < 0 || y >= H || x >= W) 
+                {
+                    continue;
+                }
+                if(grid[y][x] < lowest)
+                {
+                    lowest = grid[y][x];
+                    cell = {y, x};
+                }
+            }
+            adj[i][j] = cell;
+        }
+    }    
+    while(size)
+    {
+        for(int i = 0; i < H; i++)
+        {
+            for(int j = 0; j < W; j++)
+            {
+                if(grid[i][j] < 0) continue;
+                
+                if(adj[i][j][0] == -1)
+                {
+                    Solve(grid, i, j);
+                    basin++;
+                }
+            }
+        }
+    }
+    vector<int> counts(basin, 0);
+    
+    for(auto r : grid)
+    {
+        for(auto c : r) 
+        {
+            counts[abs(c)]++;
+        }
+    }    
+    sort(counts.rbegin(), counts.rend());
+    counts.pop_back();
+    return counts;
+}

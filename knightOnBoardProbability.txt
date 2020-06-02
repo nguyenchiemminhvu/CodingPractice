@@ -1,0 +1,47 @@
+You have a chessboard with n rows and m columns. The knight is placed on the (x, y) cell (0-indexed). Find the probability that the knight stays on the board after performing the usual knight move steps times randomly. If the knight gets moved off of the board, it can't return to the board again. For example, after the move (0, 0) - (-1, -2), it's impossible for the knight to return on the board by performing the move (-1, -2) - (0, 0).
+
+Example
+
+For n = 8, m = 8, steps = 2, x = 4, and y = 4, the output should be
+knightOnBoardProbability(n, m, steps, x, y) = 0.875.
+
+Start position:
+
+After these 4 moves, the knight can do any of 8 move types and stay on the board:
+
+After these 4 moves, the knight can do 6 move types and stay on the board, but there are 2 types of moves that would move the knight off of the board:
+
+4/8 * 8/8 + 4/8 * 6/8 = 4/8 + 3/8 = 7/8 = 0.875
+
+======================================================================================
+
+double prob[20][20][60];
+int pass[20][20][60];
+
+double knightOnBoardProbability(int n, int m, int steps, int x, int y) 
+{
+    if (x < 0 || y < 0 || x >= n || y >= m) 
+        return 0.0;
+
+    if (steps == 0) 
+        return 1.0;
+
+    if (pass[x][y][steps]) 
+        return prob[x][y][steps];
+    
+    pass[x][y][steps] = 1;
+    double &d = prob[x][y][steps];
+    d = 0.0;
+    
+    d += knightOnBoardProbability(n, m, steps-1, x+2, y-1);
+    d += knightOnBoardProbability(n, m, steps-1, x+2, y+1);
+    d += knightOnBoardProbability(n, m, steps-1, x-2, y-1);
+    d += knightOnBoardProbability(n, m, steps-1, x-2, y+1);
+    d += knightOnBoardProbability(n, m, steps-1, x-1, y+2);
+    d += knightOnBoardProbability(n, m, steps-1, x+1, y+2);
+    d += knightOnBoardProbability(n, m, steps-1, x-1, y-2);
+    d += knightOnBoardProbability(n, m, steps-1, x+1, y-2);
+    d /= 8;
+    
+    return d;
+}
