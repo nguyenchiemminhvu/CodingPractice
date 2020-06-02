@@ -1,0 +1,94 @@
+Given an array of words and a length l, format the text such that each line has exactly l characters and is fully justified on both the left and the right. Words should be packed in a greedy approach; that is, pack as many words as possible in each line. Add extra spaces when necessary so that each line has exactly l characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line does not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right. For the last line of text and lines with one word only, the words should be left justified with no extra space inserted between them.
+
+Example
+
+For
+words = ["This", "is", "an", "example", "of", "text", "justification."]
+and l = 16, the output should be
+
+textJustification(words, l) = ["This    is    an",
+                               "example  of text",
+                               "justification.  "]
+
+=====================================================================================
+
+std::vector<std::string> textJustification(std::vector<std::string> words, int l) {
+    std::vector<std::string> lines;
+    std::vector<std::string> current;
+    int length = 0;
+    
+    for (auto&& word : words)
+    {
+        if (current.empty() || length + word.size() + 1 <= l)
+        {
+            length += word.size();
+            if (!current.empty()) ++length;
+            current.push_back(std::move(word));
+        }
+        else
+        {
+            if (current.size() == 1)
+            {
+                auto line = std::move(current[0]);
+                while (line.size() < l)
+                {
+                    line += " ";
+                }
+                lines.push_back(std::move(line));
+            }
+            else
+            {
+                int padding = l - length;
+                int toJustify = current.size() - 1;
+                for (int i = 0; i < toJustify; ++i)
+                {
+                    int n = 1 + padding / toJustify;
+                    if (padding % toJustify > i)
+                    {
+                        ++n;
+                    }
+                
+                    for (int j = 1; j < n + 1; ++j)
+                    {
+                        current[i + 1] = std::string(" ") + current[i + 1];
+                    }
+                }
+            
+                std::string line;
+                for (auto&& w : current)
+                {
+                    line += std::move(w);
+                }
+            
+                lines.push_back(std::move(line));
+            }
+            
+            current.clear();
+            
+            length = word.size();
+            current.push_back(std::move(word));
+        }
+    }
+    
+    if (!current.empty())
+    {
+        std::string line;
+        bool first = true;
+        for (auto&& w : current)
+        {
+            if (first) first = false;
+            else
+            {
+                line += " ";
+            }
+            line += std::move(w);
+        }
+            
+        while (line.size() < l) line += " ";
+        lines.push_back(std::move(line));
+    }
+    
+    return lines;
+}
