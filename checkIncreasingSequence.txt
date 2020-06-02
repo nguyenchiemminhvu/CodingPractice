@@ -1,0 +1,21 @@
+Given the sequence of integers seq, check if it is strictly increasing.
+
+Example
+
+For seq = [1, 3, 8], the output should be
+checkIncreasingSequence(seq) = true;
+For seq = [2, 2, 3], the output should be
+checkIncreasingSequence(seq) = false.
+
+=========================================================
+
+bool checkIncreasingSequence(std::vector<int> a)
+{
+    for (int i = 1; i < a.size(); i++)
+    {
+        if (a[i] <= a[i-1])
+            return false;
+    }
+
+    return true;
+}

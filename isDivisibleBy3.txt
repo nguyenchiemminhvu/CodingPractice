@@ -1,0 +1,30 @@
+A masked number is a string that consists of digits and one asterisk (*) that should be replaced by exactly one digit. Given a masked number find all the possible options to replace the asterisk with a digit to produce an integer divisible by 3.
+
+Example
+
+For inputString = "1*0", the output should be
+isDivisibleBy3(inputString) = ["120", "150", "180"].
+
+============================================================
+
+std::vector<std::string> isDivisibleBy3(std::string s)
+{
+    std::vector<std::string> res;
+
+    int pos = s.find("*");
+    for (int i = 0; i <= 9; i++)
+    {
+        s[pos] = '0' + i;
+        
+        int sum = 0;
+        for (char c : s)
+        {
+            sum += c - '0';
+        }
+
+        if (sum % 3 == 0)
+            res.push_back(s);
+    }
+
+    return res;
+}
