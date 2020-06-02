@@ -1,0 +1,215 @@
+Carlos always loved playing video games, especially the well-known computer game "Pipes". Today he finally decided to write his own version of the legendary game from scratch.
+
+In this game the player has to place the pipes on a rectangular field to make water pour from each source to a respective sink. He has already come up with the entire program, but one question still bugs him: how can he best check that the arrangement of pipes is correct?
+
+It's your job to help him figure out exactly that.
+
+Carlos has 7 types of pipes in his game, with numbers corresponding to each type:
+
+1 - vertical pipe
+2 - horizontal pipe
+3-6 - corner pipes
+7 - two pipes crossed in the same cell (note that these pipes are not connected)
+
+Water pours from each source in each direction that has a pipe connected to it (thus it can even pour in all four directions). The puzzle is solved correctly only if all water poured from each source eventually reaches a corresponding sink.
+
+Help Carlos check whether the arrangement of pipes is correct. If it is correct, return the number of cells with pipes that will be full of water at the end of the game. If not, return -X, where X is the number of cells with water before the first leakage point is reached, or if the first drop of water reaches an incorrect destination (whichever comes first). Assume that water moves from one cell to another at the same speed.
+
+Example
+
+For
+
+state = ["a224C22300000",
+         "0001643722B00",
+         "0b27275100000",
+         "00c7256500000",
+         "0006A45000000"]
+the output should be pipesGame(state) = 19.
+
+===================================================================
+
+enum
+{
+    EMPTY = '0',
+    VERTICAL,
+    HORIZONTAL,
+    LR,
+    LL,
+    UL,
+    UR,
+    CROSS
+};
+
+class Drop
+{
+    int x, y;
+    int dx, dy;
+    char sink;
+
+public:
+    Drop(int ix, int iy, int idx, int idy, int isink)
+        : x(ix), y(iy), dx(idx), dy(idy), sink(isink)
+    {}
+    Drop(const Drop &o)
+    {
+        x = o.x;
+        y = o.y;
+        dx = o.dx;
+        dy = o.dy;
+        sink = o.sink;
+    }
+
+    // Returns < 0 if leaked, > 0 if moved
+    int Drip(const vector<string> &state)
+    {
+        printf("%c:", sink);
+        if (dx == 0 && dy == 0) return 0;
+        
+        printf(" %2d%+d, %2d%+d :", x, dx, y, dy);
+        x += dx;
+        y += dy;
+        
+        if (unsigned(y) >= unsigned(state.size()))
+            return -1;
+        if (unsigned(x) >= unsigned(state[y].size()))
+            return -1;
+        
+        char c = state[y][x] & 0x7F;
+        
+        printf("%c", c);
+        
+        if (c == sink)
+        {
+            dx = dy = 0;
+            return 0;
+        }
+        
+        if (dx < 0) // moving left
+        {
+            switch (c) {
+                case HORIZONTAL: break;
+                case CROSS: break;
+                case LR: dx = 0, dy = 1; break;
+                case UR: dx = 0, dy = -1; break;
+                default: return -1;
+            }
+        }
+        else if (dx > 0) // moving right
+        {
+            switch (c) {
+                case HORIZONTAL: break;
+                case CROSS: break;
+                case LL: dx = 0, dy = 1; break;
+                case UL: dx = 0, dy = -1; break;
+                default: return -1;
+            }
+        }
+        else if (dy < 0) // moving up
+        {
+            switch (c) {
+                case VERTICAL: break;
+                case CROSS: break;
+                case LR: dy = 0, dx = 1; break;
+                case LL: dy = 0, dx = -1; break;
+                default: return -1;
+            }
+        }
+        else if (dy > 0) // moving down
+        {
+            switch (c) {
+                case VERTICAL: break;
+                case CROSS: break;
+                case UL: dy = 0, dx = -1; break;
+                case UR: dy = 0, dx = 1; break;
+                default: return -1;
+            }
+        }
+        return 1;
+    }
+    
+    // Returns true if the cell had water added to it, false if it already had water in it
+    bool Mark(vector<string> &state)
+    {
+        if (state[y][x] & 0x80)
+        {
+            return false;
+        }
+        state[y][x] |= 0x80;
+        return true;
+    }
+};
+
+int pipesGame(std::vector<std::string> state) {
+    vector<Drop> water;
+    auto dump = [&state]() {
+        const char *piecesh[8] = { "·", "┃", "━", "┏", "┓", "┛", "┗", "╋" },
+                   *piecesl[8] = { "·", "│", "─", "┌", "┐", "┘", "└", "┼" };
+        for (int y = 0; y < state.size(); ++y) {
+            for (int x = 0; x < state[y].size(); ++x) {
+                char c = state[y][x] & 0x7F;
+                const char *s;
+                char sbuf[2];
+                if (isdigit(c)) s = state[y][x] & 0x80 ? piecesh[c - '0'] : piecesl[c - '0'];
+                else { sbuf[0] = c; sbuf[1] = 0; s = sbuf; }
+                cout << s;
+            }
+            cout << endl;
+        }
+    };
+    
+    for (int y = 0; y < state.size(); ++y)
+    {
+        for (int x = 0; x < state[y].size(); ++x)
+        {
+            if (state[y][x] >= 'a' && state[y][x] <= 'z')
+                add_source(state, water, y, x);
+        }
+    }
+    
+    if (water.empty())
+    {
+        return 0;
+    }
+    
+    for (int count = 0; ; )
+    {
+        int stop = 0;
+        int before = count;
+        for (auto &drip : water)
+        {
+            int ret = drip.Drip(state);
+            stop |= ret;
+            if (ret > 0) count += drip.Mark(state);
+            printf("%2d (%d)\n", ret, count);
+        }
+        dump();
+        if (stop < 0) return -before;
+        if (stop == 0) return count;
+    }
+}
+
+void add_source(const vector<string> &state, vector<Drop> &water, int y, int x) {
+    auto get = [&state](int y, int x) {
+        if (unsigned(y) < unsigned(state.size()) && unsigned(x) < unsigned(state[y].size()))
+            return state[y][x];
+        return '0';
+    };
+    
+    int dirs[4][2] = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+    char accept[4][4] = {
+        { HORIZONTAL, CROSS, LL, UL },  // to the right
+        { HORIZONTAL, CROSS, LR, UR },  // to the left
+        { VERTICAL, CROSS, UL, UR },    // below
+        { VERTICAL, CROSS, LL, LR },    // above
+    };
+    
+    printf("Add source %d, %d\n", x, y);
+    for (int i = 0; i < 4; ++i)
+    {
+        char c = get(y + dirs[i][1], x + dirs[i][0]);
+        if (std::find(accept[i], accept[i] + 4, c) != accept[i] + 4)
+        {
+            water.push_back(Drop(x, y, dirs[i][0], dirs[i][1], toupper(state[y][x])));
+        }
+    }
+}
