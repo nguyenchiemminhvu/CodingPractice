@@ -1,0 +1,36 @@
+You have an array of integers a. Find and return the maximum possible sum of values in some subsequence b with the following property: There is no pair of elements in b for which their indices in a are adjacent.
+
+Example
+
+For a = [6, 13, 100, 100, 4], the output should be
+maxSumWithoutAdjacents(a) = 113.
+
+The subsequence with the maximum possible sum of values is {a1, a3} = {13, 100}.
+
+=======================================================================
+
+int FindMaxSum(std::vector<int> arr, int n)
+{
+    int incl = arr[0]; 
+    int excl = 0; 
+    int excl_new; 
+    int i; 
+
+    for (i = 1; i < n; i++) 
+    { 
+        /* current max excluding i */
+        excl_new = (incl > excl) ? incl: excl; 
+
+        /* current max including i */
+        incl = excl + arr[i]; 
+        excl = excl_new; 
+    } 
+
+    /* return max of incl and excl */
+    return ((incl > excl)? incl : excl); 
+}
+
+int maxSumWithoutAdjacents(std::vector<int> a)
+{
+    return FindMaxSum(a, a.size());
+}
