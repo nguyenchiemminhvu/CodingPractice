@@ -1,0 +1,121 @@
+The numeric system represented by Roman numerals originated in ancient Rome. Numbers in this system are represented by combinations of letters from the English alphabet. Roman numerals, as we use them today, are based on seven symbols:
+
+I:1; V:5; X:10; L:50; C:100; D:500; M: 1,000
+
+You have a string s that represents a number written as a Roman numeral. If the string s is a correctly written Roman numeral, return this number as an integer. If s isn't a correctly written Roman numeral, return -1.
+
+For this challenge, assume that there is no restriction on the maximum number that can be written in Roman numerals.
+
+Example
+
+For s = "MMXV", the output should be
+integerValueOfRomanNumeral(s) = 2015;
+
+For s = "XLX", the output should be
+integerValueOfRomanNumeral(s) = -1.
+
+XL is a valid Roman numeral representing 40, but XLX is not valid.
+
+====================================================================================
+
+// This function returns value 
+// of a Roman symbol 
+int value(char r) 
+{ 
+    if (r == 'I') 
+        return 1; 
+    if (r == 'V') 
+        return 5; 
+    if (r == 'X') 
+        return 10; 
+    if (r == 'L') 
+        return 50; 
+    if (r == 'C') 
+        return 100; 
+    if (r == 'D') 
+        return 500; 
+    if (r == 'M') 
+        return 1000; 
+  
+    return -1; 
+} 
+  
+// Returns decimal value of 
+// roman numaral 
+int romanToDecimal(string& str) 
+{ 
+    // Initialize result 
+    int res = 0; 
+  
+    // Traverse given input 
+    for (int i = 0; i < str.length(); i++) 
+    { 
+        // Getting value of symbol s[i] 
+        int s1 = value(str[i]); 
+  
+        if (i + 1 < str.length()) 
+        { 
+            // Getting value of symbol s[i+1] 
+            int s2 = value(str[i + 1]); 
+  
+            // Comparing both values 
+            if (s1 >= s2) 
+            { 
+                // Value of current symbol 
+                // is greater or equal to 
+                // the next symbol 
+                res = res + s1; 
+            } 
+            else 
+            { 
+                // Value of current symbol is 
+                // less than the next symbol 
+                res = res + s2 - s1; 
+                i++; 
+            } 
+        } 
+        else 
+        { 
+            res = res + s1; 
+        } 
+    } 
+    return res; 
+} 
+
+std::string decimalToRoman(int value)
+{
+    struct romandata_t { unsigned int value; char const* numeral; };
+    const struct romandata_t romandata[] =
+    {
+        {1000, "M"}, {900, "CM"},
+        {500, "D"}, {400, "CD"},
+        {100, "C"}, { 90, "XC"},
+        { 50, "L"}, { 40, "XL"},
+        { 10, "X"}, { 9, "IX"},
+        { 5, "V"}, { 4, "IV"},
+        { 1, "I"},
+        { 0, NULL} // end marker
+    };
+
+    std::string result;
+    for (const romandata_t* current = romandata; current->value > 0; ++current)
+    {
+        while (value >= current->value)
+        {
+            result += current->numeral;
+            value -= current->value;
+        }
+    }
+    return result;
+}
+
+int integerValueOfRomanNumeral(std::string s) 
+{
+    int n = romanToDecimal(s);
+    std::string r = decimalToRoman(n);
+    
+    if (r == s)
+        return n;
+    
+    return -1;
+}
