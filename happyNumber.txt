@@ -1,0 +1,47 @@
+A happy number is a number defined by the following process: Start with any positive integer and replace the number with the sum of the squares of its digits. Repeat this process until the number equals 1, at which point it will stay 1, or it loops endlessly in a cycle that does not include 1. A number for which this process ends in 1 is happy.
+
+Write an algorithm to determine whether or not a number is happy.
+
+Example
+
+For n = 19, the output should be
+happyNumber(n) = true.
+
+Following the process outlined above:
+* 12 + 92 = 82;
+* 82 + 22 = 68;
+* 62 + 82 = 100;
+* 12 + 02 + 02 = 1.
+
+===============================================================================
+
+int sumDigit(int n)
+{
+    int res = 0;
+    while (n)
+    {
+        res += ((n % 10) * (n % 10));
+        n /= 10;
+    }
+    return res;
+}
+
+bool happyNumber(int n)
+{
+    std::unordered_map<int, bool> check;
+    check[n] = true;
+    
+    while (true)
+    {
+        if (n == 1)
+            return true;
+        
+        n = sumDigit(n);
+        if (check[n])
+            return false;
+            
+        check[n] = true;
+    }
+    
+    return false;
+}
