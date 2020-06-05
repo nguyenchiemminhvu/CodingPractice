@@ -1,0 +1,94 @@
+A tree is considered a binary search tree (BST) if for each of its nodes the following is true:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and the right subtrees must also be binary search trees.
+An empty tree (has no nodes) is also considered to be BST.
+
+Given a binary tree, determine whether it is a BST or not.
+
+Example
+
+For
+t = {
+    "value": -1,
+    "left": {
+        "value": -2,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": -3,
+        "left": null,
+        "right": null
+    }
+}
+the output should be
+isBST(t) = false.
+
+For
+t = {
+    "value": 1,
+    "left": {
+        "value": 0,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 2,
+        "left": null,
+        "right": null
+    }
+}
+the output should be
+isBST(t) = true.
+
+==========================================================
+
+//
+// Binary trees are already defined with this interface:
+// template<typename T>
+// struct Tree {
+//   Tree(const T &v) : value(v), left(nullptr), right(nullptr) {}
+//   T value;
+//   Tree *left;
+//   Tree *right;
+// };
+int maxValue(Tree<int> * t)
+{
+    if (!t)
+        return INT_MIN;
+    
+    while (t->right)
+        t = t->right;
+    
+    return t->value;
+}
+
+int minValue(Tree<int> * t)
+{
+    if (!t)
+        return INT_MAX;
+        
+    while (t->left)
+        t = t->left;
+    
+    return t->value;
+}
+
+bool isBST(Tree<int> * t)
+{
+    if (!t)
+        return true;
+    
+    if (t->left && t->value <= maxValue(t->left))
+        return false;
+        
+    if (t->right && t->value >= minValue(t->right))
+        return false;
+    
+    if (!isBST(t->left) || !isBST(t->right))
+        return false;
+    
+    return true;
+}
