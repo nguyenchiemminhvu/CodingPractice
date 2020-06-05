@@ -1,0 +1,29 @@
+Determine if a given year is leap or not.
+
+Example
+
+For year = 2000, the output should be
+leapYear(year) = true.
+
+2000 is divisible by 400, so the answer is yes.
+
+===============================================
+
+bool leapYear(int year) 
+{
+    // If a year is multiple of 400,  
+    // then it is a leap year  
+    if (year % 400 == 0)  
+        return true;  
+  
+    // Else If a year is muliplt of 100,  
+    // then it is not a leap year  
+    if (year % 100 == 0)  
+        return false;  
+  
+    // Else If a year is muliplt of 4,  
+    // then it is a leap year  
+    if (year % 4 == 0)  
+        return true;  
+    return false;  
+}
