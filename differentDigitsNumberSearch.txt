@@ -1,0 +1,39 @@
+Given an array of integers, find the leftmost number that has a decimal representation which doesn't contain any digit more than once. If there is no such number, return -1 instead.
+
+Example
+
+For inputArray = [22, 111, 101, 124, 33, 30], the output should be
+differentDigitsNumberSearch(inputArray) = 124;
+For inputArray = [1111, 404], the output should be
+differentDigitsNumberSearch(inputArray) = -1.
+
+============================================================
+
+bool check(int n)
+{
+    std::unordered_map<int, int> m;
+    while (n)
+    {
+        m[n % 10]++;
+        n /= 10;
+    }
+    
+    for (std::pair<int, int> p : m)
+    {
+        if (p.second > 1)
+            return false;
+    }
+    
+    return true;
+}
+
+int differentDigitsNumberSearch(std::vector<int> a)
+{
+    for (int n : a)
+    {
+        if (check(n))
+            return n;
+    }
+    
+    return -1;
+}
