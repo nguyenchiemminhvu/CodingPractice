@@ -1,0 +1,25 @@
+Determine if the given number is a power of some non-negative integer.
+
+Example
+
+For n = 125, the output should be
+isPower(n) = true;
+For n = 72, the output should be
+isPower(n) = false.
+
+========================================================
+
+bool isPower(int n)
+{
+    if (n == 1)
+        return true;
+    
+    int sq = sqrt(n);
+    for (int index = 2; index <= sq; index++) {
+        for (int power = 2; power <= sq; power++) {
+            if (pow(index, power) == n)
+                return true;
+        }
+    }
+    return false;
+}
