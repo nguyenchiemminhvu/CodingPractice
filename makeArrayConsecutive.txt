@@ -1,0 +1,24 @@
+Given an array of integers, we need to fill in the "holes" such that it contains all the integers from some range.
+
+Example
+
+For sequence = [6, 2, 3, 8], the output should be
+makeArrayConsecutive(sequence) = [4, 5, 7].
+
+=======================================================
+
+std::vector<int> makeArrayConsecutive(std::vector<int> a)
+{
+    std::vector<int> res;
+    
+    std::map<int, int> check;
+    sort(a.begin(), a.end());
+    for (int n : a)
+        check[n]++;
+        
+    for (int i = a[0]; i <= a[a.size() - 1]; i++)
+        if (!check[i])
+            res.push_back(i);
+    
+    return res;
+}
