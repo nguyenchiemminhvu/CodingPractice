@@ -59,107 +59,219 @@ When the last piece falls, the final field looks like this:
 
 =======================================================================================================
 
-vector<string> f = vector<string>(20, string(10, '.'));
+struct Piece
+{
+    vector<vector<char>> data;
+    
+    Piece() = default;
+    
+    Piece(const vector<vector<char>> &piece)
+    : data(piece)
+    {}
+    
+    Piece(const Piece &o)
+    : data(o.data)
+    {}
+    
+    bool operator != (const Piece &o) const
+    {
+        return data != o.data;
+    }
+    
+    int height() const { return data.size(); }
+    int width() const { return data[0].size(); }
+    
+    void Rotate()
+    {
+        int w = data.size();
+        int h = data[0].size();
+        vector<vector<char>> rot(h, vector<char>(w, 0));
+        int x = w;
+        for (auto &row : data)
+        {
+            int y = 0;
+            x--;
+            for (char c : row)
+                rot[y++][x] = c;
+        }
+        data = rot;
+    }
+    
+    void Print() const
+    {
+        for (const auto &row : data)
+        {
+            for (char c : row)
+                cout << c;
+            cout << endl;
+        }
+    }
+};
 
-int place2(const vector<string> &p, int y, int x) {
-    for (int i = 0; i < p.size(); ++i) {
-        for (int j = 0; j < p[0].size(); ++j) {
-            if (p[i][j]=='#') {
-                f[y+i][x+j]=p[i][j];
+struct Field
+{
+    char board[20][10];
+    char filled[20];    // Number of filled cells per row
+    
+    Field()
+    {
+        memset(board, '.', sizeof(board));
+        memset(filled, 0, sizeof(filled));
+    }
+    
+    // Find "optimal" position of the piece according to problem description.
+    // Returns the score for the piece at the returned x and y position.
+    int FindOptimal(const Piece &pi, int &xx, int &yy) const
+    {
+        int bestx = 0, besty = 20 - pi.height();
+        int bestscore = 0;
+        
+        for (int x = 0; x <= 10 - pi.width(); ++x)
+        {
+            int y = FindBottom(pi, x);
+            if (y >= 0)
+            {
+                int score = Occupants(y, pi.height());
+                if (score > bestscore)
+                {
+                    bestx = x;
+                    besty = y;
+                    bestscore = score;
+                }
+            }
+        }
+        xx = bestx;
+        yy = besty;
+        return bestscore;
+    }
+    
+    // Returns true on collision
+    bool Test(const Piece &pi, int x, int y) const
+    {
+        for (int i = pi.height() - 1; i >= 0; --i)
+        {
+            for (int j = pi.width() - 1; j >= 0; --j)
+            {
+                if (pi.data[i][j] == '#' && board[y+i][x+j] != '.')
+                {
+                    //printf("Hit at %d,%d\n", x+j, y+i);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    // Returns bottom-most row this piece can fall to
+    int FindBottom(const Piece &pi, int x) const
+    {
+        int y;
+        
+        for (y = 0; y <= 20 - pi.height() && !Test(pi, x, y); ++y)
+        { }
+        //printf("bottom @ %d = %d\n", x, y - 1);
+        return y - 1;
+    }
+    
+    // Returns number of occupied cells on h rows starting at y
+    int Occupants(int y, int h) const
+    {
+        return std::accumulate(&filled[y], &filled[y + h], 0);
+    }
+    
+    // Place a piece onto the board
+    void Place(const Piece &pi, int x, int y, char stamp)
+    {
+//        pi.Print();
+//        printf("Place %dx%d %c @ %d,%d\n", pi.width(), pi.height(), stamp, x, y);
+        for (int i = 0; i < pi.height(); ++i)
+        {
+            for (int j = 0; j < pi.width(); ++j)
+            {
+                if (pi.data[i][j] == '#')
+                {
+                    board[y+i][x+j] = stamp;
+                    filled[y+i]++;
+                }
             }
         }
     }
     
-    for (int i = y+p.size()-1; i >= y; --i) {
-        int is_full=1;
-        for (int j = 0; j < 10; ++j) {
-            if (f[i][j]!='#') {
-                is_full = 0;
+    // Finds full rows and drops them. Returns how many rows we dropped.
+    int CheckClear(int y, int h)
+    {
+        int dropped = 0;
+        for (int i = 0; i < h; ++i)
+        {
+            if (filled[y + i] == 10)
+            {
+                DropRow(y + i);
+                dropped++;
+            }
+        }
+        return dropped;
+    }
+    
+    // Drops everything above row y down one row, overwritting row y.
+    void DropRow(int y)
+    {
+        if (y > 1)
+        {
+            memmove(&board[1], &board[0], 10*y);
+            memmove(&filled[1], &filled[0], y);
+        }
+        memset(&board[0], '.', 10);
+        filled[0] = 0;
+    }
+    
+    void Print() const
+    {  
+        int x, y;
+        for (y = 0; y < 20; ++y)
+        {
+            if (filled[y] < 10)
                 break;
-            }
         }
-        if (is_full) {
-            f.erase(f.begin() + i);
-        }
-    }
-    int res = 0;
-    while (f.size()<20) {
-        ++res;
-        f.insert(f.begin(), string(10, '.'));
-    }
-    return res;
-}
-
-void rotate(vector<string> &p) {
-    vector<string> r;
-    for (int j = 0; j < p[0].size(); ++j) {
-        string s;
-        for (int i = 0; i < p.size(); ++i) {
-            s.push_back(p[p.size()-i-1][j]);
-        }
-        r.push_back(s);
-    }
-    p=r;
-}
-
-int is_ok(const vector<string> &p, int y, int x) {
-    for (int i = 0; i < p.size(); ++i) {
-        for (int j = 0; j < p[0].size(); ++j) {
-            if (p[i][j] == '#' && f[i+y][x+j] == '#') {
-                return 0;
-            }
+        y--;
+        for (; y < 20; ++y)
+        {
+            for (int x = 0; x < 10; ++x)
+                cout << board[y][x];
+            cout << ' ' << (int)filled[y] << endl;
         }
     }
-    return 1;
-}
-
-pair<int,int> place(const vector<string> &p, int pos) {
-    pair<int,int> bad=make_pair(-1,-1);
-    if (pos+p[0].size()>10) {
-        return bad;
-    }
-    for (int i = 0; i < 20 - p.size() + 1; ++i) {
-        if (!is_ok(p, i, pos)) {
-            return bad;
-        }
-        int fff=0;
-        for (int j = 0; j < p.size(); ++j) {
-            for (int k = 0; k < 10; ++k) {
-                fff+=f[j+i][k]=='#';
-            }
-        }
-        bad=make_pair(fff,i);
-    }
-    return bad;
-}
+};
 
 int tetrisGame(std::vector<std::vector<std::vector<char>>> pieces) {
-    int res=0;
-    for (int i = 0; i < pieces.size(); ++i) {
-        pair<int,int> b = make_pair(-1,-1);
-        vector<string> bp;
-        int bpx=-1;
-        vector<string> p;
-        for (int k = 0; k < pieces[i].size(); ++k) {
-            p.push_back(
-                string(pieces[i][k].begin(), pieces[i][k].end()));
-        }
-        for (int j = 0; j < 4; ++j) {
-            for (int k = 0; k < 10; ++k) {
-                pair<int,int> r = place(p, k);
-                if (r.first < 0) {
-                    continue;
-                }
-                if (r.first > b.first) {
-                    b=r;
-                    bp=p;
-                    bpx=k;
-                }
+    int points = 0;
+    char stamp = 'A';
+    Field field;
+    
+    for (const auto &p : pieces)
+    {
+        Piece pi(p), rpi(p);
+        int bestx, besty, bestscore = -1;
+        Piece bestrot;
+       
+        do
+        {
+            int x, y, score;
+            score = field.FindOptimal(rpi, x, y);
+            if (score > bestscore)
+            {
+                bestscore = score;
+                bestx = x;
+                besty = y;
+                bestrot = rpi;
             }
-            rotate(p);
-        }
-        res += place2(bp,b.second, bpx);
+            rpi.Rotate();
+        } while (pi != rpi);
+        printf("bestscore = %d, bestx = %d, besty = %d\n", bestscore, bestx, besty);
+        field.Place(bestrot, bestx, besty, stamp++);
+        field.Print();
+        cout << endl;
+        
+        points += field.CheckClear(besty, bestrot.height());
     }
-    return res;
+    return points;
 }
-
