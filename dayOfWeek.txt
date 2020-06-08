@@ -21,7 +21,6 @@ bool isLeapYear(int year)
     return (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0));
 }
 
-
 int dayOfWeek(std::string input)
 {
     int month = std::atoi( std::string(input.begin(), input.begin() + 2).c_str() );
