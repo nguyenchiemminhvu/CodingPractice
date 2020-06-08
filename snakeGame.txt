@@ -1,0 +1,268 @@
+Your task is to imitate a turn-based variation of the popular "Snake" game.
+
+You are given the initial configuration of the board and a list of commands which the snake follows one-by-one. The game ends if one of the following happens:
+
+the snake tries to eat its tail;
+the snake tries to move out of the board;
+it executes all the given commands.
+Output the board configuration after the game ends.
+
+Example
+
+For
+gameBoard = [['.', '.', '.', '.'],
+             ['.', '.', '<', '*'],
+             ['.', '.', '.', '*']]
+and commands = "FFFFFRFFRRLLF", the output should be
+
+snakeGame(gameBoard, commands) = [['.', '.', '.', '.'],
+                                  ['X', 'X', 'X', '.'],
+                                  ['.', '.', '.', '.']]
+For
+gameBoard = [['.', '.', '^', '.', '.'],
+             ['.', '.', '*', '*', '.'],
+             ['.', '.', '.', '*', '*']]
+and commands = "RFRF", the output should be
+
+snakeGame(gameBoard, commands) = [['.', '.', 'X', 'X', '.'],
+                                  ['.', '.', 'X', 'X', '.'],
+                                  ['.', '.', '.', 'X', '.']]
+For
+gameBoard = [['.', '.', '*', '>', '.'],
+             ['.', '*', '*', '.', '.'],
+             ['.', '.', '.', '.', '.']]
+and commands = "FRFFRFFRFLFF", the output should be
+
+snakeGame(gameBoard, commands) = [['.', '.', '.', '.', '.'],
+                                  ['<', '*', '*', '.', '.'],
+                                  ['.', '.', '*', '.', '.']]
+
+======================================================================
+
+pair<int, int> dir[4] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+vector<vector<int>> adj = 
+{
+    {0, -1, 2, 3}, // U (0): { U, -, L, R}
+    {1, -1, 3, 2}, // D (1): { D, -, R, L}
+    {2, -1, 1, 0}, // L (2): { L, -, D, U}
+    {3, -1, 0, 1}  // R (3): { R, -, U, D}
+};
+
+string head = "^v<>";
+vector<vector<bool>> snakeNodes;
+vector<vector<char>> board;
+set<pair<int, int>> headNeighbors;
+
+bool killed = false;
+bool valid = false;
+int nodes = 0;
+
+
+struct Node
+{
+   int x, y;
+   Node* next = NULL;
+   Node* prev = NULL;  
+   
+   int direction;
+
+   Node(){}
+   Node(int X, int Y) : x(X), y(Y) {}
+};
+
+
+Node* MakeLinkedList(Node* node, pair<int, int> first, vector<vector<bool>> neighbors)
+{    
+    neighbors[first.first][first.second] = false;
+    
+    Node* curr = node;        
+    curr->prev = new Node(first.second, first.first);
+    curr->prev->next = curr;
+    curr = curr->prev;    
+    
+    if(curr->next->y < curr->y) curr->direction = 0;
+    if(curr->next->y > curr->y) curr->direction = 1;            
+    if(curr->next->x < curr->x) curr->direction = 2;
+    if(curr->next->x > curr->x) curr->direction = 3;    
+
+    int count = nodes-1;        
+    
+    while(count > 0)
+    {
+        int x = curr->x;
+        int y = curr->y;
+        
+        bool found = false;
+        
+        for(int i=0; i<4; i++)
+        {
+            pair<int, int> d = dir[i];
+            
+            if(y + d.first  < 0 || y + d.first >= board.size() 
+            || x + d.second < 0 || x + d.second >= board[0].size()) continue;
+            
+            if(neighbors[y + d.first][x + d.second] == true)
+            {
+                Node* prev = new Node(x + d.second, y + d.first);
+                
+                if(i == 0) prev->direction = 1;
+                if(i == 1) prev->direction = 0;
+                if(i == 2) prev->direction = 3;
+                if(i == 3) prev->direction = 2;
+                
+                curr->prev = prev;
+                prev->next = curr;                
+                curr = curr->prev;
+
+                board[curr->y][curr->x] = '-';
+                neighbors[curr->y][curr->x] = false;                
+                count--;
+                found = true;
+                break;
+            }
+        }
+        if(!found) return node;        
+    }
+    valid = true;       
+    return node;
+}
+
+
+std::vector<std::vector<char>> snakeGame(std::vector<std::vector<char>> gameBoard, std::string commands) 
+{        
+    snakeNodes.resize(gameBoard.size());
+    fill(snakeNodes.begin(), snakeNodes.end(), vector<bool>(gameBoard[0].size(), false));
+    
+    Node* headNode = new Node;
+    bool headFound = false;
+    
+    for(int i=0; i<gameBoard.size(); i++)
+    {
+        for(int j=0; j<gameBoard[i].size(); j++)
+        {
+            if(!headFound && head.find_first_of(gameBoard[i][j]) != string::npos)
+            {
+                headNode->y = i;
+                headNode->x = j;           
+
+                if(gameBoard[i][j] == '^') headNode->direction = 0;
+                if(gameBoard[i][j] == 'v') headNode->direction = 1;
+                if(gameBoard[i][j] == '<') headNode->direction = 2;
+                if(gameBoard[i][j] == '>') headNode->direction = 3;    
+                
+                headFound = true;
+                i = 0; 
+                j = -1;                
+                continue;
+            }
+            if(headFound && gameBoard[i][j] == '*')
+            {                
+                if((abs(headNode->y - i) == 1 && abs(headNode->x - j) == 0) 
+                || (abs(headNode->x - j) == 1 && abs(headNode->y - i) == 0))
+                {
+                    headNeighbors.insert({i, j});
+                }
+                snakeNodes[i][j] = true;
+                nodes++;
+            }
+        }
+    }
+        
+    if(nodes > 0)
+    {
+        Node* LL;
+        
+        while(!valid && !headNeighbors.empty())
+        {
+            pair<int, int> first = *headNeighbors.begin();
+
+            board = gameBoard;
+            LL = headNode;
+            LL = MakeLinkedList(LL, first, snakeNodes);        
+            headNeighbors.erase(first);
+        }
+        headNode = LL;
+    }    
+    board = gameBoard;
+
+    
+    for(auto move : commands)
+    {       
+        int next_y, next_x;
+
+        if(move == 'F') 
+        {
+            headNode->direction = adj[headNode->direction][0];
+            
+            if(nodes == 0)
+            {
+                next_y = headNode->y + dir[headNode->direction].first;
+                next_x = headNode->x + dir[headNode->direction].second; 
+                
+                if(next_y < 0 || next_y >= board.size() || next_x < 0 || next_x >= board[0].size())
+                {
+                    board[headNode->y][headNode->x] = 'X';                
+                    return board;
+                }
+                board[headNode->y][headNode->x] = '.';                
+                headNode->y = next_y;
+                headNode->x = next_x;
+                board[headNode->y][headNode->x] = head[headNode->direction];
+                continue;
+            }           
+        }
+        else
+        {
+            if(move == 'L') headNode->direction = adj[headNode->direction][2];
+            if(move == 'R') headNode->direction = adj[headNode->direction][3]; 
+                        
+            board[headNode->y][headNode->x] = head[headNode->direction];
+            continue;            
+        }                                
+        next_y = headNode->y + dir[headNode->direction].first;
+        next_x = headNode->x + dir[headNode->direction].second;        
+        
+        if(next_y < 0 || next_y >= board.size() 
+        || next_x < 0 || next_x >= board[0].size()
+        || board[next_y][next_x] == '*') 
+        {            
+            killed = true;
+            break;
+        }                
+        headNode->x = next_x;
+        headNode->y = next_y;        
+        board = vector<vector<char>>(gameBoard.size(), vector<char>(gameBoard[0].size(), '.'));              
+        Node* curr = headNode->prev;
+        
+        while(curr != NULL)
+        {         
+            int d = curr->direction;           
+            
+            curr->y += dir[curr->direction].first;
+            curr->x += dir[curr->direction].second;  
+            
+            if(curr->next->y < curr->y) curr->direction = 0;
+            if(curr->next->y > curr->y) curr->direction = 1;            
+            if(curr->next->x < curr->x) curr->direction = 2;
+            if(curr->next->x > curr->x) curr->direction = 3;
+            
+            board[curr->y][curr->x] = '*';            
+            curr = curr->prev;
+            
+        }
+        board[next_y][next_x] = head[headNode->direction];
+    }
+    
+    if(killed)
+    {
+        for(int i=0; i<board.size(); i++)
+        {
+            for(int j=0; j<board[i].size(); j++)
+            {
+                if(board[i][j] != '.') board[i][j] = 'X';
+            }
+        }
+    }   
+    return board;
+}
