@@ -1,0 +1,112 @@
+A tree is considered to be a binary search tree (BST) if for its every node the following is true:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+Thee right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and the right subtrees must also be binary search trees.
+Given a binary search tree t and an element n, find and return the element in t closest to n. If there are several such elements, return the topmost one.
+
+Example
+
+For
+t = {
+    "value": 1,
+    "left": {
+        "value": 0,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 3,
+        "left": null,
+        "right": null
+    }
+}
+and n = 2, the output should be
+closestInTree(t, n) = 1.
+
+While there are two elements in this tree that are equally close to 2, we choose 1 since it appears at the topmost position.
+
+For
+t = {
+    "value": 10,
+    "left": {
+        "value": 9,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 12,
+        "left": {
+            "value": 11,
+            "left": null,
+            "right": null
+        },
+        "right": {
+            "value": 13,
+            "left": null,
+            "right": null
+        }
+    }
+}
+and n = 12, the output should be
+closestInTree(t, n) = 12.
+
+===========================================================================
+
+//
+// Binary trees are already defined with this interface:
+// template<typename T>
+// struct Tree {
+//   Tree(const T &v) : value(v), left(nullptr), right(nullptr) {}
+//   T value;
+//   Tree *left;
+//   Tree *right;
+// };
+void ConvertTree(Tree<int> * t, Tree<std::pair<int, int>> *& tt, int level = 0)
+{
+    if (t)
+    {
+        tt = new Tree<std::pair<int, int>>(std::pair<int, int>(t->value, level));
+        ConvertTree(t->left, tt->left, level + 1);
+        ConvertTree(t->right, tt->right, level + 1);
+    }
+}
+
+void traversal(Tree<std::pair<int, int>> * t, std::vector<std::pair<int, int>> &close)
+{
+    if (t)
+    {
+        traversal(t->left, close);
+        close.push_back(t->value);
+        traversal(t->right, close);
+    }
+}
+
+int closestInTree(Tree<int> * t, int n)
+{
+    Tree<std::pair<int, int>> * tt;
+    ConvertTree(t, tt);
+    
+    std::vector<std::pair<int, int>> close;
+    traversal(tt, close);
+    
+    std::vector<std::pair<int, int>>::iterator upper = close.begin(), lower = close.end() - 1;
+    while (upper != close.end() && upper->first < n)
+        upper++;
+    while (lower != close.begin() && lower->first > n)
+        lower--;
+    
+    if (lower == upper)
+        return lower->first;
+    
+    if (n - lower->first < upper->first - n)
+        return lower->first;
+    
+    if (n - lower->first == upper->first - n)
+    {
+        if (lower->second < upper->second)
+            return lower->first;
+    }
+    
+    return upper->first;
+}
