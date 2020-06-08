@@ -1,0 +1,23 @@
+Split a given string into an array of words in it.
+
+Example
+
+For str = "I love CodeSignal", the output should be
+splitString(str) = ["I", "love", "CodeSignal"].
+
+=================================================
+
+std::vector<std::string> splitString(std::string str) 
+{
+    std::regex regex("\\w+\\s");
+    std::smatch match;
+    std::vector<std::string> slicedArray;
+    str += " ";
+    while (std::regex_search(str, match, regex))
+    {
+        std::string matchString = match[0].str();
+        slicedArray.push_back(std::string(matchString.begin(), matchString.end() - 1));
+        str = match.suffix().str();
+    }
+    return slicedArray;
+}
