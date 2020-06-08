@@ -72,8 +72,8 @@ finally, @ finishes the program execution.
 
 ===============================================================================
 
-std::string befunge93(std::vector<std::string> program) {
-    
+std::string befunge93(std::vector<std::string> program) 
+{
     stack<int> box;
     string output;
     int cmd_num = 0;
@@ -83,8 +83,10 @@ std::string befunge93(std::vector<std::string> program) {
     int dir_y = 0;
     int t, t1, t2;
     bool start_string = false;
-    while(true){
-        if((output.size() >= 100) || (cmd_num >= 100000)){
+    while(true)
+    {
+        if((output.size() >= 100) || (cmd_num >= 100000))
+        {
             return output;
         }
         x += dir_x;
@@ -95,10 +97,14 @@ std::string befunge93(std::vector<std::string> program) {
         
         char c = program[y][x];
         
-        if(start_string && (c != '"')){
+        if(start_string && (c != '"'))
+        {
             box.push(c);
-        }else{
-            switch(c){
+        }
+        else
+        {
+            switch(c)
+            {
                 case '>':
                     dir_x = 1;
                     dir_y = 0;
@@ -127,28 +133,43 @@ std::string befunge93(std::vector<std::string> program) {
                 case '`':
                 case '\\':
                     t1 = 0;
-                    if(box.size() > 0){
+                    if(box.size() > 0)
+                    {
                         t1 = box.top();
                         box.pop();
                     }
                     t2 = 0;
-                    if(box.size() > 0){
+                    if(box.size() > 0)
+                    {
                         t2 = box.top();
                         box.pop();
                     }
-                    if(c == '+'){
+                    if(c == '+')
+                    {
                         box.push(t1 + t2);
-                    }else if(c == '-'){
+                    }
+                    else if(c == '-')
+                    {
                         box.push(t2 - t1);
-                    }else if(c == '*'){
+                    }
+                    else if(c == '*')
+                    {
                         box.push(t1 * t2);
-                    }else if(c == '/'){
+                    }
+                    else if(c == '/')
+                    {
                         box.push(t2 / t1);
-                    }else if(c == '%'){
+                    }
+                    else if(c == '%')
+                    {
                         box.push(t2 % t1);
-                    }else if(c == '`'){
+                    }
+                    else if(c == '`')
+                    {
                         box.push((t2 > t1)? 1 : 0);
-                    }else if(c == '\\'){
+                    }
+                    else if(c == '\\')
+                    {
                         box.push(t1);
                         box.push(t2);
                     }
@@ -159,21 +180,31 @@ std::string befunge93(std::vector<std::string> program) {
                 case '_':
                 case '|':
                     t = 0;
-                    if(box.size() > 0){
+                    if(box.size() > 0)
+                    {
                         t = box.top();
                         box.pop();
                     }
-                    if(c == '.'){
+                    if(c == '.')
+                    {
                         output += to_string(t) + " ";
-                    }else if(c == ','){
+                    }
+                    else if(c == ',')
+                    {
                          output += (char)t;
-                    }else if(c == '!'){
+                    }
+                    else if(c == '!')
+                    {
                         t = (t == 0)? 1 : 0;
                         box.push(t);
-                    }else if(c == '_'){
+                    }
+                    else if(c == '_')
+                    {
                         dir_x = (t == 0)? 1 : -1;
                         dir_y = 0;
-                    }else if(c == '|'){
+                    }
+                    else if(c == '|')
+                    {
                         dir_y = (t == 0)? 1 : -1;
                         dir_x = 0;
                     }
@@ -193,7 +224,8 @@ std::string befunge93(std::vector<std::string> program) {
                         return output;
                     break;
                 default:
-                    if((c >= '0') && (c <= '9')){
+                    if((c >= '0') && (c <= '9'))
+                    {
                         box.push(c - '0');
                     }
                     break;
