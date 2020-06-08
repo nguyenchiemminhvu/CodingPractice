@@ -19,169 +19,79 @@ game2048(grid, path) = [[0, 0, 0, 0],
 
 =======================================================================
 
-void Right(vector<vector<int>>& a) 
+void rotate90(vector< vector<int> >& grid) 
 {
-	for (int i = 0; i < 4; i++) 
+    for(size_t i = 0; i < 3; i++)
     {
-		for (int j = 3; j > 0; j--) 
+        for(size_t j = i; j < 3 - i; j++) 
         {
-			for (int k = j - 1; k >= 0; k--) 
-            {
-				if (a[i][j] == a[i][k] && a[i][k] != 0) 
-                {
-                    a[i][j] += a[i][k];
-                    a[i][k] = 0;
-					break;
-				}
-				else if (a[i][k] != 0) break;
-			}
-		}
-	}
-
-	for (int k = 0; k < 4; k++) 
-    {
-		for (int i = 3; i > 0; i--) 
-        {
-			if (a[k][i] == 0) {
-				for (int j = i - 1; j >= 0; j--) 
-                {
-					if (a[k][j] != 0) 
-                    {
-						swap(a[k][i], a[k][j]); break;
-					}
-				}
-			}
-		}
-	}
+            int tmp = grid[i][j];
+            grid[i][j] = grid[j][3 - i];
+            grid[j][3 - i] = grid[3 - i][3 - j];
+            grid[3 - i][3 - j] = grid[3 - j][i];
+            grid[3 - j][i] = tmp;
+        }
+    }
 }
 
-void Left(vector<vector<int>>& a) 
+void move_left(vector< vector<int> >& grid) 
 {
-	for (int i = 0; i < 4; i++) 
+    for(size_t i = 0; i < 4; i++) 
     {
-		for (int j = 0; j < 4; j++) 
+        stack<int> numbers;
+        for(int j = 3; j >= 0; j--)
+            if (grid[i][j] != 0)
+                numbers.push(grid[i][j]);
+        int index = 0;
+        while(!numbers.empty()) 
         {
-			for (int k = j + 1; k < 4; k++) 
+            int number = numbers.top();
+            numbers.pop();
+            if (!numbers.empty() && numbers.top() == number)
             {
-				if (a[i][j] == a[i][k] && a[i][k] != 0) 
-                {
-                    a[i][j] += a[i][k];
-                    a[i][k] = 0;
-					break;
-				}
-				else if (a[i][k] != 0) break;
-			}
-		}
-	}
-	
-	for (int k = 0; k < 4; k++) 
-    {
-		for (int i = 0; i < 3; i++) 
-        {
-			if (a[k][i] == 0) 
-            {
-				for (int j = i + 1; j < 4; j++) 
-                {
-					if (a[k][j] != 0) 
-                    {
-						swap(a[k][i], a[k][j]); break;
-					}
-				}
-			}
-		}
-	}
+                number <<= 1;
+                numbers.pop();
+            }
+            grid[i][index++] = number;
+        }
+        while(index < 4)
+            grid[i][index++] = 0;
+    }
 }
 
-void Up(vector<vector<int>>& a) 
+void rotate(int degree, vector< vector<int> >& grid) 
 {
-	for (int i = 0; i < 4; i++) 
+    while(degree)
     {
-		for (int j = 0; j < 4; j++) 
-        {
-			for (int k = j + 1; k < 4; k++) 
-            {
-				if (a[j][i] == a[k][i] && a[k][i] != 0) 
-                {
-                    a[j][i] += a[k][i];
-                    a[k][i] = 0;
-					break;
-				}
-				else if (a[k][i] != 0) break;
-			}
-		}
-	}
-
-	for (int k = 0; k < 4; k++) 
-    {
-		for (int i = 0; i < 3; i++) 
-        {
-			if (a[i][k] == 0) 
-            {
-				for (int j = i + 1; j < 4; j++) 
-                {
-					if (a[j][k] != 0)
-                    {
-						swap(a[i][k], a[j][k]); break;
-					}
-				}
-			}
-		}
-	}
-}
-
-void Down(vector<vector<int>>& a) 
-{
-	for (int i = 0; i < 4; i++) 
-    {
-		for (int j = 3; j > 0; j--) 
-        {
-			for (int k = j - 1; k >= 0; k--) 
-            {
-				if (a[j][i] == a[k][i] && a[k][i] != 0) 
-                {
-                    a[j][i] += a[k][i];
-                    a[k][i] = 0;
-					break;
-				}
-				else if (a[k][i] != 0) break;
-			}
-		}
-	}
-
-	for (int k = 0; k < 4; k++) 
-    {
-		for (int i = 3; i > 0; i--) 
-        {
-			if (a[i][k] == 0) 
-            {
-				for (int j = i - 1; j >= 0; j--) 
-                {
-					if (a[j][k] != 0) 
-                    {
-						swap(a[i][k], a[j][k]); break;
-					}
-				}
-			}
-		}
-	}
+        rotate90(grid); 
+        degree -= 90;
+    }
 }
 
 std::vector<std::vector<int>> game2048(std::vector<std::vector<int>> grid, std::string path) 
 {
-    for(int i = 0; i < path.length(); i++)
+    for(size_t i = 0; i < path.size(); i++) 
     {
-        switch(path[i])
+        char direction = path[i];
+        if (direction == 'L')
+            move_left(grid);
+        else if (direction == 'R') 
         {
-            case 'R' : Right(grid);
-                break;
-            case 'L' : Left(grid);
-                break;
-            case 'U' : Up(grid);
-                break;
-            case 'D' : Down(grid);
-                break;
-            default : 
-                break;
+            rotate(180, grid);
+            move_left(grid);
+            rotate(180, grid);
+        }
+        else if (direction == 'U')
+        {
+            rotate(90, grid);
+            move_left(grid);
+            rotate(270, grid);
+        }
+        else if (direction == 'D')
+        {
+            rotate(270, grid);
+            move_left(grid);
+            rotate(90, grid);
         }
     }
     
