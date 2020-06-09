@@ -1,0 +1,14 @@
+Given an array of integers, find the maximal difference among all possible pairs of its elements.
+
+Example
+
+For inputArray = [19, 32, 11, 23], the output should be
+arrayMaximalDifference(inputArray) = 21.
+
+=================================================
+
+int arrayMaximalDifference(std::vector<int> a)
+{
+    std::sort(a.begin(), a.end());
+    return a.back() - a.front();
+}
