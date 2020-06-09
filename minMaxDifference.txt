@@ -1,0 +1,29 @@
+Given an array find the absolute difference between its minimal and maximal elements.
+
+Example
+
+For inputArray = [1, 4, 10, 4, 2], the output should be
+minMaxDifference(inputArray) = 9.
+
+Here |10 - 1| = 9.
+
+======================================================
+
+int minMaxDifference(std::vector<int> inputArray)
+{
+    int indexOfMinimum = 0,
+        indexOfMaximum = 0;
+
+    for (int i = 1; i < inputArray.size(); i++)
+    {
+        if (inputArray[i] < inputArray[indexOfMinimum])
+        {
+            indexOfMinimum = i;
+        }
+        if (inputArray[i] > inputArray[indexOfMaximum])
+        {
+            indexOfMaximum = i;
+        }
+    }
+    return abs(inputArray[indexOfMinimum] - inputArray[indexOfMaximum]);
+}

@@ -1,0 +1,42 @@
+Given the positions of a white bishop and a black pawn on the standard chess board, determine whether the bishop can capture the pawn in one move.
+
+The bishop has no restrictions in distance for each move, but is limited to diagonal movement. Check out the example below to see how it can move:
+
+Example
+
+For bishop = "a1" and pawn = "c3", the output should be
+bishopAndPawn(bishop, pawn) = true.
+
+For bishop = "h1" and pawn = "h3", the output should be
+bishopAndPawn(bishop, pawn) = false.
+
+==================================================
+
+bool bishopAndPawn(std::string bishop, std::string pawn)
+{
+    struct Parser
+    {
+        int getX(char pos)
+        {
+            return pos - 'a';
+        }
+
+        int getY(char pos)
+        {
+            return pos - '1';
+        }
+    };
+
+    Parser myParser;
+    int x1 = myParser.getX(bishop[0]);
+    int y1 = myParser.getY(bishop[1]);
+    int x2 = myParser.getX(pawn[0]);
+    int y2 = myParser.getY(pawn[1]);
+
+    if (x1 + y1 == x2 + y2 || x1 - y1 == x2 - y2)
+    {
+        return true;
+    }
+
+    return false;
+}
