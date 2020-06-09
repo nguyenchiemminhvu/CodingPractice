@@ -1,0 +1,24 @@
+Find the number of elements that are contained in both of the given arrays.
+
+Example
+
+For a = [1, 2, 3] and b = [3, 4, 5], the output should be
+sameElementsNaive(a, b) = 1.
+
+============================================================
+
+int sameElementsNaive(std::vector<int> a, std::vector<int> b)
+{
+    std::unordered_map<int, int> m;
+    for (int n : a)
+        m[n]++;
+    for (int n : b)
+        m[n]++;
+    
+    int res = 0;
+    for (std::pair<int, int> p : m)
+    {
+        res += (p.second > 1);
+    }
+    return res;
+}
