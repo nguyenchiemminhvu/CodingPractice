@@ -1,0 +1,31 @@
+Given integers n and k, find the number of the ways to choose k objects out of n different ones modulo 109 + 7. Note that the order doesn't matter.
+
+Example
+
+For n = 5 and k = 2, the output should be
+countWays(n, k) = 10.
+Here are all possible ways to choose 2 objects out of 5 if we number them from 1 to 5:
+
+[1, 2], [1, 3], [1, 4], [1, 5],
+[2, 3], [2, 4], [2, 5],
+[3, 4], [3, 5],
+[4, 5]
+
+===================================================================
+
+#define MOD 1000000007
+
+int countWays(int n, int k)
+{
+    int C[k+1]; 
+    memset(C, 0, sizeof(C));
+    
+    C[0] = 1;
+  
+    for (int i = 1; i <= n; i++) 
+    {
+        for (int j = min(i, k); j > 0; j--) 
+            C[j] = ((C[j] % MOD) + (C[j-1] % MOD)) % MOD; 
+    } 
+    return C[k];
+}
