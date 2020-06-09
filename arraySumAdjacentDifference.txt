@@ -1,0 +1,23 @@
+Given array of integers, find the sum of absolute differences of consecutive numbers.
+
+Example
+
+For inputArray = [4, 7, 1, 2], the output should be
+arraySumAdjacentDifference(inputArray) = 10.
+
+|4 - 7| = 3;
+|7 - 1| = 6;
+|1 - 2| = 1
+So, the answer is 3 + 6 + 1 = 10.
+
+========================================================
+
+int arraySumAdjacentDifference(std::vector<int> a)
+{
+    int s = 0;
+    for (int i = 1; i < a.size(); i++)
+    {
+        s += abs(a[i] - a[i - 1]);
+    }
+    return s;
+}
