@@ -1,0 +1,29 @@
+The inversion count for an array indicates how far the array is from being sorted. If the array is already sorted, then the inversion count is 0. If the array is sorted in reverse order, then the inversion count is the maximum possible value.
+
+Given an array a, find its inversion count. Since this number could be quite large, take it modulo 109 + 7.
+
+Example
+
+For a = [3, 1, 5, 6, 4], the output should be countInversions(a) = 3.
+
+The three inversions in this case are: (3, 1), (5, 4), (6, 4).
+
+===================================================================
+
+#define M 1000000007
+
+int countInversions(std::vector<int> nums)
+{
+    int res = 0;
+    
+    std::vector<int> temp;
+    for(int i = nums.size() - 1; i >= 0; i--)
+    {
+        std::vector<int>::iterator it = std::lower_bound(temp.begin(), temp.end(), nums[i]);
+        res += (int)(it - temp.begin()) % M;
+        res %= M;
+        temp.insert(it, nums[i]);
+    }
+    
+    return res % M;
+}
