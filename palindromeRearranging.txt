@@ -1,0 +1,27 @@
+Given a string, find out if its characters can be rearranged to form a palindrome.
+
+Example
+
+For inputString = "aabb", the output should be
+palindromeRearranging(inputString) = true.
+
+We can rearrange "aabb" to make "abba", which is a palindrome.
+
+=========================================================
+
+#define CHARS 26
+bool palindromeRearranging(std::string input) {
+    int freq[CHARS] = { 0 };
+    for (char c : input)
+    {
+        freq[c - 'a']++;
+    }
+    
+    int cOdd = 0;
+    for (int i = 0; i < CHARS; i++)
+    {
+        if (freq[i] & 1)
+            cOdd++;
+    }
+    return input.size() & 1 ? cOdd <= 1 : cOdd <= 0;
+}

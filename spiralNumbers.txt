@@ -1,0 +1,45 @@
+Construct a square matrix with a size N × N containing integers from 1 to N * N in a spiral order, starting from top-left and in clockwise direction.
+
+Example
+
+For n = 3, the output should be
+
+spiralNumbers(n) = [[1, 2, 3],
+                    [8, 9, 4],
+                    [7, 6, 5]]
+
+=====================================================
+
+std::vector<std::vector<int>> spiralNumbers(int n) {
+    std::vector<std::vector<int>> res(n, std::vector<int>(n, 0));
+    int top, bottom, left, right;
+    top = left = 0;
+    bottom = right = n - 1;
+    
+    int id = 1;
+    while (id <= n || top < bottom && left < right)
+    {
+        for (int i = left; i <= right; i++)
+            res[top][i] = id++;
+        top++;
+        
+        for (int i = top; i <= bottom; i++)
+            res[i][right] = id++;
+        right--;
+        
+        for (int i = right; i >= left; i--)
+            res[bottom][i] = id++;
+        bottom--;
+        
+        for (int i = bottom; i >= top; i--)
+            res[i][left] = id++;
+        left++;
+    }
+    
+    if (n & 1)
+    {
+        res[n/2][n/2] = n * n;
+    }
+    
+    return res;
+}

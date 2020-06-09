@@ -13,21 +13,21 @@ lineEncoding(s) = "2a3bc".
 ============================================================================
 
 std::string lineEncoding(std::string s) {
-
-  s += "#";
-  int cnt = 1;
-  std::string result = "";
-  for (int i = 1; i < (int)s.size(); i++) {
-    if (s[i] == s[i - 1]) {
-      cnt++;
-    } else {
-      if (cnt > 1) {
-        result += std::to_string(cnt);
-      }
-      cnt = 1;
-      result += s[i - 1];
+    std::string res;
+    
+    int curIndex = 0;
+    size_t next = s.find_first_not_of(s[curIndex], curIndex);
+    while (next != std::string::npos)
+    {
+        res += (next - curIndex) == 1 ? "" : std::to_string(next - curIndex);
+        res += s[curIndex];
+        
+        curIndex = next;
+        next = s.find_first_not_of(s[curIndex], curIndex);
     }
-  }
-
-  return result;
+    
+    res += (s.size() - curIndex) == 1 ? "" : std::to_string(s.size() - curIndex);
+    res += s[curIndex];
+    
+    return res;
 }

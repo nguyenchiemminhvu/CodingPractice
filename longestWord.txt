@@ -1,0 +1,28 @@
+Define a word as a sequence of consecutive English letters. Find the longest word from the given string.
+
+Example
+
+For text = "Ready, steady, go!", the output should be
+longestWord(text) = "steady".
+
+=============================================================
+
+std::string longestWord(std::string text) {
+    std::string res;
+    std::string S;
+    for (char c : text)
+    {
+        if (std::isalpha(c))
+        {
+            S += c;
+            continue;
+        }
+        if (S.length() > res.length())
+            res = S;
+        S.clear();
+    }
+    if (S.length() > res.length())
+            res = S;
+    
+    return res;
+}

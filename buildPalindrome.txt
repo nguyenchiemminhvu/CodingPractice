@@ -1,0 +1,30 @@
+Given a string, find the shortest possible string which can be achieved by adding characters to the end of initial string to make it a palindrome.
+
+Example
+
+For st = "abcdc", the output should be
+buildPalindrome(st) = "abcdcba".
+
+===============================================
+
+bool isPalindrome(const std::string &s)
+{
+    return s == std::string(s.rbegin(), s.rend());
+}
+
+std::string buildPalindrome(std::string s)
+{
+    if (isPalindrome(s))
+        return s;
+    
+    std::string res;
+    int originSize = s.size();
+    s.append(std::string(s.rbegin(), s.rend()));
+    while (s.size() > originSize + 1)
+    {
+        s.erase(s.begin() + originSize);
+        if (isPalindrome(s))
+            res = s;
+    }
+    return res;
+}
