@@ -1,0 +1,26 @@
+#define Z z[r][c] =
+#define L(u, v) s += u (i & 1); for (int x : t) s += v & 51;
+#define I(u) ? w ? Z 95 : 0, c u, Z 95, c u :
+
+int i, r, c, w;
+
+auto fractal(int n) {
+    string s = "012", t; // encrypt solution
+    for (; ++i < n; ) {
+        t = s;
+        L(48 +, 101 - x)
+        L(49 -, 101 - x)
+        L(50 +, 2 + x)
+    }
+    auto z = vector(1 << n, vector((2 << n) - 1, ' ')); // print solution
+    for (int x : s) 
+        x == 48 I(++) 
+        x == 49 ? ++r, Z '|' : 
+        x == 50 I(--) 
+        (Z '|', --r), 
+        w = x % 2 < 1; 
+    return z;
+}
+
+// x == 48 ? w ? z[r][c] = 95 : 0, ++c, z[r][c++] = 95 :
+// x == 50 ? w ? z[r][c] = 95 : 0, --c, z[r][c--] = 95 : z[r--][c] = '|';
