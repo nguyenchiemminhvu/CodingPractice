@@ -1,0 +1,102 @@
+You've mastered the Rubik's Cube and got bored solving it, so now you are looking for a new challenge. One puzzle similar to the Rubik's Cube caught your attention. It's called a Pyraminx puzzle, and is a triangular pyramid-shaped puzzle. The parts are arranged in a pyramidal pattern on each side, while the layers can be rotated with respect to each vertex, and the individual tips can be rotated as well. There are 4 faces on the Pyraminx. The puzzle should be held so that one face faces you and one face faces down, as in the image below. The four corners are then labeled U (for up), R (for right), L (for left), and B (for back). The front face thus contains the U, R, and L corners.
+
+
+
+Let's write down all possible moves for vertex U in the following notation:
+
+U - 120° counterclockwise turn of topmost tip (assuming that we're looking at the pyraminx from the top, and vertex U is the topmost);
+U' - clockwise turn for the same tip;
+u - 120° counterclockwise turn of two upper layer;
+u' - clockwise turn for the same layers.
+
+
+For other vertices the moves can be described similarly:
+
+
+
+The first puzzle you bought wasn't assembled, so you get your professional pyraminx solver friend to assemble it. He does, and you wrote down all his moves notated as described above. Now the puzzle's faces have colors faceColors[0] (front face), faceColors[1] (bottom face), faceColors[2] (left face), faceColors[3] (right face). You want to know the initial state of the puzzle to repeat your friend's moves and see how he solved it.
+
+==================================================================================
+
+class Pyraminx 
+{
+private:
+    vector< char > colors;
+    vector< vector<char> > triangles;
+    int rotation_rule[9] = { 8,3,7,6,0,2,1,5,4 };
+public:
+    Pyraminx(const vector<char>& face_colors) : colors(face_colors.begin(), face_colors.end()), triangles(4) 
+    {
+        for(size_t i = 0; i < 4; i++)
+            triangles[i] = vector<char>(9, face_colors[i]);
+    }
+    
+    void rotate(int times = 1) {
+        for(size_t i = 0; i < 4; i++) {
+            vector<char> new_face = triangles[i];
+            for(size_t j = 0; j < 9; j++)
+                triangles[i][j] = new_face[rotation_rule[j]];
+        }
+        swap(triangles[1], triangles[2]);
+        swap(triangles[2], triangles[3]);
+        if (times == 2) rotate();
+    }
+    
+    void flip(int times = 1) {
+        for(size_t i = 0; i < 4; i++) {
+            vector<char> new_face = triangles[i];
+            for(size_t j = 0; j < 9; j++)
+                triangles[i][j] = new_face[rotation_rule[j]];
+        }
+        swap(triangles[3], triangles[0]);
+        swap(triangles[3], triangles[2]);
+        for(auto c : triangles[0])
+                cout << c;
+        if (times == 2) flip();
+    }
+    
+    void move_top(bool clockwise = false) {
+        swap(triangles[0][0], triangles[2][4]); swap(triangles[2][4], triangles[3][8]);
+        if (clockwise)  move_top();
+    }
+    
+    void move_top_ext(bool clockwise = false) {
+        move_top();
+        swap(triangles[0][1], triangles[2][6]); swap(triangles[2][6], triangles[3][3]);
+        swap(triangles[0][2], triangles[2][5]); swap(triangles[2][5], triangles[3][7]);
+        swap(triangles[0][3], triangles[2][1]); swap(triangles[2][1], triangles[3][6]);
+        if (clockwise)  move_top_ext();
+    }
+    
+    void move(string movement) {
+        bool reverse = true;
+        if (movement.size() == 2)
+            reverse = false;
+        switch(movement[0]) {
+            case 'U': { move_top(reverse); break; }
+            case 'u': { move_top_ext(reverse); break; }
+            case 'R': { rotate(); move_top(reverse); rotate(2); break; }
+            case 'r': { rotate(); move_top_ext(reverse); rotate(2); break; }
+            case 'L': { rotate(2); move_top(reverse); rotate(); break; }
+            case 'l': { rotate(2); move_top_ext(reverse); rotate(); break; }
+            case 'B': { flip(); rotate(); move_top(reverse); rotate(2); flip(2); break; }
+            case 'b': { flip(); rotate(); move_top_ext(reverse); rotate(2); flip(2); break; }
+        }
+    }
+    
+    void play(vector<string> moves) {
+        for(auto movement : moves)
+            move(movement);
+    }
+    
+    vector< vector<char> > current_state() {
+        auto state = triangles;
+        return state;
+    }
+};
+
+std::vector<std::vector<char>> pyraminxPuzzle(std::vector<char> faceColors, std::vector<std::string> moves) {
+    Pyraminx pyraminx(faceColors);
+    pyraminx.play(vector<string>(moves.rbegin(), moves.rend())); 
+    return pyraminx.current_state();
+}
