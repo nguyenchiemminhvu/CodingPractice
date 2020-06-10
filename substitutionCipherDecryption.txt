@@ -1,0 +1,69 @@
+You intercept a note being passed between your classmates, and while trying to read it discover that it's encrypted. Since you're a fan of puzzles, you decide to crack the code. You know the following two details about the note:
+
+Your classmates use a simple substitution cipher. It works as follows:
+Consider the plaintext alphabet. Then take its permutation and call it a ciphertext alphabet.
+Write down the ciphertext alphabet under the plaintext alphabet. Now the symbols that are located in the same column correspond to one another.
+Now look through the message symbol by symbol and change each one to its replacement from the ciphertext alphabet.
+The contents of the message are followed by a signature encrypted in the same way.
+To be thorough, you make sure to iterate over all the ciphers satisfying the above-mentioned requirements. The most reasonable approach is to choose the one with lexicographically smallest ciphertext alphabet out of them.
+
+Given the contents of the message, a signature and an encryptedSignature, what text will you end up with after applying the approach described above?
+
+Example
+
+For contents = "issomtoqmvjts", signature = "alice",
+and encryptedSignature = "james", the output should be
+substitutionCipherDecryption(contents, signature, encryptedSignature) = "keepitprivate".
+
+Here is what we know for sure thanks to signature and encryptedSignature:
+
+ plaintext alphabet: abcdefghijklmnopqrstuvwxyz
+ciphertext alphabet: j*e*s***m**a**************
+Now let's choose the lexicographically smallest ciphertext alphabet out of all the candidates:
+
+ plaintext alphabet: abcdefghijklmnopqrstuvwxyz
+ciphertext alphabet: jbecsdfgmhiaklnopqrtuvwxyz
+You can see that 'i' from the ciphertext corresponds to 'k', 's' corresponds to 'e', etc.
+
+=============================================================================
+
+template <typename T>
+int findIndex(const std::vector<T> &v, T value)
+{
+    for (int i = 0; i < v.size(); i++)
+        if (v[i] == value)
+            return i;
+    return -1;
+}
+
+std::string substitutionCipherDecryption(std::string contents, std::string signature, std::string encryptedSignature)
+{
+    std::vector<char> alphabet(26);
+    
+    std::unordered_map<char, bool> check;
+    for (int i = 0; i < signature.length(); i++)
+    {
+        check[encryptedSignature[i] - 'a'] = true;
+        alphabet[signature[i] - 'a'] = encryptedSignature[i];
+    }
+    
+    int ic = 0;
+    for (int i = 0; i < 26; i++)
+    {
+        if (alphabet[i] == 0)
+        {
+            while (check[ic])
+                ic++;
+                
+            alphabet[i] = 'a' + ic++;
+        }
+    }
+    
+    for (char &c : contents)
+    {
+        ic = findIndex(alphabet, c);
+        c = 'a' + ic;
+    }
+    
+    return contents;
+}
