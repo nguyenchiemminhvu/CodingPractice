@@ -62,51 +62,33 @@ closestInTree(t, n) = 12.
 //   Tree *left;
 //   Tree *right;
 // };
-void ConvertTree(Tree<int> * t, Tree<std::pair<int, int>> *& tt, int level = 0)
+void maxDiffUtil(Tree<int> *ptr, int k, int &min_diff, int &min_diff_key) 
 {
-    if (t)
-    {
-        tt = new Tree<std::pair<int, int>>(std::pair<int, int>(t->value, level));
-        ConvertTree(t->left, tt->left, level + 1);
-        ConvertTree(t->right, tt->right, level + 1);
-    }
-}
+    if (ptr == NULL) 
+        return;
+     
+    if (ptr->value == k) 
+    { 
+        min_diff_key = k; 
+        return; 
+    } 
 
-void traversal(Tree<std::pair<int, int>> * t, std::vector<std::pair<int, int>> &close)
-{
-    if (t)
-    {
-        traversal(t->left, close);
-        close.push_back(t->value);
-        traversal(t->right, close);
+    if (min_diff > abs(ptr->value - k)) 
+    { 
+        min_diff = abs(ptr->value - k); 
+        min_diff_key = ptr->value; 
     }
+     
+    if (k < ptr->value) 
+        maxDiffUtil(ptr->left, k, min_diff, min_diff_key); 
+    else
+        maxDiffUtil(ptr->right, k, min_diff, min_diff_key); 
 }
 
 int closestInTree(Tree<int> * t, int n)
 {
-    Tree<std::pair<int, int>> * tt;
-    ConvertTree(t, tt);
-    
-    std::vector<std::pair<int, int>> close;
-    traversal(tt, close);
-    
-    std::vector<std::pair<int, int>>::iterator upper = close.begin(), lower = close.end() - 1;
-    while (upper != close.end() && upper->first < n)
-        upper++;
-    while (lower != close.begin() && lower->first > n)
-        lower--;
-    
-    if (lower == upper)
-        return lower->first;
-    
-    if (n - lower->first < upper->first - n)
-        return lower->first;
-    
-    if (n - lower->first == upper->first - n)
-    {
-        if (lower->second < upper->second)
-            return lower->first;
-    }
-    
-    return upper->first;
+    int min_diff = INT_MAX, min_diff_key = -1; 
+    maxDiffUtil(t, n, min_diff, min_diff_key); 
+  
+    return min_diff_key; 
 }
