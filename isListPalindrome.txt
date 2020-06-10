@@ -14,14 +14,44 @@ isListPalindrome(l) = false.
 
 ====================================================
 
+ListNode<int> * reverseLinkedList(ListNode<int> * l) 
+{
+    ListNode<int> * prev = NULL;
+    ListNode<int> * cur = l;
+    ListNode<int> * next = NULL;
+
+    while (cur)
+    {
+        next = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = next;
+    }
+
+    return prev;
+}
+
 bool isListPalindrome(ListNode<int> * l)
 {
-    std::vector<int> v;
-    while (l)
+    ListNode<int> * pSlow = l;
+    ListNode<int> * pFast = l;
+    
+    while (pFast && pFast->next)
     {
-        v.push_back(l->value);
-        l = l->next;
+        pSlow = pSlow->next;
+        pFast = pFast->next->next;
     }
     
-    return v == std::vector<int>(v.rbegin(), v.rend());
+    ListNode<int> * p = pSlow;
+    p = reverseLinkedList(p);
+    while (pSlow)
+    {
+        if (l->value != p->value)
+            return false;
+        
+        l = l->next;
+        pSlow = pSlow->next;
+    }
+    
+    return true;
 }
