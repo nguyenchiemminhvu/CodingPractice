@@ -1,0 +1,25 @@
+Determine the sign of a given integer and return:
+
+-1 for a negative integer;
+1 for a positive integer;
+0 otherwise.
+Example
+
+For n = -1, the output should be
+signOfNumber(n) = -1;
+For n = 42, the output should be
+signOfNumber(n) = 1;
+For n = 0, the output should be
+signOfNumber(n) = 0.
+
+===========================================================
+
+int signOfNumber(int n) {
+  if (n) {
+    if (n <= 0) {
+      return -1;
+    }
+    return 1;
+  }
+  return 0;
+}
