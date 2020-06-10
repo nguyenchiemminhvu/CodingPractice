@@ -1,0 +1,42 @@
+For a given integer n, return the shortest possible list of distinct Fibonacci numbers that sum up to n, sorted in ascending order.
+
+Example
+
+For n = 20, the output should be
+fibonacciSum(n) = [2, 5, 13].
+
+============================================================
+
+std::vector<int> fibonacciSum(int n)
+{
+    std::vector<int> v;
+    
+    int check = 0;
+    int n1 = 1, n2 = 1;
+    while (n2 <= n)
+    {   
+        v.push_back(n2);
+        int temp = n1 + n2;
+        n1 = n2;
+        n2 = temp;
+    }
+    
+    std::reverse(v.begin(), v.end());
+    
+    std::vector<int> res;
+    int sum = 0;
+    for (int i : v)
+    {
+        if (sum + i <= n)
+        {
+            res.push_back(i);
+            sum += i;
+        }
+        
+        if (sum == n)
+            break;
+    }
+    
+    std::reverse(res.begin(), res.end());
+    return res;
+}
