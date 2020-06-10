@@ -10,7 +10,6 @@ fibonacciSum(n) = [2, 5, 13].
 std::vector<int> fibonacciSum(int n)
 {
     std::vector<int> v;
-    
     int check = 0;
     int n1 = 1, n2 = 1;
     while (n2 <= n)
@@ -20,7 +19,6 @@ std::vector<int> fibonacciSum(int n)
         n1 = n2;
         n2 = temp;
     }
-    
     std::reverse(v.begin(), v.end());
     
     std::vector<int> res;
