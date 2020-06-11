@@ -1,0 +1,12 @@
+Implement an algorithm that can output a substring of the given string given a starting point and a length.
+
+Example
+
+For inputString = "abcde", start = 2, and length = 3, the output should be
+mySubstringByLength(inputString, start, length) = "cde".
+
+===============================================================
+
+std::string mySubstringByLength(std::string inputString, int start, int length) {
+    return std::string(inputString.begin() + start, inputString.begin() + start + length);
+}
