@@ -23,7 +23,8 @@ std::string addDigits(long a, long b, long n)
             continue;
         
         long tmp = stol(addDigits(a * 10 + i, b, n - 1));
-        if(tmp >= 0) ans = max(ans, tmp);
+        if (tmp >= 0)
+            ans = max(ans, tmp);
     }
 
     return to_string(ans);
