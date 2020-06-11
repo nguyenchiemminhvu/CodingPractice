@@ -17,34 +17,13 @@ rounders(n) = 2000.
 
 =========================================================
 
-int rounders(int n)
+int rounders(int n) 
 {
-    string item = to_string(n);
-    int carry = 0;
-    
-    for (int i = item.size() - 1; i >= 1; i--)
+    int t = 1;
+    while (n > 9)
     {
-        int digit = item[i] - '0' + carry;
-        if (digit < 5)
-        {
-            carry = 0;
-        }
-        else
-        {
-            carry = 1;
-        }
-        item[i] = '0';
+        n = n / 10 + (n % 10 >= 5);
+        t *= 10;
     }
-    
-    if (item[0] < '9')
-    {
-        item[0] = item[0] + carry;
-    }
-    else
-    {
-        item[0] = '0';
-        item = "1" + item;
-    }
-    
-    return stoi(item);
+    return n * t;
 }
