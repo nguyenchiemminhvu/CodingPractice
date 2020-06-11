@@ -1,0 +1,32 @@
+Note: Write a solution with O(n2) complexity, since this is what you would be asked to do during a real interview. Can you solve this task without using built-in data structures?
+
+Given an array of integers a, find the number of pairs of numbers ai and aj, where i ≠ j, such that the sum of ai + ajis also present in a.
+
+Example
+
+For a = [1, 1, 3, 2, 5], the output should be
+pairsSum(a) = 4.
+
+Here are all of the number pairs:
+* 1 pair (1, 1): 1 + 1 = 2 is also present in a;
+* 2 pairs (1, 2): 1 + 2 = 3 is present in a too;
+* 1 pair (2, 3): 2 + 3 = 5 is also present in a.
+
+======================================================================
+
+int pairsSum(std::vector<int> a)
+{
+    std::sort(a.begin(), a.end());
+    
+    int res = 0;
+    for (int i = 0; i < a.size(); i++)
+    {
+        for (int j = i + 1; j < a.size(); j++)
+        {
+            int s = a[i] + a[j];
+            if (std::binary_search(a.begin(), a.end(), s))
+                res++;
+        }
+    }
+    return res;
+}
