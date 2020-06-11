@@ -1,0 +1,64 @@
+In the Land Of Chess, bishops don't really like each other. In fact, when two bishops happen to stand on the same diagonal, they immediately rush towards the opposite ends of that same diagonal.
+
+Given the initial positions (in chess notation) of two bishops, bishop1 and bishop2, calculate their future positions. Keep in mind that bishops won't move unless they see each other along the same diagonal.
+
+Example
+
+For bishop1 = "d7" and bishop2 = "f5", the output should be
+bishopDiagonal(bishop1, bishop2) = ["c8", "h3"].
+
+For bishop1 = "d8" and bishop2 = "b5", the output should be
+bishopDiagonal(bishop1, bishop2) = ["b5", "d8"].
+
+The bishops don't belong to the same diagonal, so they don't move.
+
+=========================================================
+
+std::vector<std::string> bishopDiagonal(std::string bishop1, std::string bishop2) {
+    std::pair<int, int> b1{bishop1[0] - 'a', bishop1[1] - '1'};
+    std::pair<int, int> b2{bishop2[0] - 'a', bishop2[1] - '1'};
+    
+    std::cout << b1.first << " " << b1.second << std::endl;
+    std::cout << b2.first << " " << b2.second << std::endl;
+
+    if((b1.first - b2.first) == -(b1.second - b2.second))
+    {
+        if(7 - b1.second < b1.first)
+        {
+            b1.first -= 7 - b1.second;
+            b1.second = 7;
+        }
+        else
+        {
+            b1.first += b1.second;
+            b1.second = 0;
+        }
+        b2.first = b1.second;
+        b2.second = b1.first;
+        
+        bishop1[0] = b1.first + 'a';
+        bishop1[1] = b1.second + '1';
+        bishop2[0] = b2.first + 'a';
+        bishop2[1] = b2.second + '1';
+    }
+    else if(b1.first - b2.first == b1.second - b2.second)
+    {
+        int min = 7 - std::max(b1.first, b1.second);
+        b1.first += min;
+        b1.second += min;
+        b2.first = 7 - b1.second;
+        b2.second = 7 - b1.first;
+        
+        bishop1[0] = b1.first + 'a';
+        bishop1[1] = b1.second + '1';
+        bishop2[0] = b2.first + 'a';
+        bishop2[1] = b2.second + '1';
+    }
+    
+    if(bishop1 > bishop2)
+    {
+        std::swap(bishop1, bishop2);
+    }
+    return {bishop1, bishop2};
+    
+}
