@@ -1,0 +1,23 @@
+Consider a rectangular chess board of a × b squares. For each of the squares imagine a lone queen standing on that square and compute the number of squares under the queen's attack. Add all the numbers you got for each of the a × b possible queen's positions.
+
+Example
+
+For a = 2 and b = 3, the output should be
+chessBoardSquaresUnderQueenAttack(a, b) = 26.
+
+============================================================================
+
+int chessBoardSquaresUnderQueenAttack(int a, int b)
+{
+    int ans = 0;
+    
+    for (int i = 0 ; i < a ; i++)
+    {
+        for (int j = 0 ; j < b ; j++)
+        {
+            ans += (a - 1)  + (b - 1) + min(i, j) + min(i, b - 1 -j) + min(a - 1 - i, j) + min(a - 1 - i, b - 1 -j); 
+        }
+    }
+    
+    return ans;
+}
