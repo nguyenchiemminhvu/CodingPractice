@@ -14,9 +14,11 @@ bfsDistancesUnweightedGraph(matrix, startVertex) = [0, 2, 1].
 
 vector<int> bfsDistancesUnweightedGraph(vector<vector<bool>> matrix, int startVertex)
 {
-    vector<int> distances (matrix.size(),INT_MAX);
+    vector<int> distances (matrix.size(), INT_MAX);
+    
     int depth = 0;
     distances[startVertex] = 0;
+    
     queue<int> bfs;
     bfs.push(startVertex);
     
@@ -27,7 +29,7 @@ vector<int> bfsDistancesUnweightedGraph(vector<vector<bool>> matrix, int startVe
         {
             int vertex = bfs.front();
             bfs.pop();
-            distances[vertex] = min(distances[vertex],depth);
+            distances[vertex] = min(distances[vertex], depth);
             for(int j = 0; j < matrix.size(); j++)
             {
                 if(matrix[vertex][j] && distances[j] == INT_MAX)
