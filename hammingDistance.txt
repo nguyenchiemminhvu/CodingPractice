@@ -1,0 +1,22 @@
+Given two strings of the same length. Your task is to calculate their Hamming distance.
+
+Example
+
+For string1 = "abab" and string2 = "cbad", the output should be
+hammingDistance(string1, string2) = 2.
+
+Only the first and the last characters are different.
+
+=========================================================
+
+int hammingDistance(std::string string1, std::string string2) {
+
+  int distance = 0;
+  for (int i = 0; i < string1.size(); i++) {
+    if (string1[i] != string2[i]) {
+      distance++;
+    }
+  }
+
+  return distance;
+}
