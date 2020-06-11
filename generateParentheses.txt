@@ -1,0 +1,59 @@
+You're a coder - you know how important it is to have a closing parenthesis for every opening parenthesis! Given n pairs of parentheses, write a function that generates all of the possible combinations of regular parentheses, sorted in lexicographical order.
+
+Example
+
+For n = 4, the output should be
+
+generateParentheses(n) = 
+[
+  "(((())))", "((()()))",
+  "((())())", "((()))()", 
+  "(()(()))", "(()()())", 
+  "(()())()", "(())(())", 
+  "(())()()", "()((()))", 
+  "()(()())", "()(())()", 
+  "()()(())", "()()()()"
+]
+
+========================================================================
+
+void _generateParenthesesUtil(int pos, int n, int open, int close, std::string &test, std::vector<std::string> &res) 
+{
+    if(close == n)  
+    {
+        res.insert(res.begin(), test);
+        return;
+    } 
+    else
+    {
+        if(open > close)
+        {
+            test += ')';
+            _generateParenthesesUtil(pos + 1, n, open, close + 1, test, res);
+            test.pop_back();
+        }
+        
+        if(open < n)
+        {
+            test += '(';
+            _generateParenthesesUtil(pos + 1, n, open + 1, close, test, res);
+            test.pop_back();
+        }
+    }
+}
+
+void generateParenthesesUtil(int n, std::string test, std::vector<std::string> & res)
+{ 
+    if(n > 0) 
+        _generateParenthesesUtil(0, n, 0, 0, test, res);
+}
+
+std::vector<std::string> generateParentheses(int n)
+{
+    std::vector<std::string> res;
+    std::string test;
+    
+    generateParenthesesUtil(n, test, res);
+    
+    return res;
+}
