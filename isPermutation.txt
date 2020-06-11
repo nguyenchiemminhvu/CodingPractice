@@ -1,0 +1,23 @@
+Given a certain array, find out if it's a permutation of numbers from 1 to a given integer.
+
+Example
+
+For n = 4 and inputArray = [1, 3, 2, 4], the output should be
+isPermutation(n, inputArray) = true;
+For n = 3 and inputArray = [2, 3, 2], the output should be
+isPermutation(n, inputArray) = false.
+
+=============================================================
+
+bool isPermutation(int n, std::vector<int> a)
+{
+    std::sort(a.begin(), a.end());
+    
+    for (int i = 1; i <= n; i++)
+    {
+        if (a[i - 1] != i)
+            return false;
+    }
+    
+    return true;
+}
