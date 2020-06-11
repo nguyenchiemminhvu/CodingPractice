@@ -15,7 +15,7 @@ int chessBoardSquaresUnderQueenAttack(int a, int b)
     {
         for (int j = 0 ; j < b ; j++)
         {
-            ans += (a - 1)  + (b - 1) + min(i, j) + min(i, b - 1 -j) + min(a - 1 - i, j) + min(a - 1 - i, b - 1 -j); 
+            ans += (a - 1)  + (b - 1) + min(i, j) + min(i, b - 1 - j) + min(a - 1 - i, j) + min(a - 1 - i, b - 1 - j); 
         }
     }
     
