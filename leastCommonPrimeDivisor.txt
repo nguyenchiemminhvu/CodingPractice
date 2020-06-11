@@ -27,7 +27,7 @@ bool isPrime(int n)
 
 int leastCommonPrimeDivisor(int a, int b)
 {
-    for(int i=2; i<=std::min(a,b); i++)
+    for(int i = 2; i <= std::min(a, b); i++)
     {     
         if (a % i == 0 && b % i == 0 && isPrime(i))
             return i;   
@@ -35,3 +35,4 @@ int leastCommonPrimeDivisor(int a, int b)
     
     return -1;
 }
+
