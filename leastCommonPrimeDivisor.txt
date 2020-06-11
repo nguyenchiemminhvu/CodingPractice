@@ -1,0 +1,37 @@
+Calculate the LCPD (least common prime divisor) of two numbers.
+
+Example
+
+For a = 12 and b = 13, the output should be
+leastCommonPrimeDivisor(a, b) = -1;
+For a = 12 and b = 18, the output should be
+leastCommonPrimeDivisor(a, b) = 2.
+
+====================================================
+
+bool isPrime(int n) 
+{
+    if (n == 2)
+        return true;
+    if (n < 2)
+        return false;
+    
+    for(int i = 2; i < std::sqrt(n) + 1; i++)
+    { 
+        if (n % i == 0) 
+            return false;   
+    }
+    
+    return true;
+}
+
+int leastCommonPrimeDivisor(int a, int b)
+{
+    for(int i=2; i<=std::min(a,b); i++)
+    {     
+        if (a % i == 0 && b % i == 0 && isPrime(i))
+            return i;   
+    }
+    
+    return -1;
+}
