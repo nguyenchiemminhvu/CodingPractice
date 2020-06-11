@@ -1,0 +1,24 @@
+Given the center and the radius of a circle and the coordinates of a point determine if the point is inside (or on the border of) the circle.
+
+Example
+
+For point = [1, 1], center = [2, 2], and radius = 1, the output should be
+insideCircle(point, center, radius) = false.
+
+For point = [1, 1], center = [0, 0], and radius = 3, the output should be
+insideCircle(point, center, radius) = true.
+
+===============================================================
+
+bool insideCircle(std::vector<int> point, std::vector<int> center, int radius)
+{
+    point[0] -= center[0];
+    point[1] -= center[1];
+    
+    int k1 = abs(point[0]);
+    int k2 = abs(point[1]);
+    
+    double h = sqrt(k1 * k1 + k2 * k2);
+    
+    return h <= (double)radius;
+}
