@@ -1,0 +1,31 @@
+Given a rectangular matrix of characters, add a border of asterisks(*) to it.
+
+Example
+
+For
+
+picture = ["abc",
+           "ded"]
+the output should be
+
+addBorder(picture) = ["*****",
+                      "*abc*",
+                      "*ded*",
+                      "*****"]
+
+===========================================================
+
+std::vector<std::string> addBorder(std::vector<std::string> picture)
+{
+    for (std::string & s : picture)
+    {
+        s = "*" + s + "*";
+    }
+    
+    int borderLength = picture[0].length();
+    std::string borderTopDown = std::string(borderLength, '*');
+    picture.insert(picture.begin(), borderTopDown);
+    picture.push_back(borderTopDown);
+    
+    return picture;
+}
