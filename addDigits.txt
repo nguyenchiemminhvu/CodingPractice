@@ -17,10 +17,11 @@ std::string addDigits(long a, long b, long n)
         return to_string(a);
 
     long ans = a;
-    for(int i=0; i<10; ++i)
+    for(int i = 0; i < 10; i++)
     {
         if ((a * 10 + i) % b)
             continue;
+        
         long tmp = stol(addDigits(a * 10 + i, b, n - 1));
         if(tmp >= 0) ans = max(ans, tmp);
     }
