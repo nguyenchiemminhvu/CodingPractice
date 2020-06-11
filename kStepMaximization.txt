@@ -1,0 +1,58 @@
+You have an integer n. At each step, you can apply one of the following operations to it:
+
+Increase the number by 1.
+Multiply the number by 2.
+Rotate the number by 180 degrees. To do that, consider the number represented as a seven-segment display character string written on a sheet of paper. If you rotate that sheet of paper by 180 degrees and end up with a valid number, this number is a result of that operation. If rotating the number gives you an invalid value, that operation is impossible. For instance, 9865210 will turn into 0125986, which becomes 125986 since the leading zero should be dropped. For 347, this operation is impossible because each digit becomes invalid after being rotated by 180 degrees.
+
+You are allowed to perform no more than k steps. What is the maximum possible number that you can obtain?
+
+Example
+
+For n = 17 and k = 3, the output should be
+kStepMaximization(n, k) = 162.
+
+Here is the correct sequence of operations to get 162 from 17 in 3 steps:
+
+First, increase n by 1 to get 18.
+Now rotate the current value. This operation produces 81.
+Finally, multiply 81 by 2. The result equals 162, which is the answer.
+
+========================================================================
+
+int rotate(const std::string& s)
+{
+    int size = s.size();
+    std::string result(s);
+    for (int i = 0; i < size; ++i)
+    {
+        char c = s[i];
+        if (c == '0' || c == '1' || c == '2' || c == '5' || c == '6' || c == '8' || c == '9')
+        {
+            int index = size - 1 - i;
+            if (c == '9')
+                result[index] = '6';
+            else if (c == '6')
+                result[index] = '9';
+            else
+                result[index] = c;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    return stoi(result);
+}
+
+int kStepMaximization(int n, int k)
+{
+    if (k == 0)
+        return n;
+    
+    int rotated = rotate(std::to_string(n));
+    int result1 = (rotated == -1) ? -1 : kStepMaximization(rotated, k-1);
+    int result2 = kStepMaximization(n+1, k-1);
+    int result3 = kStepMaximization(n*2, k-1);
+    
+    return std::max(result1, std::max(result2, result3));
+}
