@@ -1,0 +1,13 @@
+Find the perimeter of a square with given sides.
+
+Example
+
+For n = 1, the output should be
+squarePerimeter(n) = 4.
+
+====================================
+
+int squarePerimeter(int n)
+{
+    return n * 4;
+}
