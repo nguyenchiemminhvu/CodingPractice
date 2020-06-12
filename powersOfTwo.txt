@@ -1,0 +1,18 @@
+Every positive integer can be uniquely represented as a sum of different positive powers of two.
+
+Given a number n, return a sorted array of different powers of two that sum up to n.
+
+Example
+
+For n = 5, the output should be powersOfTwo(n) = [1, 4].
+
+===========================================================
+
+std::vector<int> powersOfTwo(int n)
+{
+    std::vector<int> a;
+    for (int b = 1; b <= n; b <<= 1)
+        if (b & n)
+            a.push_back(b);
+    return a;
+}
