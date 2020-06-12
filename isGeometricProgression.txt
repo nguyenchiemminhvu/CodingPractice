@@ -1,0 +1,22 @@
+Given a sequence determine if it's a geometric progression or not.
+
+Example
+
+For sequence = [1, 4, 16], the output should be
+isGeometricProgression(sequence) = true;
+For sequence = [2, 4, 8, 17, 34], the output should be
+isGeometricProgression(sequence) = false.
+
+=======================================================
+
+bool isGeometricProgression(std::vector<int> a)
+{
+    float D = (float)a[1] / a[0];
+    for (int i = 2; i < a.size(); i++)
+    {
+        if ((float)a[i] / a[i - 1] != D)
+            return false;
+    }
+    
+    return true;
+}
