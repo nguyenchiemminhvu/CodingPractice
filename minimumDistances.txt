@@ -1,0 +1,20 @@
+int minimumDistances(vector<int> a)
+{
+    int minDist = INT_MAX;
+
+    for (size_t i = 0; i < a.size(); i++)
+    {
+        for (size_t j = i + 1; j < a.size(); j++)
+        {
+            if (a[i] == a[j])
+            {
+                minDist = min(minDist, abs((int)j - (int)i));
+            }
+        }
+    }
+
+    if (minDist == INT_MAX)
+        return -1;
+    
+    return minDist;
+}

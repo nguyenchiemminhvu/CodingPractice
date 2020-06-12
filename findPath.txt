@@ -1,0 +1,85 @@
+You are given an n × m matrix, which contains all the integers from 1 to n * m, inclusive, each exactly once.
+
+Initially you are standing in the cell containing the number 1. On each turn you are allowed to move to an adjacent cell, i.e. to a cell that shares a common side with the one you are standing on now. It is prohibited to visit any cell more than once.
+
+Check if it is possible to visit all the cells of the matrix in the order of increasing numbers in the cells, i.e. get to the cell with the number 2 on the first turn, then move to 3, etc.
+
+Example
+
+For
+
+matrix = [[1, 4, 5], 
+          [2, 3, 6]]
+the output should be
+findPath(matrix) = true;
+
+For
+
+matrix = [[1, 3, 6], 
+          [2, 4, 5]]
+the output should be
+findPath(matrix) = false.
+
+===============================================================
+
+vector<pair<int,int> > dist = {{-1,0},{1,0},{0,-1},{0,1}};
+
+bool visit(const vector<vector<int> > &m,int i, int j, int count)
+{
+    if (count == m.size() * m[0].size())
+    {
+        return true;
+    }
+    
+    for (auto &d : dist)
+    {
+        int ni = i + d.first;
+        int nj = j + d.second;
+        
+        if(ni >= 0 && ni < m.size() && nj >= 0 && nj < m[i].size())
+        {
+            if(m[ni][nj] == m[i][j] + 1)
+            {
+                return visit(m, ni, nj, count + 1);
+            }
+        }
+    }
+    
+    return false;
+}
+
+bool findPath(std::vector<std::vector<int>> matrix)
+{ 
+    if(matrix.empty())
+    {
+        return false;
+    }
+    
+    int starti = -1;
+    int startj = -1;
+    
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        for (int j = 0; j < matrix[i].size(); j++)
+        {
+            if (matrix[i][j] == 1)
+            {
+                starti = i;
+                startj = j;
+                break;
+            }
+        }
+        
+        if(starti != -1)
+        {
+            break;
+        }
+    }
+    
+    if (starti == -1)
+    {
+        return false;
+    }
+    
+    return visit(matrix, starti, startj, 1);
+}
