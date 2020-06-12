@@ -1,0 +1,28 @@
+Given a square's vertices in arbitrary order, find (the length of the square's side)2.
+
+Example
+
+For x = [0, 1, 0, 1] and y = [0, 1, 1, 0], the output should be
+findSquareSide(x, y) = 1.
+
+=======================================================================
+
+int minimum(int a, int b, int c)
+{
+    int max = ( a > b ) ? b : a;
+    return ( ( max > c ) ? c : max );
+}
+
+int distance(int x0, int y0, int x1, int y1)
+{
+    return (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
+}
+
+int findSquareSide(std::vector<int> x, std::vector<int> y)
+{
+    int a = distance(x[0], y[0], x[1], y[1]);
+    int b = distance(x[0], y[0], x[2], y[2]);
+    int c = distance(x[0], y[0], x[3], y[3]);
+                                              
+    return minimum(a, b, c); 
+}
