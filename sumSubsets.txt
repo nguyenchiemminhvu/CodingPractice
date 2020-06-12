@@ -1,0 +1,41 @@
+Given a sorted array of integers arr and an integer num, find all possible unique subsets of arr that add up to num. Both the array of subsets and the subsets themselves should be sorted in lexicographical order.
+
+Example
+
+For arr = [1, 2, 3, 4, 5] and num = 5, the output should be
+sumSubsets(arr, num) = [[1, 4], [2, 3], [5]].
+
+==============================================================
+
+void FindSubset(std::vector<int> a, int s, int cur, std::vector<int> &test, std::set<std::vector<int>> &res)
+{
+    if (s == 0)
+    {
+        res.insert(test);
+        return;
+    }
+    else
+    {
+        for (int i = cur; i < a.size(); i++)
+        {
+            if (a[i] <= s)
+            {
+                test.push_back(a[i]);
+                
+                FindSubset(a, s - a[i], i + 1, test, res);
+                
+                test.pop_back();
+            }
+        }
+    }
+}
+
+std::vector<std::vector<int>> sumSubsets(std::vector<int> a, int s)
+{
+    std::set<std::vector<int>> res;
+    
+    std::vector<int> test;
+    FindSubset(a, s, 0, test, res);
+    
+    return std::vector<std::vector<int>>(res.begin(), res.end());
+}
