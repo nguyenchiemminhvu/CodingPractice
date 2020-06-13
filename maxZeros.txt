@@ -1,0 +1,53 @@
+Given a decimal integer n, find an integer k ≥ 2 such that the representation of n in base k has the maximum possible number of zeros. If there are several answers, output the smallest one.
+
+Example
+
+For n = 9, the output should be
+maxZeros(n) = 2.
+9 = 10012 = 1003 = 214...
+If you'll try all other bases, you'll see that the maximum possible number of zeros in these representations is 2, thus the answer is k = 2.
+
+===============================================
+
+std::string convert(int n, int b)
+{
+    std::string res = "";
+    while (n)
+    {
+        res = res + std::to_string(n % b);
+        n /= b;
+    }
+    std::reverse(res.begin(), res.end());
+    return res;
+}
+
+int countZero(std::string s)
+{
+    int z = 0;
+    
+    for (char c : s)
+        if (c == '0')
+            z++;
+            
+    return z;
+}
+
+int maxZeros(int n)
+{
+    int b = 2, maxB = 2, max0 = 0;
+    
+    std::string s;
+    while (b < 10)
+    {
+        s = convert(n, b);
+        if (countZero(s) > max0)
+        {
+            max0 = countZero(s);
+            maxB = b;
+        }
+        s = "";
+        b++;
+    }
+    
+    return maxB;
+}
