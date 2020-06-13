@@ -1,0 +1,52 @@
+You are given a rectangular array of characters, where each symbol '*' can either be replaced with any character or left unchanged, whereas all other elements cannot be changed. You would like to make the minimum possible number of replacements to make the array symmetric with respect to both the horizontal and vertical middle axes, i.e. such an array that looks the same when flipped horizontally or vertically.
+
+Given array a, return the resulting symmetric array. If this symmetry is impossible to obtain, return an empty 2D array instead.
+
+Example
+
+For
+
+a = [['*', '*', 'c', '*'],
+     ['*', 'b', '*', 'a'],
+     ['a', '*', '*', '*'],
+     ['*', '*', 'c', '*']]
+the output should be
+
+fastSymmetrization(a) = [['*', 'c', 'c', '*'],
+                         ['a', 'b', 'b', 'a'],
+                         ['a', 'b', 'b', 'a'],
+                         ['*', 'c', 'c', '*']]
+For
+
+a = [['*', 'a', 'b', '*'],
+     ['*', 'a', 'b', '*']]
+the output should be
+
+fastSymmetrization(a) = []
+Since only asterisks can be changed, symmetry along the vertical axis is impossible to obtain.
+
+=====================================================
+
+auto fastSymmetrization(auto a) 
+{
+    int w=a.size(), x = a[0].size();
+    for(int i = 0;i<w/2;i++)
+        for(int j = 0;j<x/2;j++)
+        {
+            set<int> n;
+            n.insert(a[i][j]);
+            n.insert(a[w-i-1][j]);
+            
+            n.insert(a[w-i-1][x-j-1]);
+            n.insert(a[i][x-j-1]);
+            set<int>::iterator k=n.find('*');
+            if(k!=end(n))
+                n.erase(k);
+            if(n.size()>1)
+                return vector<vector<char>>();
+            if(n.size()==1)
+                a[i][j]=a[w-i-1][j]=a[w-i-1][x-j-1]=a[i][x-j-1]=*begin(n); 
+            
+        }
+    return a;
+}

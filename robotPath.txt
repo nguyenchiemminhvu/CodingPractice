@@ -1,0 +1,48 @@
+Consider a robot standing on a 2-dimensional grid at point (0, 0). It follows a sequence of instructions.
+
+Each instruction is processed as follows:
+
+'L' decreases the first coordinate by one,
+'R' increases the first coordinate by one,
+'U' increases the second coordinate by one,
+'D' decreases the second coordinate by one.
+But the robot isn't allowed to leave a pre-defined square (with sides parallel to the axes) centered at (0,0). If the execution of the current instruction would lead to the robot leaving the square, that instruction is just ignored.
+
+Given a sequence of instructions and a restricting square, output an array of two integers representing the final position of the robot after executing all the instructions.
+
+Example
+
+For instructions = "LLLLUUUUDR" and bound = 2, the output should be
+robotPath(instructions, bound) = [-1, 1].
+
+The restricting square is (2, 2), (2, -2), (-2, -2), (-2, 2).
+
+=========================================================
+
+std::vector<int> robotPath(std::string instructions, int bound) {
+
+  int dx[4] = {-1, 0, 1,  0},
+      dy[4] = { 0, 1, 0, -1},
+      x = 0,
+      y = 0;
+
+  std::string directions = "LURD";
+
+  for (int i = 0; i < instructions.size(); i++) {
+    int dirIndex = 0;
+    for (int j = 1; j < 4; j++) {
+      if (instructions[i] == directions[j]) {
+        dirIndex = j;
+      }
+    }
+    if (std::abs(x + dx[dirIndex]) <= bound
+     && std::abs(y + dy[dirIndex]) <= bound) {
+      x += dx[dirIndex];
+      y += dy[dirIndex];
+    }
+  }
+
+  std::vector<int> res(2);
+  res[0] = x, res[1] = y;
+  return res;
+}
