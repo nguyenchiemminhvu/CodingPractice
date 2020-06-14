@@ -1,0 +1,25 @@
+Given an array a and an integer d, find two elements of the array such that their absolute difference is not greater than d but is as close to d as possible (there may be more than one such pair). Return the absolute difference between these two elements or -1 if no suitable pairs were found.
+
+Example
+
+For a = [3, 2, 1] and d = 2, the output should be
+differentValues(a, d) = 2;
+For a = [3, 7] and d = 3, the output should be
+differentValues(a, d) = -1.
+
+===========================================================
+
+int differentValues(std::vector<int> a, int d) {
+
+  int best = -1;
+  for (int i = 0; i < a.size(); i++) {
+    for (int j = i + 1; j < a.size(); j++) {
+      int diff = abs(a[j] - a[i]);
+      if (diff <= d && best < diff) {
+        best = diff;
+      }
+    }
+  }
+
+  return best;
+}
