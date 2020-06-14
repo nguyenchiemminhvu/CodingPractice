@@ -1,0 +1,127 @@
+Convert a non-negative integer to its equivalent representation as words in English.
+
+Example
+
+For num = 1, the output should be
+integerToEnglishWords(num) = "One";
+For num = 123, the output should be
+integerToEnglishWords(num) = "One Hundred Twenty Three";
+For num = 12345, the output should be
+integerToEnglishWords(num) = "Twelve Thousand Three Hundred Forty Five";
+For num = 1234567, the output should be
+integerToEnglishWords(num) = "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven".
+
+===========================================================
+
+string ones(int num)
+{
+    switch(num)
+    {
+        case 0:
+            return "Zero";
+        case 1:
+            return "One";
+        case 2:
+            return "Two";
+        case 3:
+            return "Three";
+        case 4:
+            return "Four";
+        case 5:
+            return "Five";
+        case 6:
+            return "Six";
+        case 7:
+            return "Seven";
+        case 8:
+            return "Eight";
+        case 9:
+            return "Nine";        
+    }
+}
+
+string teens(int num)
+{
+    switch(num)
+    {
+        case 11:
+            return "Eleven";
+        case 12:
+            return "Twelve";
+        case 13:
+            return "Thirteen";
+        case 14:
+            return "Fourteen";
+        case 15:
+            return "Fifteen";
+        case 16:
+            return "Sixteen";
+        case 17:
+            return "Seventeen";
+        case 18:
+            return "Eighteen";
+        case 19:
+            return "Nineteen";        
+    }
+}
+
+string tens(int num)
+{
+    switch(num)
+    {
+        case 10:
+            return "Ten";
+        case 20:
+            return "Twenty";
+        case 30:
+            return "Thirty";
+        case 40:
+            return "Forty";
+        case 50:
+            return "Fifty";
+        case 60:
+            return "Sixty";
+        case 70:
+            return "Seventy";
+        case 80:
+            return "Eighty";
+        case 90:
+            return "Ninety";        
+    }
+}
+
+string integerToEnglishWords(int num) 
+{
+    if(num >= 0 && num <= 9)
+    {
+        return ones(num);
+    }
+    else if(num >= 11 && num <= 19)
+    {
+        return teens(num);
+    }
+    else if((num % 10 == 0) && (num < 100) )
+    {
+        return tens(num);
+    }
+    else if(num < 100)
+    {
+        return integerToEnglishWords((num / 10) * 10) + " " + integerToEnglishWords(num % 10);
+    }
+    else if(num >= 100 && num <= 999)
+    {
+        return integerToEnglishWords((num / 100) ) + " " + "Hundred" + (num % 100 > 0 ? " " + integerToEnglishWords(num % 100): "") ;
+    }
+    else if(num >= 1000 && num <= 999999)
+    {
+        return integerToEnglishWords((num / 1000) ) + " " + "Thousand" + (num % 1000 > 0 ? " " + integerToEnglishWords(num % 1000): "") ;
+    }
+    else if(num >= 1000000 && num <= 999999999)
+    {
+        return integerToEnglishWords((num / 1000000) ) + " " + "Million" + (num % 1000000 > 0 ? " " + integerToEnglishWords(num % 1000000): "") ;
+    }
+    else
+    {
+        return integerToEnglishWords((num / 1000000000) ) + " " + "Billion" + (num % 1000000000 > 0 ? " " + integerToEnglishWords(num % 1000000000): "") ;
+    }
+}
