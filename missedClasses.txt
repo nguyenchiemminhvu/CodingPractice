@@ -18,8 +18,6 @@ November 4th of 2015 is a Wednesday, February 23th of 2016 and March 8th of 2016
 
 =====================================================================
 
-#include <ctime>
-
 int missedClasses(int year, std::vector<int> daysOfTheWeek, std::vector<std::string> holidays)
 {
     std::map<int, int> mDaysOfWeek;
