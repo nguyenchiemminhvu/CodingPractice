@@ -11,8 +11,19 @@ josephusProblem(n, k) = 3.
 
 int josephusProblem(int n, int k)
 {
-    if (n == 1) 
-        return 1;
-    else
-        return (josephusProblem(n - 1, k) + k - 1) % n + 1; 
+    vector<int> persons;
+    for(int i = 0; i < n; ++i)
+    {
+        persons.push_back(i+1);
+    }
+    
+    int current = 0;
+    while (persons.size() > 1)
+    {
+        int posToRemove = (current + k-1) % persons.size();
+        persons.erase(persons.begin() + posToRemove);
+        current = (posToRemove) % persons.size();
+    }
+    
+    return persons[0];
 }
