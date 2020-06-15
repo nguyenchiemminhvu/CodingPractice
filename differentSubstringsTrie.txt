@@ -1,0 +1,32 @@
+Given a string, find the number of different non-empty substrings in it.
+
+Example
+
+For inputString = "abac", the output should be
+differentSubstringsTrie(inputString) = 9.
+They are:
+
+"a", "b", "c",
+"ab", "ac", "ba",
+"aba", "bac",
+"abac"
+
+=======================================================
+
+int differentSubstringsTrie(std::string s) 
+{
+    std::vector<std::string> v;
+    
+    for (int i = 0; i < s.size(); i++)
+    {
+        for (int j = 1; j <= s.size() - i; j++)
+        {
+            v.push_back(s.substr(i, j));
+        }
+    }
+    
+    std::sort(v.begin(), v.end());
+    v.erase(std::unique(v.begin(), v.end()), v.end());
+    
+    return v.size();
+}
