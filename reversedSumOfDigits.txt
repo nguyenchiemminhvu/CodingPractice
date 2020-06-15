@@ -31,11 +31,15 @@ std::string reversedSumOfDigits(int p, int n)
     
     p -= 1;
     int index = 0;
-    while(p > 0){
-        if(p > 9){
+    while(p > 0)
+    {
+        if(p > 9)
+        {
             digits[index++] += 9;
             p -= 9;
-        } else{
+        }
+        else
+        {
             digits[index++] += p;
             p = 0;
         }
@@ -47,4 +51,3 @@ std::string reversedSumOfDigits(int p, int n)
     
     return result;
 }
-
