@@ -1,0 +1,16 @@
+Given an integer n, find the volume of the cube with edges equal to n.
+
+Example
+
+For n = 5, the output should be
+cubeVolume(n) = 125.
+
+========================================================
+
+int cubeVolume(int n) {
+  int result = 1;
+  for (int i = 1; i <= 3; i++) {
+    result *= n;
+  }
+  return result;
+}
