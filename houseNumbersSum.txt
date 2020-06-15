@@ -13,10 +13,14 @@ The answer was obtained as 5 + 1 + 2 + 3 = 11.
 
 ================================================================
 
-int houseNumbersSum(std::vector<int> input) {
+int houseNumbersSum(std::vector<int> input)
+{
     int res = 0;
-    for (int n : input) {
-        if (!n) return res;
+    for (int n : input)
+    {
+        if (!n)
+            return res;
+        
         res += n;
     }
     return res;
