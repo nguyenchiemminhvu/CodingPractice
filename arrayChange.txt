@@ -1,0 +1,24 @@
+You are given an array of integers. On each move you are allowed to increase exactly one of its element by one. Find the minimal number of moves required to obtain a strictly increasing sequence from the input.
+
+Example
+
+For inputArray = [1, 1, 1], the output should be
+arrayChange(inputArray) = 3.
+
+===============================================================================
+
+int arrayChange(std::vector<int> input) 
+{
+    int res = 0;
+    
+    for (int i = 0, l = input.size() - 1; i < l; i++)
+    {
+        while (input[i + 1] <= input[i])
+        {
+            input[i + 1]++;
+            res++;
+        }
+    }
+    
+    return res;
+}
