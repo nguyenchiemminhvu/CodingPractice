@@ -1,0 +1,13 @@
+Return a string equal to "local value".
+
+Example
+
+For no arguments provided, the output should be
+returnLocalValue() = "local value".
+
+=================================================
+
+std::string returnLocalValue() 
+{
+    return "local value";
+}
