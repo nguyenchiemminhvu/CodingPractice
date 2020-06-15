@@ -16,12 +16,12 @@ vector<long long> removeDigits(long long n, int k)
 {
     stringstream ss;
     string s_in, test;
-    long long cont = 0, high = 0, low = 10000000;
+    long long high = INT_MIN, low = INT_MAX;
     
     ss << n;
     ss >> s_in;
     
-    for(unsigned long i = 0; i < s_in.length(); ++i)
+    for (unsigned long i = 0; i < s_in.length(); i++)
     {
         ss.str("");
         ss.clear();
@@ -29,14 +29,15 @@ vector<long long> removeDigits(long long n, int k)
         
         test = s_in.substr(i,k);
 
+        long long temp;
         if (test.length() >= k)
-            cont = stoll(test);
+            temp = stoll(test);
             
-        if(cont > high)
-            high = cont;
+        if(temp > high)
+            high = temp;
             
-        if(cont < low)
-            low = cont;
+        if(temp < low)
+            low = temp;
     }
     
     vector<long long> ans = {low, high};
