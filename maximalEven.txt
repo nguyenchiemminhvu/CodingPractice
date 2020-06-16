@@ -1,0 +1,17 @@
+Pick-out the largest even number from an array of integers
+
+Example
+
+For inputArray = [4, 3, 6, 8, 2, 4], the output should be
+maximalEven(inputArray) = 8.
+
+========================================================
+
+int maximalEven(std::vector<int> a)
+{
+    int m = INT_MIN;
+    for (int n : a)
+        if (n % 2 == 0)
+            m = std::max(m, n);
+    return m;
+}

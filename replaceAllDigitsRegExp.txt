@@ -7,13 +7,6 @@ replaceAllDigitsRegExp(input) = "There are ## points".
 
 =============================================================
 
-std::string replaceAllDigitsRegExp(std::string input)
-{
-    for (char &c : input)
-    {
-        if (std::isdigit(c))
-            c = '#';
-    }
-    
-    return input;
+std::string replaceAllDigitsRegExp(std::string input) {
+  return std::regex_replace(input, std::regex("[0-9]"), "#");
 }
