@@ -1,0 +1,40 @@
+The wicked witch has captured the prince and imprisoned him in the bottom-right corner of a dungeon! The dungeon consists of m × n rooms laid out in a 2D grid. The knight is initially positioned in the top-left room of the dungeon, and she must fight her way through the dungeon to rescue the prince. The knight has an initial health level represented by a positive integer. If at any point her health level drops to 0 or below, she dies immediately.
+
+Some of the rooms in the dungeon are guarded by goblins, and the knight loses health upon entering these rooms. These rooms are represented by cells that contain negative integers. Other rooms are either empty, represented by cells that contain 0s, or they contain magic potions that increase the knight's health, represented by cells that contain positive integers. In order to reach the prince as quickly as possible, the knight decides to move only right or down for each step.
+
+Write a function to determine the knight's minimum initial health so that she is able to rescue the prince.
+
+Example
+
+For
+
+dungeon = [[-2,  -3,  4],
+           [-6, -15,  0],
+           [10,  25, -6]]
+the output should be
+dungeonGame(dungeon) = 8.
+
+The initial health of the knight must be at least 8 if she follows the optimal path RIGHT-> RIGHT -> DOWN -> DOWN.
+
+=============================================================
+
+int dungeonGame(std::vector<std::vector<int>>& dungeon)
+{
+    const int H = dungeon.size(), W = dungeon[0].size();
+    std::vector<std::vector<int>> dp(H, std::vector<int>(W, 0));    
+    for (int i = H - 1; i >= 0; i--)
+    {
+        for (int j = W - 1; j >= 0; j--)
+        {
+            int health = dungeon[i][j];
+            int max_health = INT_MIN;
+            if (i + 1 < H)
+                max_health = std::max(max_health, dp[i + 1][j]);
+            if (j + 1 < W)
+                max_health = std::max(max_health, dp[i][j + 1]);
+            health += max_health == INT_MIN ? 0 : max_health;
+            dp[i][j] = health > 0 ? 0 : health;
+        }
+    }
+    return -dp[0][0] + 1;
+}
