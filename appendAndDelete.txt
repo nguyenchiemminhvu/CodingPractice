@@ -1,0 +1,42 @@
+Given an integer k and two strings str1 and str2 determine whether or not we can convert str1 to str2 by performing exactly k of the below operations on str1.
+a) Append a lowercase English alphabetic letter to the end of the str1.
+b) Delete the last character in str1 (Performing this operation on an empty string results in an empty string)
+
+Examples:
+
+Input : k = 7, str1 = aba, str2 = aba
+Output : Yes
+(4 operations to convert str1 to an 
+empty string(to make string empty we 
+have to perform one more delete 
+operation) and 3 append operations)
+
+Input : k = 5, str1 = pqruvs, str2 = pqrxy 
+Output : Yes
+(3 delete operations and 2 append operations)
+
+=============================================================
+
+string appendAndDelete(string str1, string str2, int k)
+{
+    // Case A (i) 
+    if ((str1.length() + str2.length()) < k) 
+        return "Yes"; 
+  
+    // finding common length of both string 
+    int commonLength = 0; 
+    for (int i = 0; i < min(str1.length(), str2.length()); i++)
+    { 
+        if (str1[i] == str2[i]) 
+            commonLength++; 
+        else
+            break; 
+    } 
+  
+    // Case A (ii)- 
+    if ((k - str1.length() - str2.length() + 2 * commonLength) % 2 == 0) 
+        return "Yes"; 
+    
+    // Case B- 
+    return "No"; 
+}
