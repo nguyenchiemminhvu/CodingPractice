@@ -15,6 +15,16 @@ Input : k = 5, str1 = pqruvs, str2 = pqrxy
 Output : Yes
 (3 delete operations and 2 append operations)
 
+First of all we determine the common prefix of both strings and then depending upon the value of common prefix, str1.length, str2.length and k we can conclude result. Below are the cases.
+
+CASE A: Cases where we can change str1 to str2 :
+
+i. If str1.length + str2.length <= k then we can delete str1 completely and re-construct str2 easily.
+
+ii. If [k-(str1.length-prefix.length + str2.length-prefix.length)] is even then we can easily construct str2 from str1. This is because str1.length-prefix.length is number of letter to be deleted and str2.length-prefix.length is number of letter to be added in str1 after deletion of uncommon letter. After this if the operations left is even then we can add and remove any random letter which cost even number of operations.
+
+CASE B: In rest of all cases we cannot construct str2 from str1.
+
 =============================================================
 
 string appendAndDelete(string str1, string str2, int k)
