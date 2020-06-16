@@ -14,52 +14,22 @@ The bishops don't belong to the same diagonal, so they don't move.
 
 =========================================================
 
-std::vector<std::string> bishopDiagonal(std::string bishop1, std::string bishop2)
+std::vector<std::string> bishopDiagonal(std::string b1, std::string b2)
 {
-    std::pair<int, int> b1{bishop1[0] - 'a', bishop1[1] - '1'};
-    std::pair<int, int> b2{bishop2[0] - 'a', bishop2[1] - '1'};
-    
-    std::cout << b1.first << " " << b1.second << std::endl;
-    std::cout << b2.first << " " << b2.second << std::endl;
-
-    if ((b1.first - b2.first) == -(b1.second - b2.second))
+    if (b1[0] > b2[0]) std::swap(b1, b2);
+    if (abs(b1[0] - b2[0]) == abs(b1[1] - b2[1]))
     {
-        if (7 - b1.second < b1.first)
+        if (b1[1] < b2[1])
         {
-            b1.first -= 7 - b1.second;
-            b1.second = 7;
+            while (b1[0] > 'a' && b1[1] > '1') { b1[0]--; b1[1]--; }
+            while (b2[0] < 'h' && b2[1] < '8') { b2[0]++; b2[1]++; }
         }
         else
         {
-            b1.first += b1.second;
-            b1.second = 0;
+            while (b1[0] > 'a' && b1[1] < '8') { b1[0]--; b1[1]++; }
+            while (b2[0] < 'h' && b2[1] > '1') { b2[0]++; b2[1]--; }
         }
-        b2.first = b1.second;
-        b2.second = b1.first;
-        
-        bishop1[0] = b1.first + 'a';
-        bishop1[1] = b1.second + '1';
-        bishop2[0] = b2.first + 'a';
-        bishop2[1] = b2.second + '1';
-    }
-    else if (b1.first - b2.first == b1.second - b2.second)
-    {
-        int min = 7 - std::max(b1.first, b1.second);
-        b1.first += min;
-        b1.second += min;
-        b2.first = 7 - b1.second;
-        b2.second = 7 - b1.first;
-        
-        bishop1[0] = b1.first + 'a';
-        bishop1[1] = b1.second + '1';
-        bishop2[0] = b2.first + 'a';
-        bishop2[1] = b2.second + '1';
     }
     
-    if (bishop1 > bishop2)
-    {
-        std::swap(bishop1, bishop2);
-    }
-    
-    return { bishop1, bishop2 };
+    return { b1, b2 };
 }
