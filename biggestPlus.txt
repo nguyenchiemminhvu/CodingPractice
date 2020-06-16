@@ -1,0 +1,64 @@
+Given a matrix that contains only the characters '0' and '1', find the biggest plus sign (+) formed by 1s in this matrix and return its size. Size, in this case, indicates the length of the plus sign's edges. In order to be a valid plus sign, the edges must be of equal length.
+
+For example, a plus sign with a size of k in matrix starts at cell (x, y). The plus sign's edges are (x - k, y), (x - k + 1, y), ..., (x + k, y) and (x, y - k), (x, y - k + 1), ..., (x, y + k), all with a length of k.
+
+Example
+
+For
+
+  matrix = ["0010010", 
+            "1010101",
+            "1111111", 
+            "0010000",
+            "0000000"]
+the output should be biggestPlus(matrix) = 1.
+
+Here, the biggest plus sign is centered at cell (2, 2) (0-based) and has a size of 1 since the downward facing edge is short.
+
+=======================================================================
+
+bool check(const std::vector<std::string> &m, int i, int j)
+{
+    return i >= 0 && i < m.size() && j >= 0 && j < m[i].size();
+}
+
+int traversal(const std::vector<std::string> &m, int fromX, int fromY)
+{
+    int res = 0;
+    
+    int up = fromX - 1;
+    int down = fromX + 1;
+    int left = fromY - 1;
+    int right = fromY + 1;
+    
+    while (check(m, up, fromY) && check(m, down, fromY) && check(m, fromX, left) && check(m, fromX, right)
+        && m[up][fromY] == '1' && m[down][fromY] == '1' && m[fromX][left] == '1' && m[fromX][right] == '1')
+    {
+        res++;
+        
+        up--;
+        down++;
+        left--;
+        right++;
+    }
+        
+    return res;
+}
+
+int biggestPlus(std::vector<std::string> matrix)
+{
+    int res = 0;
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        for (int j = 0; j < matrix[i].length(); j++)
+        {
+            if (matrix[i][j] == '1')
+            {
+                res = std::max(res, traversal(matrix, i, j));
+            }
+        }
+    }
+    
+    return res;
+}
+

@@ -1,0 +1,18 @@
+Given an integer, find its kth digit.
+
+Example
+
+For n = 578943 and k = 2, the output should be
+kthDigit(n, k) = 7.
+
+====================================================
+
+int kthDigit(int n, int k)
+{
+    std::string s = std::to_string(n);
+    
+    if (k > s.length())
+        return -1;
+    
+    return s[k - 1] - '0';
+}
