@@ -17,11 +17,12 @@ int arrayKthGreatestQuick(std::vector<int> inputArray, int k) {
   }
 
   for (int i = 0; i < inputArray.size(); i++) {
-    if (inputArray[i] >= inputArray[pos])
-        right.push_back(inputArray[i]);
-    else
+    if (inputArray[i] < inputArray[pos]) {
         left.push_back(inputArray[i]);
-
+    }
+    else {
+        right.push_back(inputArray[i]);
+    }
   }
 
   if (right.size() >= k) {
