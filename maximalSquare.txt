@@ -1,0 +1,65 @@
+You have a 2D binary matrix that's filled with 0s and 1s. In the matrix, find the largest square that contains only 1s and return its area.
+
+Example
+
+For
+
+matrix = [
+    ['1', '0', '1', '1', '1'],
+    ['1', '0', '1', '1', '1'],
+    ['1', '1', '1', '1', '1'],
+    ['1', '0', '0', '1', '0'],
+    ['1', '0', '0', '1', '0']
+]
+the output should be
+maximalSquare(matrix) = 9.
+
+==============================================================
+
+bool check(const std::vector<std::vector<char>> &matrix, int fromX, int fromY, int toX, int toY)
+{
+    for (int i = fromX; i <= toX; i++)
+    {
+        if (matrix[i][toY] != '1')
+            return false;
+    }
+    
+    for (int j = fromY; j <= toY; j++)
+    {
+        if (matrix[toX][j] != '1')
+            return false;
+    }
+    
+    return true;
+}
+
+int traversal(const std::vector<std::vector<char>> &matrix, int fromX, int fromY)
+{
+    int toX = fromX;
+    int toY = fromY;
+    while (toX < matrix.size() && toY < matrix[fromX].size() && check(matrix, fromX, fromY, toX, toY))
+    {
+        toX++;
+        toY++;
+    }
+    
+    return (toX - fromX) * (toY - fromY);
+}
+
+int maximalSquare(std::vector<std::vector<char>> matrix)
+{
+    int res = 0;
+    
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        for (int j = 0; j < matrix[i].size(); j++)
+        {
+            if (matrix[i][j] == '1')
+            {
+                res = std::max(res, traversal(matrix, i, j));
+            }
+        }
+    }
+    
+    return res;
+}
