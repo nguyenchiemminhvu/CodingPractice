@@ -1,0 +1,69 @@
+Julius Caesar protected his confidential information by encrypting it using a cipher. Caesar's cipher shifts each letter by a number of letters. If the shift takes you past the end of the alphabet, just rotate back to the front of the alphabet. In the case of a rotation by 3, w, x, y and z would map to z, a, b and c.
+
+Original alphabet:      abcdefghijklmnopqrstuvwxyz
+Alphabet rotated +3:    defghijklmnopqrstuvwxyzabc
+
+Sample Input
+
+11
+middle-Outz
+2
+
+Sample Output
+
+okffng-Qwvb
+
+Explanation
+
+Original alphabet:      abcdefghijklmnopqrstuvwxyz
+Alphabet rotated +2:    cdefghijklmnopqrstuvwxyzab
+
+m -> o
+i -> k
+d -> f
+d -> f
+l -> n
+e -> g
+-    -
+O -> Q
+u -> w
+t -> v
+z -> b
+
+========================================================
+
+string caesarCipher(string s, int k)
+{
+    k %= 26;
+
+    for (char & c : s)
+    {
+        if (c >= 'a' && c <= 'z')
+        {
+            int temp = c + k - 'z';
+            if (temp > 0)
+            {
+                c = 'a' + temp - 1;
+            }
+            else
+            {
+                c += k;
+            }
+        }
+
+        if (c >= 'A' && c <= 'Z')
+        {
+            int temp = c + k - 'Z';
+            if (temp > 0)
+            {
+                c = 'A' + temp - 1;
+            }
+            else
+            {
+                c += k;
+            }
+        }
+    }
+
+    return s;
+}
