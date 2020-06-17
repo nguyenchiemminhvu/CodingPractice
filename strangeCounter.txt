@@ -1,0 +1,22 @@
+Sample Input
+
+4
+
+Sample Output
+
+6
+
+======================================================
+
+long strangeCounter(long t)
+{
+    long long base = 3;
+    while (t > base)
+    {
+        t -= base;
+        base *= 2;
+    }
+
+    cout << base << " " << t << endl;
+    return base - t + 1;
+}
