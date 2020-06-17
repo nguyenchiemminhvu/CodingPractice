@@ -1,0 +1,22 @@
+void insertionSort1(int n, vector<int> arr)
+{
+    std::set<std::vector<int>> s;
+
+    std::vector<int> temp = arr;
+    std::sort(temp.begin(), temp.end(), std::greater<int>());
+    
+    int right = arr.size() - 1;
+    for (int i = 0; i < temp.size(); i++)
+    {
+        arr[right--] = temp[i];
+        s.insert(arr);
+    }
+
+    for (std::set<std::vector<int>>::reverse_iterator i = s.rbegin(); i != s.rend(); i++)
+    {
+        std::vector<int> v = *i;
+        for (int n : v)
+            cout << n << " ";
+        cout << endl;
+    }
+}

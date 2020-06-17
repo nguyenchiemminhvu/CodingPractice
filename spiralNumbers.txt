@@ -10,7 +10,8 @@ spiralNumbers(n) = [[1, 2, 3],
 
 =====================================================
 
-std::vector<std::vector<int>> spiralNumbers(int n) {
+std::vector<std::vector<int>> spiralNumbers(int n) 
+{
     std::vector<std::vector<int>> res(n, std::vector<int>(n, 0));
     int top, bottom, left, right;
     top = left = 0;
@@ -43,3 +44,4 @@ std::vector<std::vector<int>> spiralNumbers(int n) {
     
     return res;
 }
+
