@@ -1,0 +1,49 @@
+Let's say that binary sequence s generates binary sequence t if:
+
+s and t are of the same length;
+for each i such that s[i] = 1 it is true that t[i] = 1.
+Given a sequence s, return an array of all the sequences it generates, sorted lexicographically.
+
+Example
+
+For s = "01101", the output should be
+binaryGenerator(s) = ["01101", "01111", "11101", "11111"].
+
+==============================================================
+
+std::vector<std::string> binaryGenerator(std::string s) 
+{
+    // Create a vector of indeces `i` for which s[i] == 0 ordered from left to right. 
+    vector<int> zeros;
+    for (int i = s.size() - 1; i >= 0; i--) 
+    {
+        if (s[i] == '0') 
+        { 
+            zeros.push_back(i);
+        }
+    }
+    
+    // The number of generated strings is 2 to the power of number of zeros in `s`.
+    const int num_generated_strings = 1 << zeros.size();
+    
+    // Create that many copies of s to prepare the return result.
+    std::vector<std::string> generated_strings(num_generated_strings, s);
+    
+    // Update each generated string.
+    for (int i = 0; i < num_generated_strings; i++) 
+    {
+        // For kth binary bit of the generated string index and the kth zero 
+        // of the string `s` counting from right to left.
+        for (int k = 0, bit = 1; k < zeros.size(); k++, bit <<= 1) 
+        {
+            // If the kth bit of the index is not zero.
+            if ((i & bit) != 0) 
+            {
+                // Replace the kth zero in a copy of `s` with '1'. 
+                generated_strings[i][zeros[k]] = '1';
+            } 
+        }
+    }
+    
+    return generated_strings;
+}
