@@ -1,0 +1,14 @@
+std::string funnyString(std::string s)
+{
+    std::string r = std::string(s.rbegin(), s.rend());
+
+    std::vector<int> vs;
+    for (int i = 1; i < s.length(); i++)
+        vs.push_back(abs(s[i] - s[i - 1]));
+
+    std::vector<int> vr;
+    for (int i = 1; i < r.length(); i++)
+        vr.push_back(abs(r[i] - r[i - 1]));
+
+    return vs == vr ? "Funny" : "Not Funny";
+}
