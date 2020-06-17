@@ -13,6 +13,8 @@ wordLadder(beginWord, endWord, wordList) = 5.
 
 The shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog" with a length of 5.
 
+The idea is to use BFS. We start from the given start word, traverse all words that adjacent (differ by one character) to it and keep doing so until we find the target word or we have traversed all words.
+
 =========================================================================
 
 // Returns length of shortest chain to reach 'target' from 'start' 
