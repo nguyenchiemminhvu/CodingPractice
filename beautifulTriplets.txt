@@ -1,0 +1,42 @@
+It must return an integer that represents the number of beautiful triplets in the sequence.
+
+Sample Input
+
+7 3
+1 2 4 5 7 8 10
+
+Sample Output
+
+3
+
+=============================================================
+
+int beautifulTriplets(int d, vector<int> arr)
+{
+    if (arr.size() < 3)
+        return 0;
+    
+    int res = 0;
+
+    std::sort(arr.begin(), arr.end());
+
+    for (int i = 0; i < arr.size() - 2; i++)
+    {
+        for (int j = i + 1; j < arr.size() - 1; j++)
+        {
+            if (arr[j] - arr[i] == d)
+            {
+                int t = arr[j] + d;
+                for (int k = j + 1; k < arr.size(); k++)
+                {
+                    if (arr[k] == t)
+                    {
+                        res++;
+                    }
+                }
+            }
+        }
+    }
+
+    return res;
+}
