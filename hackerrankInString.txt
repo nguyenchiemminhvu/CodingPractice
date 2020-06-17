@@ -1,0 +1,17 @@
+string hackerrankInString(string s)
+{
+    std::string check = "hackerrank";
+
+    for (char c : s)
+    {
+        if (check.length() == 0)
+            return "YES";
+        
+        if (c == check.front())
+        {
+            check.erase(check.begin());
+        }
+    }
+
+    return check.empty() ? "YES" : "NO";
+}
