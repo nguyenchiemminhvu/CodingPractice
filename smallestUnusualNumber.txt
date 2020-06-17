@@ -1,0 +1,115 @@
+Let's call an integer unusual if the sum of its digits is larger than the product of its digits. For example, the numbers 21 and 990 are unusual, while the numbers 22 and 991 aren't.
+
+Given an integer a (represented as a string), find the smallest unusual integer x such that x ≥ a. Since both x and a can be very large, return the value of x - a.
+
+Example
+
+For a = "42", the output should be
+smallestUnusualNumber(a) = 8.
+
+The smallest unusual number that is greater than or equal to 42 is 50, and 50 - 42 = 8.
+
+=============================================================
+
+void getDigits(vector<int> &numbers, string &a) 
+{
+    for (int i = 0; i < a.length(); i++) 
+    {
+        numbers.push_back(int(a[i]) - 48);
+    }
+}
+
+long double getSum(vector<int> &numbers) 
+{
+    long double sum = 0;
+    for (int i = 0; i < numbers.size(); i++) 
+    {
+        sum += numbers[i];
+    }
+    return sum;
+}
+
+long double getProduct(vector<int> &numbers) 
+{
+    long double product = 1;
+    for (int i = 0; i < numbers.size(); i++)
+    {
+        product *= numbers[i];
+    }
+    return product;
+}
+
+void addOne(vector<int> &numbers)
+{
+    int i = numbers.size()-1;
+    numbers[i] += 1;
+    int carry = 0;
+    while (numbers[i] >= 10)
+    {
+        numbers[i] %= 10;
+        carry = 1;
+        i--;
+        
+        if(i >= 0)
+        { 
+            numbers[i] += carry;
+            carry = 0;
+        }
+        else
+        {
+            numbers.insert(numbers.begin(), carry);
+            break;
+        }
+    }
+    
+}
+
+void printNumber(vector<int> &numbers)
+{
+    for (int i = 0; i < numbers.size(); i++)
+    {
+        cout << numbers[i] << " ";
+    }
+    cout << endl;
+} 
+
+int getDifference(vector<int> &num1, vector<int> &num2)
+{
+    int diff = 0;
+    while (num1 != num2)
+    {
+        diff++;
+        addOne(num1);
+    }
+    return diff;
+}
+
+int smallestUnusualNumber(std::string a)
+{
+    vector<int> firstNum, secondNum;
+    int diff;
+    long double sum;
+    long double prod;
+    /* Convert each character in the string into number 
+     * and place it in a vector
+     */
+    getDigits(firstNum, a);
+    secondNum = firstNum;
+    
+    sum = getSum(secondNum);
+    prod = getProduct(secondNum);
+    /*printf("Sum is: %llf, Product is: %llf\n",sum, prod);*/
+    
+    while (sum <= prod)
+    {
+        addOne(secondNum);
+        sum = getSum(secondNum);
+        prod = getProduct(secondNum);
+        /*printf("Sum is: %llf, Product is: %llf\n",sum, prod);*/
+    }
+    
+    /*printNumber(secondNum);*/
+    diff = getDifference(firstNum, secondNum);
+    /*printf("The difference is %d\n", diff); */
+    return diff;
+}
