@@ -16,18 +16,17 @@ reverseToSort(inputArray) = false.
 
 int reverseToSort(std::vector<int> a)
 {
-    int left, right;
-    
     std::vector<int> temp = a;
     sort(temp.begin(), temp.end());
     for (int i = 1; i < a.size(); i++)
         if (temp[i] <= temp[i - 1])
             return 0;
     
+    int left = 0;
     while (a[left] == temp[left])
         left++;
     
-    right = a.size() - 1;
+    int right = a.size() - 1;
     while (a[right] == temp[right])
         right--;
     
