@@ -1,0 +1,62 @@
+In this challenge, you will be given a string. You must remove characters until the string is made up of any two alternating characters. When you choose a character to remove, all instances of that character must be removed. Your goal is to create the longest string possible that contains just two alternating letters.
+
+As an example, consider the string abaacdabd. If you delete the character a, you will be left with the string bcdbd. Now, removing the character c leaves you with a valid string bdbd having a length of 4. Removing either b or d at any point would not result in a valid string.
+
+Sample Input
+
+10
+beabeefeab
+
+Sample Output
+
+5
+
+Explanation
+
+babab is the longest string we can create.
+
+=========================================================================
+
+int alternate(string s)
+{
+    int res = 0;
+
+    std::vector<int> freq(26, 0);
+    for (char c : s)
+        freq[c - 'a']++;
+
+    for (size_t i = 0; i < freq.size(); i++)
+    {
+        for (size_t j = i + 1; j < freq.size(); j++)
+        {
+            if (!freq[i] || !freq[j])
+                continue;
+            
+            char ch1 = 'a' + i;
+            char ch2 = 'a' + j;
+
+            bool check = true;
+            std::string temp;
+            for (char c : s)
+            {
+                if (c == ch1 || c == ch2)
+                {
+                    if (c == temp.back())
+                    {
+                        check = false;
+                        break;
+                    }
+
+                    temp += c;
+                }
+            }
+            
+            if (check)
+            {
+                res = std::max(res, (int)temp.length());
+            }
+        }
+    }
+
+    return res;
+}
