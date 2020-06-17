@@ -1,0 +1,16 @@
+Determine whether the given number n is a power of two.
+
+Example
+
+For n = 64, the output should be
+isPowerOfTwo2(n) = true;
+
+For n = 5, the output should be
+isPowerOfTwo2(n) = false.
+
+=====================================================
+
+bool isPowerOfTwo2(long long n)
+{
+    return !(n & (n - 1));
+}
