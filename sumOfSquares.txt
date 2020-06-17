@@ -1,0 +1,16 @@
+Find the sum of squares of all integers from 1 up to and including given N.
+
+Example
+
+For n = 5, the output should be
+sumOfSquares(n) = 55.
+
+=================================================
+
+int sumOfSquares(int n)
+{
+    int s = 0;
+    for (int i = 1; i <= n; i++)
+        s += i * i;
+    return s;
+}
