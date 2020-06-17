@@ -16,16 +16,16 @@ Thus, the encoded message will be aea sgmse.
 
 ==============================================================
 
-auto caesarBoxCipherEncoding(auto t)
+std::string caesarBoxCipherEncoding(std::string t)
 {
     int n = sqrt(t.length()), i, j;
-    vector<string> v;
-    for (i = 0; i < n*n; i += n)
-        v.push_back(string(t.begin() + i, t.begin() + i + n));
+    std::vector<std::string> v;
+    for (i = 0; i < n * n; i += n)
+        v.push_back(std::string(t.begin() + i, t.begin() + i + n));
     
-    string r;
+    std::string r;
     for (j = 0; j < n; j++)
-        for (auto s : v)
+        for (std::string s : v)
             r += s[j];
     
     return r;
