@@ -1,0 +1,35 @@
+std::string getCommon(std::string s1, std::string s2)
+{
+    std::string res;
+
+    std::vector<int> f1(26, 0);
+    for (char c : s1)
+    {
+        f1[c - 'a']++;
+    }
+
+    std::vector<int> f2(26, 0);
+    for (char c : s2)
+    {
+        f2[c - 'a']++;
+    }
+
+    for (int i = 0; i < 26; i++)
+    {
+        if (f1[i] && f2[i])
+            res += 'a' + i;
+    }
+
+    return res;
+}
+
+int gemstones(std::vector<std::string> arr)
+{
+    std::string temp = arr[0];
+    for (int i = 1; i < arr.size(); i++)
+    {
+        temp = getCommon(temp, arr[i]);
+    }
+
+    return temp.length();
+}
