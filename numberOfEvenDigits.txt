@@ -1,0 +1,21 @@
+Find the number of even digits in the given integer.
+
+Example
+
+For n = 1010, the output should be
+numberOfEvenDigits(n) = 2;
+For n = 123, the output should be
+numberOfEvenDigits(n) = 1.
+
+===========================================
+
+int numberOfEvenDigits(int n)
+{
+    int res = 0;
+    while (n)
+    {
+        res += !(n & 1);
+        n /= 10;
+    }
+    return res;
+}
