@@ -1,0 +1,69 @@
+Given an absolute file path (Unix-style), shorten it to the format /<dir1>/<dir2>/<dir3>/....
+
+Here is some info on Unix file system paths:
+
+/ is the root directory; the path should always start with it even if it isn't there in the given path;
+/ is also used as a directory separator; for example, /code/fights denotes a fights subfolder in the code folder in the root directory;
+this also means that // stands for "change the current directory to the current directory"
+. is used to mark the current directory;
+.. is used to mark the parent directory; if the current directory is root already, .. does nothing.
+Example
+
+For path = "/home/a/./x/../b//c/", the output should be
+simplifyPath(path) = "/home/a/b/c".
+
+Here is how this path was simplified:
+* /./ means "move to the current directory" and can be replaced with a single /;
+* /x/../ means "move into directory x and then return back to the parent directory", so it can replaced with a single /;
+* // means "move to the current directory" and can be replaced with a single /.
+
+===============================================================
+
+std::string simplifyPath(std::string path)
+{
+    path += "/";
+    path = std::regex_replace(path, std::regex("//"), "/");
+    path = std::regex_replace(path, std::regex("//"), "/");
+    
+    std::stack<std::string> dirs;
+    
+    std::regex re("([a-zA-Z.]+)/");
+    for (std::sregex_iterator iter = std::sregex_iterator(path.begin(), path.end(), re); 
+         iter != std::sregex_iterator();
+         iter++)
+    {
+        std::smatch ma = *iter;
+        std::string dir = ma.str(1);
+        
+        if (dir == "..")
+        {
+            if (!dirs.empty())
+            {
+                dirs.pop();
+            }
+        }
+        else if (dir != ".")
+        {
+            dirs.push(dir);
+        }
+    }
+    
+    std::stack<std::string> temp;
+    while (!dirs.empty())
+    {
+        temp.push(dirs.top());
+        dirs.pop();
+    }
+    
+    std::string res;
+    while (!temp.empty())
+    {
+        res += "/";
+        res += temp.top();
+        temp.pop();
+    }
+    
+    if (res.empty())
+        res = "/";
+    return res;
+}
