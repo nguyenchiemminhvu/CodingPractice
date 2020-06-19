@@ -1,0 +1,36 @@
+Given a string s, recursively remove any adjacent duplicate characters that it contains.
+
+Example
+
+For s = "cooodefightssforrrcodee", the output should be
+removeDuplicateAdjacent(s) = "cdefightfocod";
+For s = "acaaabbbacdddd", the output should be
+removeDuplicateAdjacent(s) = "acac".
+
+==================================================================
+
+bool check(std::string s, int i)
+{
+    if (i - 1 >= 0 && s[i - 1] == s[i])
+        return false;
+    if (i < s.length() - 1 && s[i] == s[i + 1])
+        return false;
+    return true;
+}
+
+std::string removeDuplicateAdjacent(std::string s)
+{
+    bool b = true;
+    std::string res;
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (check(s, i))
+            res += s[i];
+        else
+            b = false;
+    }
+    
+    if (b)
+        return res;
+    return removeDuplicateAdjacent(res);
+}
