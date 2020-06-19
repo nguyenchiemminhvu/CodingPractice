@@ -1,0 +1,28 @@
+Given a matrix, find its transpose.
+
+Example
+
+For
+
+matrix = [[1, 1, 3], 
+          [2, 1, 1]]
+the output should be
+
+matrixTransposition(matrix) = [[1, 2],
+                               [1, 1],
+                               [3, 1]]
+
+===========================================================
+
+std::vector<std::vector<int>> matrixTransposition(std::vector<std::vector<int>> matrix)
+{
+    std::vector<std::vector<int>> res(matrix[0].size(), std::vector<int>(matrix.size(), 0));
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        for (int j = 0; j < matrix[i].size(); j++)
+        {
+            res[j][i] = matrix[i][j];
+        }
+    }
+    return res;
+}
