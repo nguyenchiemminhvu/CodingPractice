@@ -1,0 +1,25 @@
+Return the value of prefix function for a given string.
+
+Example
+
+For s = "acacbab", the output should be
+prefixFunctionNaive(s) = [0, 0, 1, 2, 0, 1, 0].
+
+==========================================================
+
+std::vector<int> prefixFunctionNaive(std::string s)
+{
+    std::vector<int> p(s.size());
+    
+    int j = 0;
+    for (int i = 1; i < (int)s.size(); i++) {
+        while (j > 0 && s[j] != s[i])
+            j = p[j-1];
+
+        if (s[j] == s[i])
+            j++;
+        p[i] = j;
+    }
+       
+    return p;
+}
