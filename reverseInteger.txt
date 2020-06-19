@@ -1,0 +1,24 @@
+Reverse the digits of the given integer.
+
+Example
+
+For x = 12345, the output should be
+reverseInteger(x) = 54321;
+For x = -4243, the output should be
+reverseInteger(x) = -3424.
+
+============================================
+
+int reverseInteger(int x)
+{
+    std::string s = std::to_string(x);
+    if (s.front() == '-')
+    {
+        std::string r = std::string(s.rbegin(), s.rend());
+        return std::stoi("-" + r);
+    }
+    else
+    {
+        return std::stoi(std::string(s.rbegin(), s.rend()));
+    }
+}
