@@ -19,58 +19,34 @@ Placing a bomb at (0, 1) or at (0, 3) destroys 2 enemies.
 
 ===================================================================
 
-int bomberTraversal(const std::vector<std::vector<char>> &m, int row, int col)
+int n_killed(int row, int col, const std::vector<std::vector<char>>& field)
 {
-    int res = 0;
-    
-    for (int i = row; i >= 0; i--)
-    {
-        if (m[i][col] == 'W')
-            break;
-        res += m[i][col] == 'E';
+    int killed = 0;
+    for (int i = row - 1; i >= 0 && field[i][col] != 'W'; --i) {
+        killed += field[i][col] == 'E';
     }
-    
-    for (int i = row; i < m.size(); i++)
-    {
-        if (m[i][col] == 'W')
-            break;
-        res += m[i][col] == 'E';
+    for (int i = row + 1; i < field.size() && field[i][col] != 'W'; ++i) {
+        killed += field[i][col] == 'E';
     }
-    
-    for (int j = col; j >= 0; j--)
-    {
-        if (m[row][j] == 'W')
-            break;
-        res += m[row][j] == 'E';
+    for (int i = col + 1; i < field[0].size() && field[row][i] != 'W'; ++i) {
+        killed += field[row][i] == 'E';
     }
-    
-    for (int j = col; j < m[row].size(); j++)
-    {
-        if (m[row][j] == 'W')
-            break;
-        res += m[row][j] == 'E';
+    for (int i = col - 1; i >= 0 && field[row][i] != 'W'; --i) {
+        killed += field[row][i] == 'E';
     }
-    
-    return res;
+    return killed;
 }
 
-int bomber(std::vector<std::vector<char>> m)
-{
-    if (m.size() == 0 || m[0].size() == 0)
-        return 0;
-    
-    int res = 0;
-    
-    for (int i = 0; i < m.size(); i++)
+int bomber(std::vector<std::vector<char>> field) {
+    auto max = 0;
+    for (int row = 0; row < field.size(); ++row)
     {
-        for (int j = 0; j < m.size(); j++)
+        for (int col = 0; col < field[0].size(); ++col)
         {
-            if (m[i][j] == '0')
-            {
-                res = std::max(res, bomberTraversal(m, i, j));
+            if (field[row][col] == '0') {
+                max = std::max(max, n_killed(row, col, field));
             }
-        }   
+        }
     }
-    
-    return res;
+    return max;
 }
