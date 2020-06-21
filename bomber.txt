@@ -22,31 +22,41 @@ Placing a bomb at (0, 1) or at (0, 3) destroys 2 enemies.
 int n_killed(int row, int col, const std::vector<std::vector<char>>& field)
 {
     int killed = 0;
-    for (int i = row - 1; i >= 0 && field[i][col] != 'W'; --i) {
+    
+    for (int i = row - 1; i >= 0 && field[i][col] != 'W'; --i)
+    {
         killed += field[i][col] == 'E';
     }
-    for (int i = row + 1; i < field.size() && field[i][col] != 'W'; ++i) {
+    for (int i = row + 1; i < field.size() && field[i][col] != 'W'; ++i)
+    {
         killed += field[i][col] == 'E';
     }
-    for (int i = col + 1; i < field[0].size() && field[row][i] != 'W'; ++i) {
+    for (int i = col + 1; i < field[0].size() && field[row][i] != 'W'; ++i)
+    {
         killed += field[row][i] == 'E';
     }
-    for (int i = col - 1; i >= 0 && field[row][i] != 'W'; --i) {
+    for (int i = col - 1; i >= 0 && field[row][i] != 'W'; --i)
+    {
         killed += field[row][i] == 'E';
     }
+    
     return killed;
 }
 
-int bomber(std::vector<std::vector<char>> field) {
+int bomber(std::vector<std::vector<char>> field)
+{
     auto max = 0;
+    
     for (int row = 0; row < field.size(); ++row)
     {
         for (int col = 0; col < field[0].size(); ++col)
         {
-            if (field[row][col] == '0') {
+            if (field[row][col] == '0')
+            {
                 max = std::max(max, n_killed(row, col, field));
             }
         }
     }
+    
     return max;
 }

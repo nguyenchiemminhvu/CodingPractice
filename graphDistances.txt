@@ -1,0 +1,67 @@
+You have a strongly connected directed graph that has positive weights in the adjacency matrix g. The graph is represented as a square matrix, where g[i][j] is the weight of the edge (i, j), or -1 if there is no such edge.
+
+Given g and the index of a start vertex s, find the minimal distances between the start vertex s and each of the vertices of the graph.
+
+Example
+
+For
+
+g = [[-1, 3, 2],
+     [2, -1, 0],
+     [-1, 0, -1]]
+and s = 0, the output should be
+graphDistances(g, s) = [0, 2, 2].
+
+Example
+
+The distance from the start vertex 0 to itself is 0.
+The distance from the start vertex 0 to vertex 1 is 2 + 0 = 2.
+The distance from the start vertex 0 to vertex 2 is 2.
+
+=======================================================
+
+// https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+
+int chooseNextVertice(std::vector<int> dist, std::vector<bool> shortestSet)
+{
+    int nextVertice = -1;
+    int minDist = INT_MAX;
+    
+    for (int i = 0; i < dist.size(); i++)
+    {
+        if (!shortestSet[i] && dist[i] < minDist)
+        {
+            minDist = dist[i];
+            nextVertice = i;
+        }
+    }
+    return nextVertice;
+}
+
+void Try(std::vector<std::vector<int>> g, int s, std::vector<int> &dist)
+{
+    std::vector<bool> shortestSet(g.size(), false);
+    dist[s] = 0;
+    
+    for (int count = 0; count < g.size() - 1; count++) // find shortets distance for all vertices
+    {
+        int i = chooseNextVertice(dist, shortestSet);
+        shortestSet[i] = true;
+        
+        for (int j = 0; j < g.size(); j++)
+        {
+            if (!shortestSet[j] && g[i][j] != -1 && dist[i] != INT_MAX
+               && dist[i] + g[i][j] < dist[j])
+            {
+                dist[j] = dist[i] + g[i][j];
+            }
+        }
+    }
+}
+
+std::vector<int> graphDistances(std::vector<std::vector<int>> g, int s)
+{
+    std::vector<int> res(g.size(), INT_MAX);
+    Try(g, s, res);
+    return res;
+}
