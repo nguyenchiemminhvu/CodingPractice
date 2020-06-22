@@ -1,0 +1,28 @@
+bool isPowerOfTwo(long n)
+{
+    return !(n & (n - 1));
+}
+
+long doNextStep(long n)
+{
+    if (isPowerOfTwo(n))
+    {
+        n >>= 1;
+    }
+    else
+    {
+        // find next lower power of two
+        long temp = n;
+        temp = temp | (temp >> 1);
+        temp = temp | (temp >> 2);
+        temp = temp | (temp >> 4);
+        temp = temp | (temp >> 8);
+        temp = temp | (temp >> 16);
+        temp = temp | (temp >> 32);
+        temp++;
+        temp >>= 1;
+        n -= temp;
+    }
+
+    return n;
+}
