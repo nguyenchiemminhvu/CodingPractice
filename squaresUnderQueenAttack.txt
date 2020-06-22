@@ -1,0 +1,37 @@
+Note: Write a solution with O(queries.length + queens.length + n) complexity and O(n) additional memory, since this is what you would be asked to do during a real interview.
+
+In chess, queens can move any number of squares vertically, horizontally, or diagonally. You have an n × n chessboard with some queens on it. You are given several queries, each of which represents one square on the chessboard. For each query square, determine whether it can be attacked by a queen or not.
+
+Example
+
+For n = 5, queens = [[1, 1], [3, 2]], and queries = [[1, 1], [0, 3], [0, 4], [3, 4], [2, 0], [4, 3], [4, 0]], the output should be
+squaresUnderQueenAttack(n, queens, queries) = [true, false, false, true, true, true, false].
+
+==================================================================
+
+std::vector<bool> squaresUnderQueenAttack(int n, std::vector<std::vector<int>> queens, std::vector<std::vector<int>> queries)
+{
+    std::vector<bool> res;
+    
+    std::map<int, bool> check;
+    for (std::vector<int> queen : queens)
+    {
+        char x = '1' + (n - queen[0] - 1);
+        char y = 'a' + queen[1];
+        
+        check[x] = true;
+        check[y] = true;
+        check[x - y] = true;
+        check[x + y] = true;
+    }
+    
+    for (std::vector<int> query : queries)
+    {
+        char x = '1' + (n - query[0] - 1);
+        char y = 'a' + query[1];
+        
+        res.push_back(check[x] || check[y] || check[x + y] || check[x - y]);
+    }
+    
+    return res;
+}
