@@ -1,0 +1,25 @@
+Given a positive integer n, find count of positive integers i such that 0 <= i <= n and n+i = n^i
+
+
+So n + i = n ^ i implies n & i = 0
+
+Hence our problem reduces to finding values of i such that n & i = 0. How to find count of such pairs? We can use the count of unset-bits in the binary representation of n. For n & i to be zero, i must unset all set-bits of n. If the kth bit is set at a particular in n, kth bit in i must be 0 always, else kth bit of i can be 0 or 1
+
+Hence, total such combinations are 2^(count of unset bits in n)
+
+For example, consider n = 12 (Binary representation : 1 1 0 0).
+All possible values of i that can unset all bits of n are 0 0 0/1 0/1 where 0/1 implies either 0 or 1. Number of such values of i are 2^2 = 4.
+
+================================================================
+
+long sumXor(long n)
+{
+    int countUnsetBits = 0;
+    while (n)
+    {
+        countUnsetBits += !(n & 1);
+        n >>= 1;
+    }
+
+    return pow(2, countUnsetBits);
+}
