@@ -1,0 +1,23 @@
+Given a number n, the task is to find the XOR from 1 to n.
+
+Examples :
+
+Input : n = 6
+Output : 7
+// 1 ^ 2 ^ 3 ^ 4 ^ 5 ^ 6  = 7
+
+Input : n = 7
+Output : 0
+// 1 ^ 2 ^ 3 ^ 4 ^ 5 ^ 6 ^ 7 = 0
+
+=============================================
+
+long long computeXorToN(long long n)
+{
+    long long a = n % 8;
+    if(a == 0 || a == 1) return n;
+    if(a == 2 || a == 3) return 2;
+    if(a == 4 || a == 5) return n + 2;
+    if(a == 6 || a == 7) return 0;
+    return 0;
+}
