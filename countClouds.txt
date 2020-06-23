@@ -1,0 +1,82 @@
+Given a 2D grid skyMap composed of '1's (clouds) and '0's (clear sky), count the number of clouds. A cloud is surrounded by clear sky, and is formed by connecting adjacent clouds horizontally or vertically. You can assume that all four edges of the skyMap are surrounded by clear sky.
+
+Example
+
+For
+
+skyMap = [['0', '1', '1', '0', '1'],
+          ['0', '1', '1', '1', '1'],
+          ['0', '0', '0', '0', '1'],
+          ['1', '0', '0', '1', '1']]
+the output should be
+countClouds(skyMap) = 2;
+
+For
+
+skyMap = [['0', '1', '0', '0', '1'],
+          ['1', '1', '0', '0', '0'],
+          ['0', '0', '1', '0', '1'],
+          ['0', '0', '1', '1', '0'],
+          ['1', '0', '1', '1', '0']]
+the output should be
+countClouds(skyMap) = 5.
+
+=================================================================================
+
+#define V(Type) std::vector<Type>
+#define VV(Type) V(V(Type))
+
+void BFS(const VV(char) &skyMap, int row, int col, VV(bool) &check)
+{
+    std::pair<int, int> dirs[] =
+    {
+        std::pair<int, int>(-1, 0), 
+        std::pair<int, int>(1, 0), 
+        std::pair<int, int>(0, -1), 
+        std::pair<int, int>(0, 1)
+    };
+    
+    std::queue<std::pair<int, int>> Q;
+    Q.push(std::pair<int, int>(row, col));
+    while (!Q.empty())
+    {
+        std::pair<int, int> start = Q.front();
+        Q.pop();
+        
+        check[start.first][start.second] = true;
+        for (std::pair<int, int> dir : dirs)
+        {
+            int nextRow = start.first + dir.first;
+            int nextCol = start.second + dir.second;
+            if (nextRow >= 0 && nextRow < skyMap.size() && nextCol >= 0 && nextCol < skyMap[0].size()
+            &&  skyMap[nextRow][nextCol] == '1' && check[nextRow][nextCol] == false)
+            {
+                Q.push(std::pair<int, int>(nextRow, nextCol));
+                check[nextRow][nextCol] = true;
+            }
+        }
+    }
+}
+
+int countClouds(VV(char) skyMap)
+{
+    if (skyMap.size() == 0 || skyMap[0].size() == 0)
+        return 0;
+    
+    int countClouds = 0;
+    
+    VV(bool) check(skyMap.size(), V(bool)(skyMap[0].size(), false));
+    for (int i = 0; i < skyMap.size(); i++)
+    {
+        for (int j = 0; j < skyMap[i].size(); j++)
+        {
+            if (skyMap[i][j] == '1' && check[i][j] == false)
+            {
+                countClouds++;
+                BFS(skyMap, i, j, check);
+            }
+        }
+    }
+    
+    return countClouds;
+}
