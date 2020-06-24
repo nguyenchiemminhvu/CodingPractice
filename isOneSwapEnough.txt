@@ -1,0 +1,68 @@
+Given a string, check if a palindrome can be obtained from it by at most one swap of some pair of characters.
+
+Example
+
+For inputString = "aabaa", the output should be
+isOneSwapEnough(inputString) = true.
+
+It is already a palindrome.
+
+For inputString = "abab", the output should be
+isOneSwapEnough(inputString) = true.
+
+For example, one can swap the leftmost 'a' with the leftmost 'b'.
+
+For inputString = "abc", the output should be
+isOneSwapEnough(inputString) = false.
+
+===================================================================
+
+bool isOneSwapEnough(std::string s)
+{
+    int l = 0, r = s.length() - 1;
+    
+    std::vector<std::pair<int, int>> diffIndexes;
+    while (l < r)
+    {
+        if (s[l] != s[r])
+        {
+            diffIndexes.push_back(std::pair<int, int>(l, r));
+        }
+        
+        l++;
+        r--;
+    }
+    
+    if (diffIndexes.size() == 0)
+        return true;
+        
+    if (diffIndexes.size() >= 3)
+        return false;
+    
+    if (diffIndexes.size() == 2)
+    {
+        int l1, r1, l2, r2;
+        l1 = diffIndexes[0].first;
+        r1 = diffIndexes[0].second;
+        l2 = diffIndexes[1].first;
+        r2 = diffIndexes[1].second;
+        
+        if (s[l1] == s[r2] && s[l2] == s[r1])
+            return true;
+    }
+    
+    if (diffIndexes.size() == 1)
+    {
+        int l1, r1;
+        l1 = diffIndexes[0].first;
+        r1 = diffIndexes[0].second;
+        
+        if (s.length() & 1)
+        {
+            if (s[l1] == s[s.length() / 2] || s[r1] == s[s.length() / 2])
+                return true;
+        }
+    }
+    
+    return false;
+}
