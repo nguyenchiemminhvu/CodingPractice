@@ -9,29 +9,30 @@ squaresUnderQueenAttack(n, queens, queries) = [true, false, false, true, true, t
 
 ==================================================================
 
+bool found(unordered_set<int> &hash, int val)
+{
+    return hash.find(val) != hash.end();
+}
+
 std::vector<bool> squaresUnderQueenAttack(int n, std::vector<std::vector<int>> queens, std::vector<std::vector<int>> queries)
 {
-    std::vector<bool> res;
+    unordered_set<int> row, col, left_diag, right_diag;
     
-    std::map<int, bool> check;
-    for (std::vector<int> queen : queens)
+    for (int i = 0 ; i < queens.size(); ++i)
     {
-        char x = '1' + (n - queen[0] - 1);
-        char y = 'a' + queen[1];
-        
-        check[x] = true;
-        check[y] = true;
-        check[x - y] = true;
-        check[x + y] = true;
+        int x = queens[i][0], y = queens[i][1];
+        row.insert(x);
+        col.insert(y);
+        left_diag.insert(y - x);
+        right_diag.insert(x + y);
     }
-    
-    for (std::vector<int> query : queries)
+
+    vector<bool> result(queries.size(), true);
+    for (int i = 0 ; i < queries.size(); ++i)
     {
-        char x = '1' + (n - query[0] - 1);
-        char y = 'a' + query[1];
-        
-        res.push_back(check[x] || check[y] || check[x + y] || check[x - y]);
+        int x = queries[i][0], y = queries[i][1];
+        if (!found(row, x) && !found(col, y) && !found(left_diag, y - x) && !found(right_diag, x + y ))
+            result[i] = false;
     }
-    
-    return res;
+    return result;
 }
