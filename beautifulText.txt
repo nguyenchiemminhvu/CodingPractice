@@ -21,32 +21,25 @@ There are two ways to obtain a text with lines of equal length from this input, 
 
 bool beautifulText(std::string s, int l, int r)
 {
-    for (int step = l; step <= r; step++)
+    for (int step = l; step <= r + 1; step++) 
     {
-        if (s.size() % (step + 1) == 0)
+        int curIdx = 0;
+        bool allWhiteSpace = true;
+        while (curIdx + step < s.length())
         {
-        }
-        else if ((s.size() + 1) % (step + 1) == 0)
-        {
-        }
-        else
-        {
-            continue;
+            curIdx += step;
+            if (s[curIdx - 1] != ' ')
+                allWhiteSpace = false;
         }
         
-        bool valid = true;
-        for (int i = 0; i < s.size() / (step + 1); i++)
+        if (allWhiteSpace)
         {
-            if (s[(i + 1) * (step + 1) - 1] != ' ')
-            {
-                valid = false;
-                break;
-            }
-        }
-        
-        if (valid)
-        {
-            return true;
+            int numSpace = s.length() / step;
+            int eachPartLength = (s.length() - numSpace) / (numSpace + 1);
+            int lastPartLength = s.length() - curIdx;
+            
+            if (eachPartLength == lastPartLength && lastPartLength >= l && lastPartLength <= r + 1)
+                return true;
         }
     }
     
