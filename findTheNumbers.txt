@@ -1,0 +1,49 @@
+Try to solve this challenge with linear complexity and using O(1) additional memory, since this is what you would be asked to do during a real interview.
+
+You have an array a containing 2 * n + 2 positive numbers, in which n numbers occur twice and two other numbers occur only once and are distinct. Find the two distinct numbers and return them in ascending order.
+
+Example
+
+For a = [1, 3, 5, 6, 1, 4, 3, 6], the output should be
+findTheNumbers(a) = [4, 5];
+For a = [4, 5, 6, 5, 3, 4], the output should be
+findTheNumbers(a) = [3, 6].
+
+====================================================================
+
+void GetTwoNonRepeatingNumbers(std::vector<int> a, int &x, int &y)
+{
+    int Xor = a[0]; /* Will hold Xor of all elements */
+    int set_bit_no; /* Will have only single set bit of Xor */
+    x = 0;  
+    y = 0;  
+      
+    /* Get the Xor of all elements */
+    for (int i = 1; i < a.size(); i++)  
+        Xor ^= a[i];  
+      
+    /* Get the rightmost set bit in set_bit_no */
+    set_bit_no = Xor & ~(Xor-1);  
+      
+    /* Now divide elements in two sets by comparing rightmost set  
+    bit of Xor with bit at same position in each element. */
+    for (int i = 0; i < a.size(); i++)  
+    {  
+        if(a[i] & set_bit_no)  
+            x = x ^ a[i]; /*Xor of first set */
+        else
+            y = y ^ a[i]; /*Xor of second set*/
+    }  
+}
+
+std::vector<int> findTheNumbers(std::vector<int> a)
+{
+    int x = 0, y = 0;
+    GetTwoNonRepeatingNumbers(a, x, y);
+    
+    if (x > y)
+        std::swap(x, y);
+    
+    return { x, y };
+}
+
