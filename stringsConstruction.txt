@@ -1,0 +1,33 @@
+Given two strings a and b, both consisting only of lowercase English letters, your task is to calculate how many strings equal to a can be constructed using only letters from the string b? Each letter can be used only once and in one string only.
+
+Example
+
+For a = "abc" and b = "abccba", the output should be stringsConstruction(a, b) = 2.
+
+We can construct 2 strings a = "abc" using only letters from the string b.
+
+For a = "ab" and b = "abcbcb", the output should be stringsConstruction(a, b) = 1.
+
+===========================================================================
+
+int stringsConstruction(std::string a, std::string b)
+{
+    std::vector<int> fa(26, 0);
+    std::vector<int> fb(26, 0);
+    
+    for (char c : a)
+        fa[c - 'a']++;
+    for (char c : b)
+        fb[c - 'a']++;
+    
+    int res = INT_MAX;
+    for (int i = 0; i < 26; i++)
+    {
+        if (fa[i] == 0)
+            continue;
+        
+        res = std::min(res, fb[i] / fa[i]);
+    }
+    
+    return res == INT_MAX ? 0 : res;
+}

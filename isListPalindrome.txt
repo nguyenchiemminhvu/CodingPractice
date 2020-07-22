@@ -44,13 +44,13 @@ bool isListPalindrome(ListNode<int> * l)
     
     ListNode<int> * p = pSlow;
     p = reverseLinkedList(p);
-    while (pSlow)
+    while (p)
     {
         if (l->value != p->value)
             return false;
         
         l = l->next;
-        pSlow = pSlow->next;
+        p = p->next;
     }
     
     return true;

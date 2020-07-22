@@ -1,0 +1,49 @@
+Given a string that contains only digits 0-9 and a target value, return all expressions that are created by adding some binary operators (+, -, or *) between the digits so they evaluate to the target value. In some cases there may not be any binary operators that will create valid expressions, in which case the function should return an empty array. The numbers in the new expressions should not contain leading zeros.
+
+The function should return all valid expressions that evaluate to target, sorted lexicographically.
+
+Example
+
+For digits = "123" and target = 6, the output should be
+composeExpression(digits, target) = ["1*2*3", "1+2+3"].
+
+=================================================================
+
+void getExprUtil(std::vector<std::string>& res, std::string curExp, std::string input, int target, int pos, int curVal, int last) 
+{ 
+    if (pos == input.length()) 
+    { 
+        if (curVal == target) 
+            res.push_back(curExp); 
+        return; 
+    } 
+  
+    for (int i = pos; i < input.length(); i++) 
+    { 
+        if (i != pos && input[pos] == '0') 
+            break; 
+            
+        string part = input.substr(pos, i + 1 - pos); 
+         
+        int cur = atoi(part.c_str()); 
+        
+        if (pos == 0)
+        {
+            getExprUtil(res, curExp + part, input, target, i + 1, cur, cur); 
+        }    
+        else
+        {
+            getExprUtil(res, curExp + "+" + part, input, target, i + 1, curVal + cur, cur);
+            getExprUtil(res, curExp + "-" + part, input, target, i + 1, curVal - cur, -cur);
+            getExprUtil(res, curExp + "*" + part, input, target, i + 1, curVal - last + last * cur, last * cur); 
+        } 
+    } 
+} 
+
+std::vector<std::string> composeExpression(std::string digits, int target)
+{
+    std::vector<string> ans;
+    getExprUtil(ans, "", digits, target, 0, 0, 0); 
+    std::sort(std::begin(ans), std::end(ans));
+    return ans;
+}
