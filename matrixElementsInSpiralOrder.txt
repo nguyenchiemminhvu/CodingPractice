@@ -17,49 +17,35 @@ matrixElementsInSpiralOrder(matrix) = [1, 2, 3, 4, 5, 6, 7, 8, 9].
 
 std::vector<int> matrixElementsInSpiralOrder(std::vector<std::vector<int>> matrix)
 {
-    std::vector<int> res;
+    vector<int> ans;
     
     if (matrix.size() == 0)
-        return res;
-        
-    int top, bottom, left, right;
-    top = left = 0;
-    right = matrix[0].size() - 1;
-    bottom = matrix.size() - 1;
+        return ans;
     
-    int n = matrix.size() * matrix[0].size();
-    
-    int id = 1;
-    while (id <= n || top < bottom && left < right)
+    int row = 0, col = 0, rows = matrix.size() - 1, cols = matrix[0].size() - 1;
+    while(row <= rows && col <= cols)
     {
-        for (int i = left; i <= right; i++)
-        {
-            res.push_back(matrix[top][i]);
-            id++;
-        }
-        top++;
+        for (int i = col; i <= cols; i++)
+            ans.push_back(matrix[row][i]);
         
-        for (int i = top; i <= bottom; i++)
-        {
-            res.push_back(matrix[i][right]);
-            id++;
-        }
-        right--;
+        for(int i = row + 1; i <= rows; i++)
+            ans.push_back(matrix[i][cols]);
         
-        for (int i = right; i >= left; i--)
+        if(row < rows && col < cols)
         {
-            res.push_back(matrix[bottom][i]);
-            id++;
+            for(int i = cols - 1; i > col; i--)
+                ans.push_back(matrix[rows][i]);
+            
+            for(int i = rows; i > row; i--)
+                ans.push_back(matrix[i][col]);
         }
-        bottom--;
         
-        for (int i = bottom; i >= top; i--)
-        {
-            res.push_back(matrix[i][left]);
-            id++;
-        }
-        left++;
+        row++;
+        col++;
+        rows--;
+        cols--;
     }
     
-    return res;
+    return ans;
 }
+
