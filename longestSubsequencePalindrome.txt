@@ -1,0 +1,52 @@
+Find the longest subsequence palindrome in a given array a. The longest subsequence palindrome of array a is a subsequence of indices i1 < i2 < ... < ik, where ai1ai2...aik is a palindrome.
+
+Example
+
+For a = [1, 2, 4, 1], the output should be
+longestSubsequencePalindrome(a) = 3.
+
+The longest subsequence palindrome here is either 1, 2, 1 or 1, 4, 1, both of which have a length of 3.
+
+For a = [1, 2, 3], the output should be
+longestSubsequencePalindrome(a) = 1.
+
+============================================================
+
+// Returns the length of the longest palindromic subsequence in seq 
+int lps(std::vector<int> str) 
+{ 
+   int n = str.size(); 
+   int i, j, cl; 
+   int L[n][n];  // Create a table to store results of subproblems 
+  
+  
+   // Strings of length 1 are palindrome of lentgh 1 
+   for (i = 0; i < n; i++) 
+      L[i][i] = 1; 
+  
+    // Build the table. Note that the lower diagonal values of table are 
+    // useless and not filled in the process. The values are filled in a 
+    // manner similar to Matrix Chain Multiplication DP solution (See 
+    // https://www.geeksforgeeks.org/matrix-chain-multiplication-dp-8/). cl is length of 
+    // substring 
+    for (cl=2; cl<=n; cl++) 
+    { 
+        for (i=0; i<n-cl+1; i++) 
+        { 
+            j = i+cl-1; 
+            if (str[i] == str[j] && cl == 2) 
+               L[i][j] = 2; 
+            else if (str[i] == str[j]) 
+               L[i][j] = L[i+1][j-1] + 2; 
+            else
+               L[i][j] = max(L[i][j-1], L[i+1][j]); 
+        } 
+    } 
+  
+    return L[0][n-1]; 
+} 
+
+int longestSubsequencePalindrome(std::vector<int> a)
+{
+    return lps(a);
+}
