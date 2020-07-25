@@ -7,21 +7,29 @@ minDistTriplet(a, b, c) = 12.
 
 ===================================================================
 
-int minDistTriplet(std::vector<int> a, std::vector<int> b, std::vector<int> c)
+int minDistTriplet(std::vector<int> a, std::vector<int> b, std::vector<int> c) 
 {
-    std::vector<int> d;
-    int s = 0;
-    for (int i = 0; i < a.size(); i++)
+    int diff = INT_MAX, x = 0, y = 0, z = 0;
+    int i = 0, j = 0, k = 0; 
+    while (i < a.size() && j < b.size() && k < c.size())
     {
-        for (int j = 0; j < b.size(); j++)
-        {
-            for (int k = 0; k<c.size();k++)
-            {
-                s = abs(a[i] - b[j]) + abs(b[j] - c[k]) + abs(a[i] - c[k]);
-                d.push_back(s);
-            }
-        }
+        int mini = min(a[i], min(b[j], c[k])); 
+        int maxi = max(a[i], max(b[j], c[k])); 
+        if (maxi - mini < diff) 
+        { 
+            x = a[i], y = b[j], z = c[k];
+            diff = maxi - mini; 
+        } 
+        if (diff == 0)
+            break;
+         
+        if (a[i] == mini)
+            i++; 
+        else if (b[j] == mini)
+            j++; 
+        else
+            k++; 
     }
-    std::sort(d.begin(), d.end());
-    return d[0];
+    
+    return abs(x - y) + abs(y - z) + abs(z - x);
 }
