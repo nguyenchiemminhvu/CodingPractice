@@ -1,0 +1,105 @@
+The sum of a subtree is the sum of all the node values in that subtree, including its root.
+
+Given a binary tree of integers, find the most frequent sum (or sums) of its subtrees.
+
+Example
+
+For
+t = {
+    "value": 1,
+    "left": {
+        "value": 2,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 3,
+        "left": null,
+        "right": null
+    }
+}
+the output should be
+mostFrequentSum(t) = [2, 3, 6].
+1st example
+
+Since all the sum values in this tree occur only once, return all of them in ascending order.
+
+For
+t = {
+    "value": -2,
+    "left": {
+        "value": -3,
+        "left": null,
+        "right": null
+    },
+    "right": {
+        "value": 2,
+        "left": null,
+        "right": null
+    }
+}
+the output should be
+mostFrequentSum(t) = [-3].
+2nd example
+
+There are 3 subtree sums for this tree: -2 + (-3) + 2 = -3, -3, and -2. The most frequent sum is -3 since it appears twice.
+
+=================================================================
+
+//
+// Binary trees are already defined with this interface:
+// template<typename T>
+// struct Tree {
+//   Tree(const T &v) : value(v), left(nullptr), right(nullptr) {}
+//   T value;
+//   Tree *left;
+//   Tree *right;
+// };
+int SumSubTree(Tree<int> * t)
+{
+    if (t == NULL)
+        return 0;
+    
+    return t->value + SumSubTree(t->left) + SumSubTree(t->right); 
+}
+
+void FindAllSumSubTree(Tree<int> * t, std::vector<int> &res)
+{
+    if (t)
+    {
+        FindAllSumSubTree(t->left, res);
+        FindAllSumSubTree(t->right, res);
+        res.push_back(SumSubTree(t));
+    }
+}
+
+std::vector<int> mostFrequentSum(Tree<int> * t)
+{
+    std::vector<int> res;
+    
+    FindAllSumSubTree(t, res);
+    
+    std::unordered_map<int, int> freq;
+    for (int n : res)
+        freq[n]++;
+    
+    std::set<int> setSum(res.begin(), res.end());
+    if (res.size() == setSum.size())
+    {
+        std::sort(res.begin(), res.end());
+        return res;
+    }
+    
+    int maxFreq = 0;
+    int maxSum = 0;
+    for (std::pair<int, int> p : freq)
+    {
+        if (maxFreq < p.second)
+        {
+            maxFreq = p.second;
+            maxSum = p.first;
+        }
+    }
+    
+    return { maxSum };
+}
