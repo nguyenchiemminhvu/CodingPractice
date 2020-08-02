@@ -55,51 +55,41 @@ There are 3 subtree sums for this tree: -2 + (-3) + 2 = -3, -3, and -2. The most
 //   Tree *left;
 //   Tree *right;
 // };
-int SumSubTree(Tree<int> * t)
+
+int postorder(Tree<int>*t, map<int, int> &ans)
 {
     if (t == NULL)
+    {
         return 0;
-    
-    return t->value + SumSubTree(t->left) + SumSubTree(t->right); 
-}
-
-void FindAllSumSubTree(Tree<int> * t, std::vector<int> &res)
-{
-    if (t)
-    {
-        FindAllSumSubTree(t->left, res);
-        FindAllSumSubTree(t->right, res);
-        res.push_back(SumSubTree(t));
-    }
-}
-
-std::vector<int> mostFrequentSum(Tree<int> * t)
-{
-    std::vector<int> res;
-    
-    FindAllSumSubTree(t, res);
-    
-    std::unordered_map<int, int> freq;
-    for (int n : res)
-        freq[n]++;
-    
-    std::set<int> setSum(res.begin(), res.end());
-    if (res.size() == setSum.size())
-    {
-        std::sort(res.begin(), res.end());
-        return res;
     }
     
-    int maxFreq = 0;
-    int maxSum = 0;
-    for (std::pair<int, int> p : freq)
+    int vl = postorder(t->left, ans);
+    int vr = postorder(t->right, ans);
+    int sum = vl + vr;
+    int fsum = sum + t->value;
+    ans[fsum] += 1;
+    return fsum;
+}
+
+std::vector<int> mostFrequentSum(Tree<int> * t) 
+{
+    map<int, int> ans;
+    postorder(t, ans);
+    
+    std::vector<int> v;
+    int m = 0;
+    for (auto itr = ans.begin(); itr != ans.end(); itr++)
     {
-        if (maxFreq < p.second)
+        if (itr->second > m)
         {
-            maxFreq = p.second;
-            maxSum = p.first;
+            v = { itr->first };
+            m = itr->second;
+        }
+        else if (itr->second == m)
+        {
+            v.push_back(itr->first);
         }
     }
     
-    return { maxSum };
+    return v;
 }
