@@ -1,0 +1,70 @@
+You have a 2D array coins with the following format: [x, y], where x and y are the coordinates of a coin. Using these coordinates, you're going to start collecting coins!
+
+Assume that you start collecting coins at position (0, 0). You can only step from coordinate (a, b) to coordinate (a + dx, b + dy), where dx ≥ 0 and dy ≥ 0. Calculate the maximum number of coins that you can collect.
+
+If there is more than one coin at the same coordinates, you can take them all.
+
+Example
+
+For coins = [[0, 1], [1, 1], [2, 0], [1, 2], [2, 2]],
+the output should be maximizeCoins(coins) = 4.
+
+You can collect coins from positions (0, 1), (1, 1), (1, 2) and (2, 2), for a total of 4 coins.
+
+============================================================
+
+int lis(std::vector<int> arr)
+{
+    int n = arr.size();
+    int lis[n];
+    lis[0] = 1;
+
+    for (int i = 1; i < n; i++ )
+    {
+        lis[i] = 1;
+        for (int j = 0; j < i; j++)
+        {
+            if (arr[i] >= arr[j] && lis[i] < lis[j] + 1)
+            {
+                lis[i] = lis[j] + 1;
+            }
+        }
+    }
+
+    return *max_element(lis, lis + n);
+}
+
+int maximizeCoins(std::vector<std::vector<int>> coins)
+{
+    std::vector<int> x;
+    std::sort
+    (
+        coins.begin(), 
+        coins.end(), 
+        [](std::vector<int> v1, std::vector<int> v2) 
+        {
+            return v1[1] < v2[1];
+        }
+    );
+    for (std::vector<int> v : coins)
+    {
+        x.push_back(v[0]);
+    }
+    
+    std::vector<int> y;
+    std::sort
+    (
+        coins.begin(), 
+        coins.end(), 
+        [](std::vector<int> v1, std::vector<int> v2) 
+        {
+            return v1[0] < v2[0];
+        }
+    );
+    for (std::vector<int> v : coins)
+    {
+        y.push_back(v[1]);
+    }
+    
+    return std::max(lis(x), lis(y));
+}
