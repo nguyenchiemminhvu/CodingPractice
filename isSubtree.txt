@@ -217,7 +217,7 @@ bool isSubTreeUtil(Tree<int> * t1, Tree<int> * t2)
     if (isSame(t1, t2))
         return true;
     
-    return isSame(t1->left, t2) || isSame(t1->right, t2);
+    return isSubTreeUtil(t1->left, t2) || isSubTreeUtil(t1->right, t2);
 }
 
 bool isSubtree(Tree<int> * t1, Tree<int> * t2)
