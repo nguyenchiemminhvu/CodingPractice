@@ -17,48 +17,109 @@ Here, the biggest plus sign is centered at cell (2, 2) (0-based) and has a size 
 
 =======================================================================
 
-bool check(const std::vector<std::string> &m, int i, int j)
-{
-    return i >= 0 && i < m.size() && j >= 0 && j < m[i].size();
-}
-
-int traversal(const std::vector<std::string> &m, int fromX, int fromY)
-{
-    int res = 0;
-    
-    int up = fromX - 1;
-    int down = fromX + 1;
-    int left = fromY - 1;
-    int right = fromY + 1;
-    
-    while (check(m, up, fromY) && check(m, down, fromY) && check(m, fromX, left) && check(m, fromX, right)
-        && m[up][fromY] == '1' && m[down][fromY] == '1' && m[fromX][left] == '1' && m[fromX][right] == '1')
-    {
-        res++;
-        
-        up--;
-        down++;
-        left--;
-        right++;
-    }
-        
-    return res;
-}
-
 int biggestPlus(std::vector<std::string> matrix)
 {
-    int res = 0;
-    for (int i = 0; i < matrix.size(); i++)
+    vector<vector<int>> left(matrix.size(), vector<int>(matrix[0].size(), 0)),
+                        right(matrix.size(), vector<int>(matrix[0].size(), 0)),
+                        up(matrix.size(), vector<int>(matrix[0].size(), 0)),
+                        down(matrix.size(), vector<int>(matrix[0].size(), 0));
+    
+    if(matrix.empty())
     {
-        for (int j = 0; j < matrix[i].length(); j++)
+        return 0;
+    }
+
+    for (int i = 0; i < matrix.size(); ++i) 
+    {
+        for (int j = 0; j < matrix[0].size(); ++j) 
         {
-            if (matrix[i][j] == '1')
+            if (i == 0) 
             {
-                res = std::max(res, traversal(matrix, i, j));
+                up[i][j] = matrix[i][j] - '0';
+
+                if (j > 0) 
+                {
+                    if (matrix[i][j] - '0') 
+                    {
+                        left[i][j] = matrix[i][j] - '0' + left[i][j - 1];
+                    }
+                }
+
+            }
+            else if (j == 0)
+            {
+                left[i][j] = matrix[i][j] - '0';
+                
+                if (i > 0)
+                {
+                    if (matrix[i][j] - '0')
+                    {
+                        up[i][j] = matrix[i][j] - '0' + up[i - 1][j];   
+                    }
+                }
+            }
+            else
+            {
+               if(matrix[i][j] - '0')
+               {
+                   up[i][j] = matrix[i][j] - '0' + up[i - 1][j];
+                   left[i][j] = matrix[i][j] - '0' + left[i][j - 1];
+               }    
+            }            
+        }
+    }
+
+    for (int i = matrix.size() - 1; i >= 0; i--)
+    {
+        for(int j = matrix[0].size() - 1; j >= 0; j--)
+        {
+            if(i == matrix.size() - 1)
+            {
+                down[i][j] = matrix[i][j] - '0';
+                
+                if(j < matrix[0].size() - 1)
+                {
+                    if (matrix[i][j] - '0')
+                    {
+                        right[i][j] = matrix[i][j] - '0' + right[i][j + 1];
+                    }
+                }    
+            }
+            else if (j == matrix[0].size() - 1)
+            {
+                right[i][j] = matrix[i][j] - '0';
+                
+                if(i < matrix.size())
+                {
+                    if(matrix[i][j] - '0')
+                    {
+                        down[i][j] = matrix[i][j] - '0' + down[i + 1][j];
+                    }
+                }
+            }
+            else
+            {
+                if(matrix[i][j] - '0')
+                {
+                    down[i][j] = matrix[i][j] - '0' + down[i + 1][j];
+                    right[i][j] = matrix[i][j] - '0' + right[i][j + 1];
+                }
             }
         }
     }
     
-    return res;
+    
+    int result = 0;
+    
+    for (int i = 0; i< matrix.size(); ++i)
+    {
+        for (int j = 0; j < matrix[0].size(); ++j)
+        {
+            result = max(result, min(up[i][j],min(down[i][j],min(right[i][j],left[i][j]))));
+        }
+    }
+    
+    return result > 0 ? result - 1 : 0;
 }
+
 
