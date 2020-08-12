@@ -1,0 +1,51 @@
+Note: Try to solve this task in linear time, since this is what you'll be asked to do during an interview.
+
+Given a singly linked list consisting only of 0, 1, and 2, return it sorted in ascending order.
+
+Example
+
+For l = [2, 1, 0], the output should be
+sortZeroOneTwoList(l) = [0, 1, 2];
+For l = [0, 1, 0, 1, 2, 0], the output should be
+sortZeroOneTwoList(l) = [0, 0, 0, 1, 1, 2].
+
+=========================================================
+
+// Singly-linked lists are already defined with this interface:
+// template<typename T>
+// struct ListNode {
+//   ListNode(const T &v) : value(v), next(nullptr) {}
+//   T value;
+//   ListNode *next;
+// };
+//
+ListNode<int> * sortZeroOneTwoList(ListNode<int> * l)
+{
+    std::vector<int> freq(3, 0);
+    
+    ListNode<int> * p = l;
+    while (p)
+    {
+        freq[p->value]++;
+        p = p->next;
+    }
+    
+    p = l;
+    int curIndex = 0;
+    while (p)
+    {
+        if (freq[curIndex] == 0)
+        {
+            curIndex++;
+            if (curIndex > 2)
+                break;
+        }
+        
+        p->value = curIndex;
+        freq[curIndex]--;
+        
+        p = p->next;
+    }
+    
+    return l;
+}
