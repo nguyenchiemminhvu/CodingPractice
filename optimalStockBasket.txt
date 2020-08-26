@@ -1,0 +1,37 @@
+You are picking a series of optimum stocks for your investment portfolio. Thankfully, you have at your disposal a tool called ACME optimizer. For each stock it provides the expected future return in 1 year, as well as the expected risk during the same period. Your goal is to implement a stock picker which will maximize the sum of expected future returns while keeping the total risk within your risk budget (riskBudget).
+
+Example
+
+For stocks = [[-1, 2], [10, 15], [11, 13], [9, 10]] and riskBudget = 30, the output should be
+optimalStockBasket(stocks, riskBudget) = 21.
+
+It's a bad idea to pick the first stock because its expected future return is negative.
+You can pick no more than two stocks from the remaining three because 15 + 13 + 10 > 30 (i.e. the total risk exceeds the risk budget if you pick all three of them). On the other hand, you can pick any pair of stocks because 15 + 13 ≤ 30, 15 + 10 ≤ 30, 13 + 10 ≤ 30.
+To maximize the sum of expected future returns according to ACME optimizer predictions you need to pick the second and third stocks (1-based). The total future return in this case equals 10 + 11 = 21.
+
+========================================================
+
+int knapsackUtil(int maxW, std::vector<int> values, std::vector<int> weights, int ith)
+{
+    if (maxW <= 0 || ith >= values.size())
+        return 0;
+    
+    if (maxW < weights[ith])
+        return knapsackUtil(maxW, values, weights, ith+1);
+    
+    return std::max( knapsackUtil(maxW, values, weights, ith+1), values[ith] + knapsackUtil(maxW - weights[ith], values, weights, ith+1) );
+}
+
+int optimalStockBasket(std::vector<std::vector<int>> stocks, int riskBudget)
+{
+    std::vector<int> values;
+    std::vector<int> weights;
+    
+    for (std::vector<int> v : stocks)
+    {
+        values.push_back(v[0]);
+        weights.push_back(v[1]);
+    }
+    
+    return knapsackUtil(riskBudget, values, weights, 0);
+}
