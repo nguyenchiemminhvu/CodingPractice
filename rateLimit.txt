@@ -1,0 +1,142 @@
+Your company decides to give Kik a try and write a chat bot to be used on the platform. You've worked hard and it's almost finished, and all that's left to do now is test it. One of the things you want to check is whether the number of messages your bot sends exceeds the per user rate limit.
+
+The purpose of the per user rate limit is to prevent bots from sending an excessively high number of messages to individual users every day. This limit is defined on a per-user basis: at midnight each day (00:00 in local server time, which also happens to be Coordinated Universal Time) the baseline limit is reset to startingAllowance. Once your bot sends a message to a given user that day, the per user rate limit (for that user) is decreased by 1. Whenever a user messages the bot, the per user rate limit increases by 1 (for that user). If at some point your bot tries to send a message to a user whose current per user rate limit equals 0, the sending fails.
+
+Importantly, the rate limit is applied to batches of messages sent to multiple users. For example, if a batch of 25 messages is sent to various users, but the rate limit of at least one of them is 0, then the whole batch fails and no message is sent to any of the users.
+
+You're given the logs of the sentBatches of messages your bot sent without setting the per user rate limit, and information about the receivedMessages. Which of the sent batches would fail if there was a per user rate limit with the initial value of startingAllowance?
+
+Example
+
+For
+
+sentBatches = [[1471040000, 736273, 827482, 2738283],
+               [1471040005, 736273, 2738283],
+               [1471040010, 827482, 2738283],
+               [1471040015, 2738283],
+               [1471040025, 827482],
+               [1471046400, 736273, 827482, 2738283]]
+receivedMessages = [[1471040001, 2738283],
+                    [1471040002, 2738283],
+                    [1471040010, 827482],
+                    [1471040020, 2738283]]
+and startingAllowance = 1, the output should be
+rateLimit(sentBatches, receivedMessages, startingAllowance) = [1, 4].
+
+Here is why:
+
+There are 3 recipients: 736273, 827482, 2738283. The per user rate limit for each of them is initially startingAllowance = 1.
+At 1471040000 the first batch of messages is sent to each of the recipients, their per user rate limit after that equals 0.
+At 1471040001 the first message is received from 2738283, so their per user rate limit is now equal to 1.
+At 1471040002 the second message from 2738283 is received, increasing their per user limit to 2.
+At 1471040005 the second batch of messages is sent. However, the current per user limit of the recipient 736273 is 0, so no new messages can be sent. The sending of the entire batch is canceled.
+At 1471040010 two events happen almost simultaneously:
+The user 827482 sends a message, which increases their per user limit by 1 (it's 1 now).
+The third batch is sent. Now, the recipients limits are 0, 0, 1, respectively.
+At 1471040015 the fourth batch is successfully sent.
+At 1471040020 user 2738283 sends another message making their per user limit equal to 1.
+At 1471040025 the fifth batch is supposed to be sent. However, user 827482 has per user limit equal to 0, so the batch isn't sent.
+At 1471046400 the per user limits of all users are set to startingAllowance again (it's 00:00 in local server time). Thus, the last batch is successfully sent.
+So, batches 2 and 5 (1 and 4 0-based) aren't sent.
+
+=============================================================================
+
+std::unordered_map<int, int> mp;
+std::vector<int> res;
+int oneday = 86400;
+
+void sentfirst(std::vector<vector<int>> sentBatches, int idx, int startingAllowance)
+{
+    std::vector<int> sent = sentBatches[idx];
+    for (int i = 1; i < sent.size(); i++)
+    {
+        if (mp.find(sent[i]) == mp.end()) 
+            mp[sent[i]] = startingAllowance;
+    }
+    
+    for (int i = 1; i < sent.size(); i++)
+    {
+        if (mp[sent[i]] == 0)
+        {
+            res.push_back(idx);
+            for (int j = 1; j < i; j++)
+                mp[sent[j]]++;
+            break;
+        }
+        else 
+            mp[sent[i]]--;
+    }
+}
+
+void receivefirst(std::vector<vector<int>> receivedMessages, int idx, int startingAllowance)
+{
+    std::vector<int> receive = receivedMessages[idx];
+    for (int i = 1; i < receive.size(); i++)
+    {
+        if (mp.find(receive[i]) == mp.end()) 
+            mp[receive[i]] = startingAllowance;
+    }
+    
+    for (int i = 1; i < receive.size(); i++)
+    {
+        mp[receive[i]]++;
+    }
+}
+
+std::vector<int> rateLimit(std::vector<std::vector<int>> sentBatches, std::vector<std::vector<int>> receivedMessages, int startingAllowance) 
+{
+    int idx_sent = 0, idx_rec = 0;
+    int starttime = 0;
+    while (idx_sent != sentBatches.size() && idx_rec != receivedMessages.size())
+    {
+        if (sentBatches[idx_sent][0] < receivedMessages[idx_rec][0])
+        {
+            int senttime = sentBatches[idx_sent][0];
+            if (starttime != 0 && (senttime - starttime >= oneday || (senttime % oneday < starttime % oneday)))
+            {
+                mp.clear();
+            }
+            sentfirst(sentBatches, idx_sent, startingAllowance);
+            idx_sent++;
+            starttime = senttime;
+        }
+        else if (sentBatches[idx_sent][0] > receivedMessages[idx_rec][0])
+        {
+            int rectime = receivedMessages[idx_rec][0];
+            if(starttime != 0 && (rectime-starttime >= oneday || (rectime % oneday < starttime % oneday)))
+            {
+                mp.clear();
+            }
+            receivefirst(receivedMessages, idx_rec, startingAllowance);
+            idx_rec++;
+            starttime = rectime;
+        }
+        else
+        {
+            int senttime = sentBatches[idx_sent][0];
+            if (starttime != 0 && (senttime - starttime >= oneday || (senttime % oneday < starttime % oneday)))
+            {
+                mp.clear();
+            }
+            receivefirst(receivedMessages, idx_rec, startingAllowance);
+            sentfirst(sentBatches, idx_sent, startingAllowance);
+            idx_sent++;
+            idx_rec++;
+            starttime = senttime;
+        }
+    }
+    
+    while (idx_sent != sentBatches.size())
+    {
+        int senttime = sentBatches[idx_sent][0];
+        if (starttime != 0 && (senttime - starttime >= oneday || (senttime % oneday < starttime % oneday)))
+        {
+            mp.clear();
+        }
+        sentfirst(sentBatches, idx_sent, startingAllowance);
+        idx_sent++;
+        starttime = senttime;
+    }
+    
+    return res;
+}
