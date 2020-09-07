@@ -1,0 +1,111 @@
+Two Sigma's mission is to uncover value in the world's data, and as part of that it's necessary to download massive amounts of information on a regular basis. Naturally, this data should be transferred as quickly and efficiently as possible.
+
+A new data resource was recently added to the network, and your job is to establish a connection between it and Two Sigma's server. Due to security reasons, all connections in Two Sigma's network are unidirectional (i.e. only have a one-way connection), and no data can be stored on any node of the network. This means that every second the amount of data a node receives should be equal to the amount of data it forwards. The only exceptions to this rule are resource and server, since the former only sends data while the latter only receives it.
+
+Unfortunately, some segments of the network are slower than is ideal due to limitations with legacy telecommunication operators around the world. This complicates finding the optimal route through the network significantly, which is why your help is required.
+
+Find a route between the resource and the server that maximizes the amount of data downloaded in a second, and return this maximum value.
+
+Example
+
+For resource = 4, server = 5, and
+
+network = [[0, 2, 4, 8, 0, 0],
+           [0, 0, 0, 9, 0, 0],
+           [0, 0, 0, 0, 0, 10],
+           [0, 0, 6, 0, 0, 10],
+           [10, 10, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0]]
+the output should be dataRoute(resource, server, network) = 19.
+
+===========================================================
+
+bool bfs(vector<vector<int>> &rGraph, int s, int t, int parent[]) 
+{ 
+    // Create a visited array and mark all vertices as not visited 
+    int V = rGraph.size();
+    bool visited[V]; 
+    memset(visited, 0, sizeof(visited)); 
+  
+    // Create a queue, enqueue source vertex and mark source vertex 
+    // as visited 
+    queue<int> q; 
+    q.push(s); 
+    visited[s] = true; 
+    parent[s] = -1; 
+  
+    // Standard BFS Loop 
+    while (!q.empty()) 
+    { 
+        int u = q.front(); 
+        q.pop(); 
+  
+        for (int v=0; v<V; v++) 
+        { 
+            if (visited[v]==false && rGraph[u][v] > 0) 
+            { 
+                q.push(v); 
+                parent[v] = u; 
+                visited[v] = true; 
+            } 
+        } 
+    } 
+  
+    // If we reached sink in BFS starting from source, then return 
+    // true, else false 
+    return (visited[t] == true); 
+} 
+
+int fordFulkerson(vector<vector<int>> &graph, int s, int t) 
+{ 
+    int u, v; 
+    int V = graph.size();
+  
+    // Create a residual graph and fill the residual graph with 
+    // given capacities in the original graph as residual capacities 
+    // in residual graph 
+    vector<vector<int>>rGraph(V,vector<int>(V,0)); // Residual graph where rGraph[i][j] indicates  
+                     // residual capacity of edge from i to j (if there 
+                     // is an edge. If rGraph[i][j] is 0, then there is not)   
+    for (u = 0; u < V; u++) 
+        for (v = 0; v < V; v++) 
+             rGraph[u][v] = graph[u][v]; 
+  
+    int parent[V];  // This array is filled by BFS and to store path 
+  
+    int max_flow = 0;  // There is no flow initially 
+  
+    // Augment the flow while tere is path from source to sink 
+    while (bfs(rGraph, s, t, parent)) 
+    { 
+        // Find minimum residual capacity of the edges along the 
+        // path filled by BFS. Or we can say find the maximum flow 
+        // through the path found. 
+        int path_flow = INT_MAX; 
+        for (v = t; v != s; v = parent[v]) 
+        { 
+            u = parent[v]; 
+            path_flow = min(path_flow, rGraph[u][v]); 
+        } 
+  
+        // update residual capacities of the edges and reverse edges 
+        // along the path 
+        for (v = t; v != s; v = parent[v]) 
+        { 
+            u = parent[v]; 
+            rGraph[u][v] -= path_flow; 
+            rGraph[v][u] += path_flow; 
+        } 
+  
+        // Add path flow to overall flow 
+        max_flow += path_flow; 
+    } 
+  
+    // Return the overall flow 
+    return max_flow; 
+}
+ 
+int dataRoute(int r, int s, std::vector<std::vector<int>> graph)
+{
+    return fordFulkerson(graph, r, s);
+}
