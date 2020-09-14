@@ -1,0 +1,9 @@
+Check whether a number is a palindrome
+
+==========================================
+
+int is_palindrome(int n)
+{
+    std::string s = std::to_string(n);
+    return s == std::string(s.rbegin(), s.rend());
+}

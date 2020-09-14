@@ -1,0 +1,71 @@
+The FDA recommends that for a healthy, balanced diet, a person on average needs around 2,000 Kcal a day to maintain their weight. As a result, Instacart is set to release a new feature that will help customers control their daily intake of calories. Given a list of items in a customer's cart, it will show the items that can be consumed in one day such that their total caloric value is as close to 2000 as possible.
+
+Knowing the caloricValue of each bought item, return the 0-based indices of the items to be consumed in one day. If there is more than one option, return the lexicographically smallest one.
+
+Example
+
+For caloricValue = [400, 800, 400, 500, 350, 350], the output should be
+dailyIntake(caloricValue) = [0, 2, 3, 4, 5].
+
+Caloric value of items [1, 3, 4, 5] and [0, 2, 3, 4, 5] both sum up to 2000 but since [0, 2, 3, 4, 5] is lexicographically smaller than [1, 3, 4, 5], the answer is [0, 2, 3, 4, 5].
+
+For caloricValue = [150, 900, 1000], the output should be
+dailyIntake(caloricValue) = [0, 1, 2].
+
+The total sum of all items (i.e. 2050) is 50 Kcal larger than 2000, so the answer is [0, 1, 2].
+
+==========================================================================
+
+
+bool less_(const std::vector<int>& x, const std::vector<int>& y) 
+{
+    for (int i = 0, e = std::min(x.size(), y.size()); i < e; ++i) 
+    {
+        if (x[i] != y[i]) 
+        {
+            return x[i] < y[i];
+        }
+    }
+    return x.size() > y.size();
+}
+
+std::vector<int> SubsetSumClosetToGivenValue(std::vector<int> arr, int k)
+{
+    std::vector<std::vector<int>> idxs(10001);
+    int best = 0;
+    for (int j = 0; j < arr.size(); j++) 
+    {
+        int c = arr[j];
+        for (int i = 10000; i > c; i--) 
+        {
+            if (idxs[i - c].size() > 0 && (idxs[i].size() == 0 || less_(idxs[i-c], idxs[i]))) 
+            {
+                idxs[i] = idxs[i-c];
+                idxs[i].emplace_back(j);
+                if (std::abs(k - best) > std::abs(k - i)) 
+                {
+                    best = i;
+                }
+                else if (std::abs(k - best) == std::abs(k - i) && !less_(idxs[best], idxs[i]))
+                {
+                    best = i;
+                }
+            }
+        }
+        if (idxs[c].size() == 0)
+        {
+            idxs[c].emplace_back(j);
+            if (std::abs(k - best) > std::abs(k - c))
+            {
+                best = c;
+            }
+        }
+    }
+
+    return idxs[best];
+}
+
+std::vector<int> dailyIntake(std::vector<int> caloricValue) 
+{
+    return SubsetSumClosetToGivenValue(caloricValue, 2000);
+}
