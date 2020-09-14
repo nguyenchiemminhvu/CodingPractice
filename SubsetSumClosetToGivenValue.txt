@@ -1,0 +1,47 @@
+bool less_(const std::vector<int>& x, const std::vector<int>& y) 
+{
+    for (int i = 0, e = std::min(x.size(), y.size()); i < e; ++i) 
+    {
+        if (x[i] != y[i]) 
+        {
+            return x[i] < y[i];
+        }
+    }
+    return x.size() > y.size();
+}
+
+std::vector<int> SubsetSumClosetToGivenValue(std::vector<int> arr, int k)
+{
+    std::vector<std::vector<int>> idxs(10001);
+    int best = 0;
+    for (int j = 0; j < arr.size(); j++) 
+    {
+        int c = arr[j];
+        for (int i = 10000; i > c; i--) 
+        {
+            if (idxs[i - c].size() > 0 && (idxs[i].size() == 0 || less_(idxs[i-c], idxs[i]))) 
+            {
+                idxs[i] = idxs[i-c];
+                idxs[i].emplace_back(j);
+                if (std::abs(k - best) > std::abs(k - i)) 
+                {
+                    best = i;
+                }
+                else if (std::abs(k - best) == std::abs(k - i) && !less_(idxs[best], idxs[i]))
+                {
+                    best = i;
+                }
+            }
+        }
+        if (idxs[c].size() == 0)
+        {
+            idxs[c].emplace_back(j);
+            if (std::abs(k - best) > std::abs(k - c))
+            {
+                best = c;
+            }
+        }
+    }
+
+    return idxs[best];
+}
