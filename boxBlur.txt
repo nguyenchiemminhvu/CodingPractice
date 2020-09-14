@@ -42,7 +42,8 @@ int boxBlur(std::vector<std::vector<int>> image, int i, int j)
     return sum;
 }
 
-std::vector<std::vector<int>> boxBlur(std::vector<std::vector<int>> image) {
+std::vector<std::vector<int>> boxBlur(std::vector<std::vector<int>> image) 
+{
     int M = image.size() - 3 + 1;
     int N = image[0].size() - 3 + 1;
     std::vector<std::vector<int>> res(M, std::vector<int>(N, 0));
