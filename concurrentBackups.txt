@@ -1,0 +1,49 @@
+Datto is designed to perform backups as quickly as possible, which is usually achieved by using multiple threads. In this task, assume that all of your available threads are backing up documents at the same 1Mb/sec speed.
+
+Given an array of documents sizes that you need to back up and the number of available threads, return the minimum amount of time needed to back up all the files (a single thread can only be backing up one document at any given moment).
+
+Example
+
+For threads = 2 and documents = [4, 2, 5],
+the output should be concurrentBackups(threads, documents) = 6.
+
+The optimal solution is to send the documents of sizes 4 and 2 to the first thread and the document of size 5 to the second one. This way the first thread will finish its work in 6 seconds, and the second one in 5, so after 6 seconds the backup will be complete.
+
+=======================================================
+
+int iter(int layer, vector<int> &d)
+{
+    if (layer == 1) 
+        return accumulate(d.begin(), d.end(), 0);
+    
+    int mi = INT_MAX;
+    for (int items = 1; items < d.size() - layer + 1; ++items) 
+    {
+        string bitmask(items, 1);
+        bitmask.resize(d.size(), 0);
+        vector<int> sub(d.size() - items);
+        do 
+        {
+            int idx = 0;
+            int c = 0;
+            for (int i = 0; i < d.size(); ++i) 
+            {
+                if (bitmask[i]) 
+                    c += d[i];
+                else 
+                    sub[idx++] = d[i];
+            }
+            mi = min(mi, max(c, iter(layer - 1, sub)));
+        } while (prev_permutation(bitmask.begin(), bitmask.end()));
+    }
+    return mi;
+}
+
+int concurrentBackups(int t, auto d) 
+{
+    if (d.empty())
+        return 0;
+    if (t >= d.size()) 
+        return *max_element(d.begin(), d.end());
+    return iter(t, d);
+}
