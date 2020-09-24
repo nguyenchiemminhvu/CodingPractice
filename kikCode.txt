@@ -1,0 +1,150 @@
+Kik Codes are the fastest, easiest way to add friends and join groups on Kik. Just scan the code with your device, and a chat with the corresponding user starts automatically. You can see an example of the Kik Code in the image below:
+
+As a part of your preparation for an interview at Kik, you decide to implement an algorithm that will automatically build a Kik Code given a userId. As you can see, a code consists of 6 circles with their circumferences partly colored. You're going to take the binary representation of userId, extend it by leading zeros if necessary (there should be 52 bits in its binary representation), reverse it, and then map it to the Code as follows:
+
+CIRCUMFERENCE	1	2	3	4	5	6
+BITS	first 3	next 4	next 8	next 10	next 12	last 15
+Each circumference will be split into sectors. The number of sectors for each circumference is equal to the number of bits mapped onto it. The contiguous sets of 1s in the corresponding bits of userId will be colored white.
+
+Now you need to implement a function that, given userId, returns the list of colored segments' coordinates in the polar coordinate system with the center at the center of the circumferences. Each segment should be returned as an array of two elements, representing the coordinates of its edges in a counterclockwise direction.
+
+Example
+
+For userId = "1851027803204441", the output should be
+
+kikCode(userId) = [
+  [[1, 0], [1, 120]],
+  [[2, 270], [2, 540]],
+  [[3, 45], [3, 135]], [[3, 180], [3, 225]], [[3, 270], [3, 360]],
+  [[4, 0], [4, 72]], [[4, 108], [4, 180]], 
+  [[4, 216], [4, 252]], [[4, 288], [4, 324]],
+  [[5, 0], [5, 360]],
+  [[6, 0], [6, 48]], [[6, 72], [6, 120]], [[6, 168], [6, 192]], 
+  [[6, 240], [6, 264]], [[6, 288], [6, 336]]
+]
+The binary representation of userId with additional leading zeros is
+0110100100110111111111111110101011011110101101011001.
+After reversing it and splitting, the following sets of bits for each circumference is obtained:
+100 1101 01101011 1101101010 111111111111 110110010010110.
+
+Which means that:
+
+circumference 1: three sectors, one segment
+first sector, coordinates [[1, 0], [1, 120]]
+circumference 2: four sectors, one segment
+sectors 1, 2 and 4, coordinates [[2, 270], [2, 540]] (note how it is treated as a single sector)
+circumference 3: eight sectors, three segments
+sectors 2 and 3, coordinates [[3, 45], [3, 135]]
+sector 5, coordinates [[3, 180], [3, 225]]
+sectors 7 and 8, coordinates [[3, 270], [3, 360]]
+circumference 4: ten sectors, four segments
+sectors 1 and 2, coordinates [[4, 0], [4, 72]]
+sectors 4 and 5, coordinates [[4, 108], [4, 180]]
+sector 7, coordinates [[4, 216], [4, 252]]
+sector 9, coordinates [[4, 288], [4, 324]]
+circumference 5: twelve sectors, one segment
+all sectors, coordinates [[5, 0], [5, 360]]
+circumference 6: fifteen sectors, five segments
+sectors 1 and 2, coordinates [[6, 0], [6, 48]]
+sectors 4 and 5, coordinates [[6, 72], [6, 120]]
+sector 8, coordinates [[6, 168], [6, 192]]
+sector 11, coordinates [[6, 240], [6, 264]]
+sectors 13 and 14, coordinates [[6, 288], [6, 336]]
+
+===============================================
+
+using Output = vector<vector<vector<int>>>;
+
+void pushInterval(Output &out, int c, int istart, int iend) 
+{
+    vector<int> vstart;
+    vstart.push_back(c);
+    vstart.push_back(istart);
+    
+    vector<int> vend;
+    vend.push_back(c);
+    vend.push_back(iend);
+    
+    vector<vector<int>> vinterval;
+    vinterval.push_back(vstart);
+    vinterval.push_back(vend);
+    
+    out.push_back(vinterval);
+}
+
+void sector(Output &out, const vector<bool> &bin, int c, const size_t start, const size_t end) 
+{
+    int dt = 360 / (end - start);
+    cout << '(' << dt << ") ";
+    bool flag = false; // continuous
+    int istart = 0;
+    int iend = 0;
+    int firstIndex = -1;
+    for (size_t i = start; i < end; i++) 
+    {
+        cout << bin[i];
+        
+        if (bin[i]) 
+        {
+            if (!flag) 
+            {
+                flag = true;
+                istart = dt * (i - start);
+            }
+        } 
+        else 
+        {
+            if (flag) 
+            {
+                flag = false;
+                iend = dt * (i - start);
+                firstIndex = out.size();
+                pushInterval(out, c, istart, iend);
+            }
+        }
+    }
+    
+    if (flag) 
+    {
+        if (firstIndex != -1 && out[firstIndex][0][1] == 0) 
+        {
+            out[firstIndex][0][1] = istart;
+            out[firstIndex][1][1] += 360; 
+        } 
+        else 
+        {
+            iend = 360;
+            pushInterval(out, c, istart, iend);
+        }
+    }
+    
+    cout << " ";
+}
+
+Output kikCode(std::string userId) 
+{
+    vector<bool> bin;
+    long i = stol(userId);
+    while (i > 0) 
+    {
+        bin.push_back(i % 2);
+        i /= 2;
+    }
+    while (bin.size() < 52) 
+    {
+        bin.push_back(false);
+    }
+    
+    
+    Output out;
+    
+    sector(out, bin, 1, 0, 3);
+    sector(out, bin, 2, 3, 7);
+    sector(out, bin, 3, 7, 15);
+    sector(out, bin, 4, 15, 25);
+    sector(out, bin, 5, 25, 37);
+    sector(out, bin, 6, 37, 52);
+    cout << endl;
+    
+    return out;
+}
