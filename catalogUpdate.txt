@@ -1,0 +1,68 @@
+Jet.com customers can easily find the item they are looking for by browsing by category. Categories are stored in a catalog that is updated on a regular basis as inventory changes. Your goal is to implement an algorithm that updates the catalog with new items.
+
+The catalog is given as a two-dimensional array. For each i, catalog[i][0] represents the name of the corresponding category, and catalog[i][j] for j > 0 is the name of some item within this category, which can also be the category of some other items. For each i all elements of catalog[i] except the first are sorted lexicographically, and catalog arrays are sorted lexicographically by their first elements. The name of the topmost directory is "root".
+
+Given a list of updates, update the catalog with the new items and return the result.
+
+Example
+
+For
+
+catalog = [["Books", "Classics", "Fiction"],
+           ["Electronics", "Cell Phones", "Computers", "Ultimate item"],
+           ["Grocery", "Beverages", "Snacks"],
+           ["Snacks", "Chocolate", "Sweets"],
+           ["root", "Books", "Electronics", "Grocery"]]
+and
+
+updates = [["Snacks", "Marmalade"],
+           ["Fiction", "Harry Potter"],
+           ["root", "T-shirts"],
+           ["T-shirts", "CodeSignal"]]
+the output should be
+
+catalogUpdate(catalog, updates) = [["Books", "Classics", "Fiction"],
+                                   ["Electronics", "Cell Phones", "Computers", "Ultimate item"],
+                                   ["Fiction", "Harry Potter"],
+                                   ["Grocery", "Beverages", "Snacks"],
+                                   ["Snacks", "Chocolate", "Marmalade", "Sweets"],
+                                   ["T-shirts", "CodeSignal"],
+                                   ["root", "Books", "Electronics", "Grocery", "T-shirts"]]
+
+============================================================
+
+std::vector<std::vector<std::string>> catalogUpdate(std::vector<std::vector<std::string>> catalog, std::vector<std::vector<std::string>> updates)
+{
+    std::map<std::string, std::set<std::string>> ms;
+    
+    for (std::vector<std::string> vs : catalog)
+    {
+        for (int i = 1; i < vs.size(); i++)
+        {
+            ms[vs[0]].insert(vs[i]);
+        }    
+    }
+    
+    for (std::vector<std::string> vs : updates)
+    {
+        for (int i = 1; i < vs.size(); i++)
+        {
+            ms[vs[0]].insert(vs[i]);
+        }    
+    }
+    
+    std::vector<std::vector<std::string>> res;
+    int cur = -1;
+    for (std::pair<std::string, std::set<std::string>> p : ms)
+    {
+        res.push_back(std::vector<std::string>());
+        cur++;
+        res[cur].push_back(p.first);
+        for (std::string s : p.second)
+        {
+            res[cur].push_back(s);
+        }
+    }
+    
+    return res;
+}
