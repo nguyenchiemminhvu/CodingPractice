@@ -23,73 +23,77 @@ squirrelAndNut(tree, triples) = [true, true, false].
 
 ============================================================
 
-bool BFS(std::map<int, std::list<int>> graph, std::vector<int> triplet)
+void dfs(std::vector<std::vector<int>> &g, int root, std::vector<int> &in, std::vector<int> &out, int &count) 
 {
-    int from = triplet[0];
-    int to = triplet[1];
-    int dest = triplet[2];
-    
-    std::vector<bool> visited(graph.size() + 1, false);
-    std::vector<int> pred(graph.size() + 1, -1);
-    std::list<int> Q;
-    
-    Q.push_back(from);
-    visited[from] = true;
-    
-    while (!Q.empty())
+    if (in[root] != -1) 
     {
-        int node = Q.front();
-        Q.pop_front();
-        
-        std::list<int> reachable = graph[node]; 
-        for (int v : reachable)
-        {
-            if (!visited[v])
-            {
-                visited[v] = true;
-                Q.push_back(v);
-                pred[v] = node;
-            }
-        }
-        
-        if (visited[to])
-            break; 
+        return;
     }
-    
-    bool res = false;
-    
-    int craw = to;
-    std::list<int> path;
-    path.push_back(craw);
-    while (pred[craw] != -1)
+    in[root] = count;
+    count++;
+    for (int i = 0; i < g[root].size(); i++)
     {
-        if (craw == dest)
-            res = true;
-        
-        path.push_back(pred[craw]);
-        craw = pred[craw];
+        dfs(g, g[root][i], in, out, count);
     }
-    
-    return res;
+    out[root] = count;
+    count++;
+}
+bool is_ancestor(int x, int y, std::vector<int> &in, std::vector<int> &out)
+{
+    return (in[x] <= in[y] and out[y] <= out[x]);
 }
 
-std::vector<bool> squirrelAndNut(std::vector<int> tree, std::vector<std::vector<int>> triples)
+bool on_shortest_path(int a, int b, int c, std::vector<int> &in, std::vector<int> &out, std::vector<std::vector<int>> &g) 
 {
-    std::map<int, std::list<int>> graph;
-    for (int i = 0; i < tree.size(); i += 2)
+    if (is_ancestor(c, a, in, out) != is_ancestor(c, b, in, out)) 
     {
-        int from = tree[i];
-        int to = tree[i + 1];
-        
-        graph[from].push_back(to);
-        graph[to].push_back(from);
+        return true;
+    } 
+    else if (is_ancestor(c, a, in, out) and is_ancestor(c, b, in, out)) 
+    {
+        bool found = false;
+        for (auto child: g[c]) 
+        {
+            if (is_ancestor(c, child, in, out)) 
+            {
+                if (is_ancestor(child, a, in, out) and is_ancestor(child, b, in, out)) 
+                {
+                    cout << "here" << endl;;
+                    found = true;
+                    break;
+                }
+            }
+        }
+        return !found;
+    } 
+    else 
+    {
+        return false;
+    }
+}
+
+std::vector<bool> squirrelAndNut(std::vector<int> tree, std::vector<std::vector<int>> triples) {
+    auto length = tree.size();
+    auto max = (length / 2) + 1;
+    std::vector<std::vector<int>> g(max, std::vector<int>());
+    for (int i = 0; i < tree.size(); i += 2) 
+    {
+        g[tree[i] - 1].push_back(tree[i + 1] -1);
+        g[tree[i + 1] - 1].push_back(tree[i] -1);
     }
     
-    std::vector<bool> res;
-    for (std::vector<int> triplet : triples)
-    {
-        res.push_back(BFS(graph, triplet));
-    }
+    std::vector<int> in(max, -1);
+    std::vector<int> out(max, -1);
+    int count = 0;
+    dfs(g, tree[0] - 1, in, out, count);
     
-    return res;
+    std::vector<bool> answers;
+    for (auto row : triples) 
+    {
+        int a = row[0] - 1;
+        int b = row[1] - 1;
+        int c = row[2] - 1;
+        answers.push_back(on_shortest_path(a, b, c, in, out, g));
+    }
+    return answers;
 }
