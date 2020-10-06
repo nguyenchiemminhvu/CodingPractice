@@ -1,0 +1,71 @@
+Two Sigma maintains a distributed computing cluster capable of handling many different types of jobs. Some jobs are quite small (for instance MapReduce style jobs), but others can be larger (certain types of distributed optimization).
+
+Let's assume that the jobs are processed one by one, and if a new job request comes in when one is already being processed it's added to the queue. You were asked to implement a scheduling algorithm that adds jobs to the regular queue and pushes them through in such a way that the average wait time for all jobs in the queue is minimized. A new job isn't pushed through unless it minimizes the average waiting time.
+
+Assume that your program starts working at 0 seconds. A request for the ith job came at requestTimei, and let's assume that it takes jobProcessi seconds to process it.
+
+Find the state of your algorithm's queue timeFromStart seconds after your program started to work, assuming that all actions that could've happened right at this moment have already happened.
+
+Example
+
+For requestTime = [0, 5, 8, 11], jobProcess = [9, 4, 2, 1], and timeFromStart = 11
+the output should be jobScheduling(requestTime, jobProcess, timeFromStart) = [1].
+
+Here's the optimal algorithm with an average wait time of (1 + 7) / 2 = 4 seconds:
+
+0 seconds from launch: start processing request 0 (0-based);
+5 seconds: add request 1 to the queue;
+8 seconds: put request 2 at the front of the queue;
+9 seconds: finish processing request 0 and start processing request 2;
+11 seconds:
+put request 3 at the front of the queue;
+finish processing request 2;
+start processing request 3;
+12 seconds: finish processing request 3 and start processing request 1;
+16 seconds: finish processing request 1.
+Therefore, 11 seconds after the program there are only 2 not yet finished requests, 3 being processed, and 1 still in the queue. Thus, the answer is [1].
+
+=================================================================
+
+struct Job
+{
+    int length;
+    int id;
+};
+
+std::vector<int> jobScheduling(std::vector<int> requestTime, std::vector<int> jobProcess, int timeFromStart)
+{
+    auto compare = [](Job const &rhs, Job const &lhs)
+    { 
+        if (lhs.length == rhs.length) 
+        {
+            return lhs.id < rhs.id;
+        }
+        return lhs.length < rhs.length;
+    };
+    std::priority_queue<Job, std::vector<Job>, decltype(compare)> q(compare);
+    int remaining_work = 0;
+    int ids = 0;
+    for (int i = 0; i <= timeFromStart; ++i) 
+    {
+        while(ids < requestTime.size() and requestTime[ids] <= i) 
+        {
+            Job j{jobProcess[ids], ids};
+            q.push(j);
+            ids++;
+        }
+        if (remaining_work == 0 and !q.empty()) 
+        {
+            remaining_work = q.top().length;
+            q.pop();
+        }
+        remaining_work = remaining_work == 0 ? 0 : remaining_work - 1;
+    }
+    std::vector<int> answer;
+    while(!q.empty()) 
+    {
+        answer.push_back(q.top().id);
+        q.pop();
+    }
+    return answer;
+}
