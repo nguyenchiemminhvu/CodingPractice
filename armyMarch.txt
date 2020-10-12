@@ -1,0 +1,45 @@
+Picture a map of a battlefield divided into two halves. Points which lie to the left of the line x = 0 are on the forest free side, while points which lie on or to the right of the line are in the forest.
+
+Your army needs to get from point a to point b. The problem is that while point a is located on the forest free side where your army's speed equals v1 miles per hour, point b is located in the forest, where your speed reduces to v2 miles per hour.
+
+Calculate the shortest possible travel time for your army to reach point b.
+
+Example
+
+For a = [-1.5, 0.5], b = [1.5, 1.5], v1 = 4.4, and v2 = 1.1, the output should be
+armyMarch(a, b, v1, v2) = 1.761942.
+
+==============================================================
+
+double distance(double x1, double y1, double x2, double y2)
+{
+    return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+
+double armyMarch(std::vector<double> a, std::vector<double> b, double v1, double v2)
+{
+    if (a[1] == b[1])
+    {
+        return abs(a[0]) / v1 + abs(b[0]) / v2;
+    }
+    
+    double target = v1 / v2;    
+    double lo = a[1];
+    double hi = b[1];
+    double mid = 0;
+    double control = 0;
+    int count = 0;
+    do
+    {
+        mid = (lo + hi) / 2;
+        double y1 = mid - a[1];
+        double y2 = mid - b[1];
+        double control = abs(sin(atan(y1 / a[0])) / sin(atan(y2 / b[0])));
+        lo = control < target ? mid : lo;
+        hi = control > target ? mid : hi;
+        count++;
+    } while (!(std::abs(target - control) < 0.001 or count > 1000));
+    
+    return distance(a[0], a[1], 0, mid) / v1 + distance(0, mid, b[0], b[1]) / v2;
+}
+
