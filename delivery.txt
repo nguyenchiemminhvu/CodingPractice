@@ -32,7 +32,6 @@ std::vector<bool> delivery(std::vector<int> order, std::vector<std::vector<int>>
         if (val >= order[1] && val <= (order[1] + order[2]))
         {
             result.push_back(true);
-            continue;
         }
         else
         {
