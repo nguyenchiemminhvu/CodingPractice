@@ -1,0 +1,72 @@
+At Jet.com, each customer is guaranteed quick service since there are always enough merchants available to fulfill a given order. To keep the number of available merchants high, Jet tries to minimize the number of merchants required to fulfill a given order.
+
+Consider a list of items the customer has ordered, and a list of available merchants. For each merchant it is known which items they have in their inventory. Calculate which merchants should fulfill the order so that all items are accounted for and the number of merchants is kept as small as possible. Return the answer as a 0-based array of merchant indices.
+
+If there are several possible answers, return the lexicographically smallest one. If there is no answer, return [-1] instead.
+
+Example
+
+For items = ["apples", "bananas", "kiwis"] and
+
+merchants = [["apples", "pineapples"],
+             ["apples", "kiwis"],
+             ["kiwis", "papayas", "bananas"],
+             ["bananas", "apples"]]
+the output should be
+merchantMinimization(items, merchants) = [0, 2].
+
+In this case it's impossible to use a single available merchant to fulfill the entire order. However, there are several sets of 2 merchants that could work:
+
+merchants 1 and 2;
+merchants 1 and 3;
+merchants 2 and 3;
+merchants 0 and 2.
+The last option forms the lexicographically smallest array, thus it is the correct answer.
+
+=======================================================
+
+std::vector<int> merchantMinimization(std::vector<std::string> items, std::vector<std::vector<std::string>> merchants)
+{
+    int n = merchants.size();
+    int min_merchants = 1e9;
+    vector<int> merchants_ans;
+
+    for (int merchants_mask = 1; merchants_mask < (1 << n); ++merchants_mask) 
+    {
+        int no_merchants_used = 0;
+        vector<int> candidates;
+        bool canBuy = true;
+        unordered_map<string, bool> canBuyThisProduct;
+        
+        for (int merchant = 0; merchant < n; ++merchant) 
+        {
+            if (merchants_mask & (1 << merchant)) 
+            {
+                ++no_merchants_used;
+                for (string m : merchants[merchant]) 
+                {
+                    canBuyThisProduct[m] = true;
+                }
+                candidates.push_back(merchant);
+            }
+        }
+        for (string item : items) 
+        {
+            if (!canBuyThisProduct[item]) 
+            {
+                canBuy = false;
+            }
+        }
+        if (canBuy && no_merchants_used < min_merchants) 
+        {
+            min_merchants = no_merchants_used;
+            merchants_ans = candidates;
+        }
+    }
+    
+    if (min_merchants == 1e9) 
+    {
+        return vector<int>{-1};
+    }
+    return merchants_ans;
+}
