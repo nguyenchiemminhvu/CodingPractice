@@ -1,0 +1,49 @@
+Thumbtack helps Professionals (Pros) grow their business by identifying new customers. Upon registering on Thumbtack, a Pro specifies which categories of services they provide. To help match customer requests with qualified Pros, Thumbtack maintains a list of Pros grouped by service categories.
+
+Given a list of pros and their category preferences, return the list of Pros for each category.
+
+Example
+
+For pros = ["Jack", "Leon", "Maria"] and
+
+preferences = [["Computer repair", "Handyman", "House cleaning"],
+               ["Computer lessons", "Computer repair", "Data recovery service"],
+               ["Computer lessons", "House cleaning"]]
+the output should be
+
+proCategorization(pros, preferences) = [[["Computer lessons"], ["Leon", "Maria"]],
+                                        [["Computer repair"], ["Jack", "Leon"]],
+                                        [["Data recovery service"], ["Leon"]],
+                                        [["Handyman"], ["Jack"]],
+                                        [["House cleaning"], ["Jack", "Maria"]]]
+
+=============================================================================
+
+std::vector<std::vector<std::vector<std::string>>> proCategorization(std::vector<std::string> pros, std::vector<std::vector<std::string>> preferences) 
+{
+    std::map<std::string, std::vector<std::string>> temp;
+    
+    for (int i = 0; i < preferences.size(); i++)
+    {
+        for (std::string s : preferences[i])
+        {
+            temp[s].push_back(pros[i]);
+        }
+    }
+    
+    std::vector<std::vector<std::vector<std::string>>> res;
+    for (std::pair<std::string, std::vector<std::string>> p : temp)
+    {
+        std::vector<std::vector<std::string>> category;
+        std::vector<std::string> cateId;
+        
+        cateId.push_back(p.first);
+        
+        category.push_back(cateId);
+        category.push_back(p.second);
+        
+        res.push_back(category);
+    }
+    
+    return res;
+}
