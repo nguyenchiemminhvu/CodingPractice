@@ -1,0 +1,23 @@
+Given a string, check if its characters can be rearranged to form a palindrome. Where a palindrome is a string that reads the same left-to-right and right-to-left.
+
+Example
+
+"trueistrue" -> false;
+"abcab" -> true because "abcba" is a palindrome
+
+========================================================
+
+bool isPalindrome(std::string s) 
+{
+    std::vector<int> f(26);
+    for (char c : s)
+        f[c - 'a']++;
+    
+    int countOddF = 0;
+    for (int i = 0; i < 26; i++)
+    {
+        countOddF += (f[i] & 1);
+    }
+    
+    return (countOddF < 2);
+}
