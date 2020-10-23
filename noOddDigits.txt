@@ -1,0 +1,22 @@
+Given a non-negative integer number, remove all of its odd digits (if all of the digits are removed, return zero).
+
+====================================================
+
+int noOddDigits(int n)
+{
+    int res = 0;
+    int k = 1;
+    
+    while (n)
+    {
+        if (n % 2 == 0)
+        {
+            res = res + (n % 10) * k;
+            k *= 10;
+        }
+        
+        n /= 10;
+    }
+    
+    return res;
+}
