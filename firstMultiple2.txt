@@ -1,0 +1,20 @@
+Find the smallest integer not less than the given limit which is divisible by at least one integer from the given array.
+
+Example
+
+For divisors = [2, 3, 4] and start = 13, the output should be
+firstMultiple2(divisors, start) = 14.
+
+==================================================
+
+int firstMultiple2(std::vector<int> divisors, int start)
+{
+    int res = INT_MAX;
+    
+    for (int n : divisors)
+    {
+        res = std::min(res, start % n ? (start / n) * n + n : (start / n) * n);
+    }
+    
+    return res;
+}
