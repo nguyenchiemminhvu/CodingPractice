@@ -1,0 +1,16 @@
+Find the value of x raised to the power of exponent (xexponent).
+
+Example
+
+For x = 2 and exponent = 3, the output should be
+power(x, exponent) = 8
+
+===============================================
+
+int power(int base, int exponent) {
+  int result = 1;
+  for (int Count = 0; Count < exponent; Count++){
+    result *= base;
+  }
+  return result;
+}
