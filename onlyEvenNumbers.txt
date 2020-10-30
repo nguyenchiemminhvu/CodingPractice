@@ -1,0 +1,23 @@
+Return a strictly increasing array of all even numbers between given left and right (both inclusive).
+
+Example
+
+For left = 5 and right = 10, the output should be
+onlyEvenNumbers(left, right) = [6, 8, 10].
+
+===================================================
+
+std::vector<int> onlyEvenNumbers(int left, int right)
+{
+    std::vector<int> res;
+    
+    if (left & 1)
+        left++;
+    
+    for (int i = left; i <= right; i += 2)
+    {
+        res.push_back(i);
+    }
+    
+    return res;
+}
