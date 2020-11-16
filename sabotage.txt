@@ -1,0 +1,75 @@
+Little Ratiorg was tired of being bullied by other bots and mighty CodeFighters, so he joined the Ninja Bots Training camp. Any bot that manages to solve all the challenges becomes an ultimate master of algorithms, and that is exactly what Ratiorg wants.
+
+It's been several weeks, and Ratiorg is getting strong enough that he's making some enemies. They're starting to feel threatened, which is why they sabotaged his next challenge. Here's how they did it:
+
+Ratiorg is about to be locked up in one of multiple rooms in a rectangular hangar. The rooms are securely locked: it is possible to leave a room only in one direction specific to this room. The problem is, the villains have messed the system up, so now there is no way to finish the challenge from certain rooms. The challenge will be over if Ratiorg successfully leaves the hangar (i.e. leaves the rectangle that represents it).
+
+To figure out the odds of Ratiorg's success, you'd like to calculate the number of rooms, starting from which Ratiorg won't be able to finish the challenge. Implement a function that will return this number.
+
+Example
+
+For
+
+hangar = [['U', 'L'],
+          ['R', 'L']]
+the output should be
+sabotage(hangar) = 2.
+
+Ratiorg won't be able to get out of the hangar if he starts from either of the bottom rooms.
+
+=====================================================================
+
+bool canEscape(const std::vector<std::vector<char>>& hangar,
+               std::vector<std::vector<bool>>& visited,
+               std::vector<std::vector<bool>>& escaped,
+               int x, int y, int& count) 
+{
+    if (0 <= y && y < hangar.size() && 0 <= x && x < hangar[y].size()) 
+    {
+        if (visited[y][x]) 
+        {
+            return escaped[y][x];
+        }
+        
+        ++count;
+        visited[y][x] = true;
+        switch (hangar[y][x]) 
+        {
+            case 'U': escaped[y][x] = canEscape(hangar, visited, escaped, x, y - 1, count); break;
+            case 'D': escaped[y][x] = canEscape(hangar, visited, escaped, x, y + 1, count); break;
+            case 'L': escaped[y][x] = canEscape(hangar, visited, escaped, x - 1, y, count); break;
+            case 'R': escaped[y][x] = canEscape(hangar, visited, escaped, x + 1, y, count); break;
+        }
+        return escaped[y][x];
+    } 
+    return true;                  
+}
+
+int sabotage(vector<vector<char>> hangar) 
+{
+    std::vector<std::vector<bool>> visited;
+    visited.reserve(hangar.size());
+    std::vector<std::vector<bool>> escaped;
+    escaped.reserve(hangar.size());
+    for (int i = 0; i < hangar.size(); ++i) 
+    {
+        visited.emplace_back(hangar[i].size(), false);
+        escaped.emplace_back(hangar[i].size(), false);
+    }
+    int res = 0;
+    for (int y = 0; y < hangar.size(); ++y) 
+    {
+        for (int x = 0; x < hangar[y].size(); ++x) 
+        {
+            if (!visited[y][x]) 
+            {
+                int count = 0;
+                if (!canEscape(hangar, visited, escaped, x, y, count)) 
+                {
+                    res += count;
+                }
+            }
+        }
+    }
+    return res;
+}
