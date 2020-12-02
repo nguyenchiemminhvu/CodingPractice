@@ -1,0 +1,87 @@
+Not long ago you saw an orienteering competition on TV and immediately wanted to try it yourself. You've joined an orienteering club and started preparing for the upcoming competitions.
+
+To test your skills, the coach asked you to enter the beginners' competition. In this race your objective is to reach the finish from the start by the shortest path. You were given a map that shows n different locations (including start and finish) connected by roads of different lengths. You are only allowed to traverse roads in one direction (i.e. all roads are one-way), but since this is competition for beginners the organizers chose such an orientation of the roads that if you constantly move along roads, you'll eventually reach the finish and if you leave some location you will never return there.
+
+Given the number of locations n and the roads between them, find the length of the shortest path between the start (location with number 0) and the finish (location with number n - 1).
+
+Example
+
+For n = 6 and
+
+roads = [[[1, 3]],
+         [[4, 1], [3, 2]],
+         [[1, 0]],
+         [[5, 3]],
+         [[5, 5]],
+         []]
+the output should be
+orienteeringBeginner(n, roads) = 8.
+
+=====================================================
+
+int chooseNextVertice(std::vector<int> dist, std::vector<bool> shortestSet)
+{
+    int nextVertice = -1;
+    int minDist = INT_MAX;
+    
+    for (int i = 0; i < dist.size(); i++)
+    {
+        if (!shortestSet[i] && dist[i] < minDist)
+        {
+            minDist = dist[i];
+            nextVertice = i;
+        }
+    }
+    return nextVertice;
+}
+
+void Try(std::vector<std::vector<int>> g, int s, std::vector<int> &dist)
+{
+    std::vector<bool> shortestSet(g.size(), false);
+    dist[s] = 0;
+    
+    for (int count = 0; count < g.size() - 1; count++) // find shortets distance for all vertices
+    {
+        int i = chooseNextVertice(dist, shortestSet);
+        shortestSet[i] = true;
+        
+        for (int j = 0; j < g.size(); j++)
+        {
+            if (!shortestSet[j] && g[i][j] != -1 && dist[i] != INT_MAX
+               && dist[i] + g[i][j] < dist[j])
+            {
+                dist[j] = dist[i] + g[i][j];
+            }
+        }
+    }
+}
+
+std::vector<int> graphDistances(std::vector<std::vector<int>> g, int s)
+{
+    std::vector<int> res(g.size(), INT_MAX);
+    Try(g, s, res);
+    return res;
+}
+
+int orienteeringBeginner(int n, vector<vector<vector<int>>> vvv)
+{
+    std::vector<std::vector<int>> g(n, std::vector<int>(n, -1));
+    
+    int i = 0;
+    for (std::vector<std::vector<int>> vv : vvv)
+    {
+        for (std::vector<int> v : vv)
+        {
+            int u = v[0];
+            int d = v[1];
+            std::cout << i << " " << u << " " << d << std::endl;
+            g[i][u] = d;
+            g[u][i] = d;
+        }
+        
+        i++;
+    }
+    
+    std::vector<int> gd = graphDistances(g, 0);
+    return gd[n - 1];
+}
