@@ -19,69 +19,54 @@ orienteeringBeginner(n, roads) = 8.
 
 =====================================================
 
-int chooseNextVertice(std::vector<int> dist, std::vector<bool> shortestSet)
+int orienteeringBeginner(int n, vector<vector<vector<int>>> roads) 
 {
-    int nextVertice = -1;
-    int minDist = INT_MAX;
-    
-    for (int i = 0; i < dist.size(); i++)
+    std::vector<int> incomingCounts(n,0);
+    for(const auto& location : roads)
     {
-        if (!shortestSet[i] && dist[i] < minDist)
+        for(const auto& destination : location)
         {
-            minDist = dist[i];
-            nextVertice = i;
+            ++incomingCounts[destination[0]];
         }
     }
-    return nextVertice;
-}
-
-void Try(std::vector<std::vector<int>> g, int s, std::vector<int> &dist)
-{
-    std::vector<bool> shortestSet(g.size(), false);
-    dist[s] = 0;
-    
-    for (int count = 0; count < g.size() - 1; count++) // find shortets distance for all vertices
+    queue<int> next;
+    for(int i = 0;i<n;++i)
     {
-        int i = chooseNextVertice(dist, shortestSet);
-        shortestSet[i] = true;
-        
-        for (int j = 0; j < g.size(); j++)
+        if(!incomingCounts[i])
         {
-            if (!shortestSet[j] && g[i][j] != -1 && dist[i] != INT_MAX
-               && dist[i] + g[i][j] < dist[j])
+            next.push(i);
+        }
+    }
+    std::vector<int> order;
+    order.reserve(n);
+    while(!next.empty())
+    {
+        auto current = next.front();
+        next.pop();
+        order.push_back(current);
+        for(const auto& destination : roads[current])
+        {
+            auto remaining = --incomingCounts[destination[0]];
+            if(remaining)
             {
-                dist[j] = dist[i] + g[i][j];
+               continue; 
             }
+            next.push(destination[0]);
         }
     }
-}
-
-std::vector<int> graphDistances(std::vector<std::vector<int>> g, int s)
-{
-    std::vector<int> res(g.size(), INT_MAX);
-    Try(g, s, res);
-    return res;
-}
-
-int orienteeringBeginner(int n, vector<vector<vector<int>>> vvv)
-{
-    std::vector<std::vector<int>> g(n, std::vector<int>(n, -1));
-    
-    int i = 0;
-    for (std::vector<std::vector<int>> vv : vvv)
+    std::vector<int> distances(n,numeric_limits<int>::max());
+    distances[0]=0;
+    for(auto currentLocation : order)
     {
-        for (std::vector<int> v : vv)
+        if(distances[currentLocation] == numeric_limits<int>::max())
         {
-            int u = v[0];
-            int d = v[1];
-            std::cout << i << " " << u << " " << d << std::endl;
-            g[i][u] = d;
-            g[u][i] = d;
+            continue;
         }
-        
-        i++;
+        for(const auto& road : roads[currentLocation])
+        {
+            auto destination = road[0];
+            distances[destination] = min(distances[destination],road[1] + distances[currentLocation]);
+        }
     }
-    
-    std::vector<int> gd = graphDistances(g, 0);
-    return gd[n - 1];
+    return distances[n-1];
 }
