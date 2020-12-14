@@ -33,6 +33,124 @@ Here, the first mention of project2 was after the first mention of project1, so 
 
 =========================================================
 
-std::vector<std::string> countAPI(std::vector<std::string> calls)
-{
+// root -> projects -> subprojects -> methods
+class tree_node {
+public:
+  int value;
+  std::string name;
+  std::vector<tree_node*> children;
+
+  explicit tree_node(const std::string& name) {
+    this->value = 1;
+    this->name = name;
+  }
+};
+
+tree_node *root;
+
+void add_to_tree(const std::string& project, const std::string& subproject, const std::string& method) {
+  tree_node *project_node = nullptr;
+  tree_node *subproject_node = nullptr;
+  tree_node *method_node = nullptr;
+
+  for (tree_node* node : root->children) {
+    if (node->name == project) {
+      project_node = node;
+      break;
+    }
+  }
+
+  if (project_node != nullptr) {
+    for (tree_node* node : project_node->children) {
+      if (node->name == subproject) {
+        subproject_node = node;
+        break;
+      }
+    }
+
+    if (subproject_node != nullptr) {
+      for (tree_node* node : subproject_node->children) {
+        if (node->name == method) {
+          method_node = node;
+          break;
+        }
+      }
+
+      if (method_node != nullptr) {
+        method_node->value++;
+        project_node->value++;
+        subproject_node->value++;
+        return;
+      }
+    }
+  }
+
+  if (project_node == nullptr) {
+    project_node = new tree_node(project);
+    subproject_node = new tree_node(subproject);
+    method_node = new tree_node(method);
+
+    root->children.push_back(project_node);
+    project_node->children.push_back(subproject_node);
+    subproject_node->children.push_back(method_node);
+    return;
+  }
+
+  if (subproject_node == nullptr) {
+    subproject_node = new tree_node(subproject);
+    method_node = new tree_node(method);
+
+    ++project_node->value;
+    project_node->children.push_back(subproject_node);
+    subproject_node->children.push_back(method_node);
+    return;
+  }
+
+  method_node = new tree_node(method);
+
+  ++project_node->value;
+  ++subproject_node->value;
+  subproject_node->children.push_back(method_node);
+}
+
+std::vector<std::string> countAPI(const std::vector<std::string>& calls) {
+  root = new tree_node("root");
+  
+  std::vector<std::string> ans;
+
+  std::string project;
+  std::string subproject;
+  std::string method;
+  for (auto& call: calls) {
+    std::cout << call << std::endl;
+    project.clear();
+    subproject.clear();
+    method.clear();
+
+    int pos = 1;
+    while (call[pos] != '/') {
+      project += call[pos];
+      ++pos;
+    }
+    ++pos;
+    while (call[pos] != '/') {
+      subproject += call[pos];
+      ++pos;
+    }
+    ++pos;
+    method = call.substr(pos);
+
+    add_to_tree(project, subproject, method);
+  }
+
+  for (tree_node* project_node: root->children) {
+    ans.emplace_back("--" + project_node->name + " (" + std::to_string(project_node->value) + ")");
+    for (tree_node* subproject_node: project_node->children) {
+      ans.emplace_back("----" + subproject_node->name + " (" + std::to_string(subproject_node->value) + ")");
+      for (tree_node* method_node: subproject_node->children)
+        ans.emplace_back("------" + method_node->name + " (" + std::to_string(method_node->value) + ")");
+    }
+  }
+
+  return ans;
 }
