@@ -29,11 +29,10 @@ interval_fee / interval_deliveries = 1 for each interval, so the answer is true.
 bool deliveryFee(std::vector<int> intervals, std::vector<int> fees, std::vector<vector<int>> deliveries)
 {
     std::map<int,int> m;
-    
-    std::reverse(intervals.begin(), intervals.end());
-    
     for (int x : intervals) 
         m[x] = 0;
+    
+    std::reverse(intervals.begin(), intervals.end());
     
     for (auto x : deliveries)
     {
