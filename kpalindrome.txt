@@ -1,0 +1,46 @@
+A string is a k-palindrome if it can be transformed into a palindrome by removing any amount of characters from 0 to k. Your task is to determine whether the given string s is a k-palindrome.
+
+Example
+
+For s = "abrarbra" and k = 1, the output should be
+kpalindrome(s, k) = true.
+
+You can remove one letter, 'r', to obtain the string "abrarba", which is a palindrome.
+
+For s = "adbcdbacdb" and k = 2, the output should be
+kpalindrome(s, k) = false.
+
+====================================================================
+
+int lcs(string X, string Y)  
+{ 
+    int m = X.length();
+    int n = Y.length();
+    
+    int L[m + 1][n + 1];  
+    int i, j;  
+    
+    for (i = 0; i <= m; i++)  
+    {  
+        for (j = 0; j <= n; j++)  
+        {  
+        if (i == 0 || j == 0)  
+            L[i][j] = 0;  
+      
+        else if (X[i - 1] == Y[j - 1])  
+            L[i][j] = L[i - 1][j - 1] + 1;  
+      
+        else
+            L[i][j] = max(L[i - 1][j], L[i][j - 1]);  
+        }  
+    } 
+    
+    return L[m][n];  
+}  
+
+bool kpalindrome(string s, int k) 
+{
+    string t = s;
+    reverse(t.begin(), t.end());
+    return (s.size() - lcs(s,t) <= k);
+}
