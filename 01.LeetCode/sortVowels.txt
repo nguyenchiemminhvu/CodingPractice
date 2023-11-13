@@ -1,0 +1,32 @@
+https://leetcode.com/problems/sort-vowels-in-a-string
+
+class Solution 
+{
+public:
+    string sortVowels(string& s) 
+    {
+        std::string temp;
+        for (const char& c : s)
+        {
+            if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
+             || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U')
+            {
+                temp += c;
+            }
+        }
+
+        std::sort(temp.begin(), temp.end());
+
+        int iTemp = 0;
+        for (char& c : s)
+        {
+            if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'
+             || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U')
+            {
+                c = temp[iTemp++];
+            }
+        }
+
+        return s;
+    }
+};
