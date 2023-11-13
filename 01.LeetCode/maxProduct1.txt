@@ -1,0 +1,34 @@
+https://leetcode.com/problems/maximum-product-of-word-lengths/
+
+class Solution 
+{
+public:
+    int maxProduct(vector<string>& words) 
+    {
+        int res = 0;
+        for (int i = 0; i < words.size(); i++)
+        {
+            for (int j = i + 1; j < words.size(); j++)
+            {
+                res = std::max(res, product(words[i], words[j]));
+            }
+        }
+        return res;
+    }
+private:
+    int product(const std::string& a, const std::string& b)
+    {
+        bool freq[26];
+        std::memset(freq, false, 26);
+        for (const char& c : a)
+            freq[c - 'a'] = true;
+        
+        for (const char& c : b)
+        {
+            if (freq[c - 'a'])
+                return 0;
+        }
+        
+        return a.length() * b.length();
+    }
+};

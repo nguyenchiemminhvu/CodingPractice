@@ -1,0 +1,41 @@
+https://leetcode.com/problems/search-in-rotated-sorted-array/
+
+class Solution 
+{
+public:
+    int search(vector<int>& nums, int target) 
+    {
+        return searchUtil(nums, 0, nums.size() - 1, target);
+    }
+private:
+    int searchUtil(const std::vector<int>& nums, int left, int right, int val)
+    {
+        if (nums[right] < nums[left])
+        {
+            int mid = (left + right) / 2;
+            int found_left = searchUtil(nums, left, mid, val);
+            if (found_left == -1)
+                return searchUtil(nums, mid + 1, right, val);
+            
+            return found_left;
+        }
+        else
+        {
+            return binarySearch(nums, left, right, val);
+        }
+    }
+    
+    int binarySearch(const std::vector<int>& nums, int left, int right, int val)
+    {
+        if (left > right)
+            return -1;
+        
+        int mid = (left + right) / 2;
+        if (nums[mid] == val)
+            return mid;
+        
+        if (nums[mid] < val)
+            return binarySearch(nums, mid + 1, right, val);
+        return binarySearch(nums, left, mid - 1, val);
+    }
+};

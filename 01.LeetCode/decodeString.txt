@@ -1,0 +1,49 @@
+class Solution 
+{
+public:
+    string decodeString(const string& s) 
+    {
+        std::stack<int> st_num;
+        std::stack<std::string> st_str;
+        
+        int cur_num = 0;
+        std::string cur_str;
+        std::string prev_str;
+        for (const char& c : s)
+        {
+            if (std::isdigit(c))
+            {
+                cur_num *= 10;
+                cur_num += (c - '0');
+            }
+            else if (c == '[')
+            {
+                st_num.push(cur_num);
+                cur_num = 0;
+                
+                st_str.push(cur_str);
+                cur_str = "";
+            }
+            else if (c == ']')
+            {
+                std::string prev_str = st_str.top();
+                st_str.pop();
+                
+                int num = st_num.top();
+                st_num.pop();
+                
+                for (int i = 0; i < num; i++)
+                {
+                    prev_str += cur_str;
+                }
+                cur_str = prev_str;
+            }
+            else
+            {
+                cur_str += c;
+            }
+        }
+        
+        return cur_str;
+    }
+};

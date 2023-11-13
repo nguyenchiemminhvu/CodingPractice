@@ -1,0 +1,49 @@
+https://leetcode.com/problems/count-nodes-equal-to-average-of-subtree/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution 
+{
+public:
+    int averageOfSubtree(TreeNode* root) 
+    {
+        if (!root)
+            return 0;
+        
+        int res = 0;
+        
+        res += averageOfSubtree(root->left);
+        if (root->val == average(root))
+            res++;
+        res += averageOfSubtree(root->right);
+        
+        return res;
+    }
+private:
+    int average(TreeNode* root)
+    {
+        std::pair<int, int> count;
+        counting(root, count);
+        return count.first / count.second;
+    }
+    
+    void counting(TreeNode* root, std::pair<int, int>& res)
+    {
+        if (!root)
+            return;
+        
+        counting(root->left, res);
+        res.first += root->val;
+        res.second++;
+        counting(root->right, res);
+    }
+};

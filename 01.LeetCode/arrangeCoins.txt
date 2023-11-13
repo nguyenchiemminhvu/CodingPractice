@@ -1,0 +1,37 @@
+https://leetcode.com/problems/arranging-coins/
+
+class Solution 
+{
+public:
+    int arrangeCoins(int n) 
+    {
+        return searchUtil(0, n, n);
+//         int k = 0;
+//         long long total = 0;
+//         while (total < n)
+//         {
+//             k++;
+//             total += k;
+//         }
+        
+//         return total == n ? k : k - 1;
+    }
+private:
+    int searchUtil(int left, int right, int n)
+    {
+        if (left <= right)
+        {
+            long long k = left + (right - left) / 2;
+            long long cur = k * (k + 1) / 2;
+            
+            if (cur == n)
+                return k;
+            if (cur < n)
+                return searchUtil(k + 1, right, n);
+            else
+                return searchUtil(left, k - 1, n);
+        }
+        
+        return right;
+    }
+};

@@ -1,0 +1,45 @@
+https://leetcode.com/problems/convert-a-number-to-hexadecimal/
+
+class Solution 
+{
+public:
+    string toHex(int n) 
+    {   
+        if (n == 0)
+            return "0";
+        
+        if (n < 0)
+            return negativeConverter(n);
+        
+        return positiveConverter(n);
+    }
+private:
+    int converter[16] = 
+    { 
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' 
+    };
+
+    std::string positiveConverter(int n)
+    {
+        std::string hex;
+        while (n > 0)
+        {
+            int temp = n & 0b1111;
+            hex.insert(hex.begin(), converter[temp]);
+            n >>= 4;
+        }
+        return hex;
+    }
+    
+    std::string negativeConverter(unsigned int n)
+    {
+        std::string hex;
+        while (n > 0)
+        {
+            int temp = n & 0b1111;
+            hex.insert(hex.begin(), converter[temp]);
+            n >>= 4;
+        }
+        return hex;
+    }
+};

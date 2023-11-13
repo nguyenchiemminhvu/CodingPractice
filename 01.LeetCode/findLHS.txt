@@ -1,0 +1,22 @@
+https://leetcode.com/problems/longest-harmonious-subsequence/submissions/
+
+class Solution 
+{
+public:
+    int findLHS(vector<int>& nums) 
+    {
+        int LHS = 0;
+        
+        std::unordered_map<int, int> checker;
+        for (const int& n : nums)
+            checker[n]++;
+        
+        for (const int& n : nums)
+        {
+            if (checker[n - 1])
+                LHS = std::max(LHS, checker[n] + checker[n - 1]);
+        }
+        
+        return LHS;
+    }
+};

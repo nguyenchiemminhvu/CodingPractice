@@ -1,0 +1,25 @@
+https://leetcode.com/problems/count-sorted-vowel-strings/
+
+class Solution 
+{
+public:
+    int countVowelStrings(int n) 
+    {
+        return counting(n, 0, 1);
+    }
+private:
+    int counting(int n, int i, int cur)
+    {
+        if (i >= n)
+        {
+            return 1;
+        }
+        
+        int temp = 0;
+        for (int j = cur; j <= 5; j++)
+        {
+            temp += counting(n, i + 1, j);
+        }
+        return temp;
+    }
+};

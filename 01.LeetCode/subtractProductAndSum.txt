@@ -1,0 +1,24 @@
+https://leetcode.com/problems/subtract-the-product-and-sum-of-digits-of-an-integer/
+
+class Solution 
+{
+public:
+    int subtractProductAndSum(int n) 
+    {
+        int p, s;
+        parse(n, p, s);
+        return p - s;
+    }
+private:
+    void parse(int n, int& p, int& s)
+    {
+        p = 1;
+        s = 0;
+        while (n)
+        {
+            p *= (n % 10);
+            s += (n % 10);
+            n /= 10;
+        }
+    }
+};

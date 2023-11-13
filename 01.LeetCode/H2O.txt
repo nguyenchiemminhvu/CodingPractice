@@ -1,0 +1,49 @@
+https://leetcode.com/problems/building-h2o/
+
+#include <semaphore.h>
+
+class H2O 
+{
+    int nH;
+    int nO;
+    sem_t sH;
+    sem_t sO;
+    
+public:
+    H2O() 
+    {
+        nH = 2;
+        nO = 1;
+        sem_init(&sH, 0, 1);
+        sem_init(&sO, 0, 1);
+    }
+
+    void hydrogen(function<void()> releaseHydrogen) 
+    {
+        sem_wait(&sH);
+        
+        // releaseHydrogen() outputs "H". Do not change or remove this line.
+        releaseHydrogen();
+        nH--;
+        if (nH == 0)
+        {
+            nH = 2;
+            sem_post(&sO);
+        }
+    }
+
+    void oxygen(function<void()> releaseOxygen) 
+    {
+        sem_wait(&sO);
+        
+        // releaseOxygen() outputs "O". Do not change or remove this line.
+        releaseOxygen();
+        nO--;
+        if (nO == 0)
+        {
+            nO = 1;
+            sem_post(&sH);
+            sem_post(&sH);
+        }
+    }
+};

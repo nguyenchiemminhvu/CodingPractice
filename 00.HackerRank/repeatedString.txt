@@ -1,0 +1,22 @@
+https://www.hackerrank.com/challenges/repeated-string/problem
+
+long repeatedString(string s, long n)
+{
+    long count_a = 0;
+    for (char c : s)
+    {
+        count_a += (int)(c == 'a');
+    }
+      
+    long len_s = s.length();
+    long times = n / len_s;
+      
+    long mod = n % len_s;
+    long remain = 0;
+    for (int i = 0; i < mod; i++)
+    {
+        remain += (int)(s[i] == 'a');
+    }
+      
+    return times * count_a + remain;
+}

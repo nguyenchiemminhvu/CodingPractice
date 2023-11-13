@@ -1,0 +1,88 @@
+https://leetcode.com/problems/design-circular-deque/
+
+class MyCircularDeque 
+{
+public:
+    MyCircularDeque(int k) 
+    {
+        cap = k;
+    }
+    
+    bool insertFront(int value) 
+    {
+        if (isFull())
+            return false;
+        
+        L.push_front(value);
+        return true;
+    }
+    
+    bool insertLast(int value) 
+    {
+        if (isFull())
+            return false;
+        
+        L.push_back(value);
+        return true;
+    }
+    
+    bool deleteFront() 
+    {
+        if (L.empty())
+            return false;
+        
+        L.pop_front();
+        return true;
+    }
+    
+    bool deleteLast() 
+    {
+        if (L.empty())
+            return false;
+        
+        L.pop_back();
+        return true;
+    }
+    
+    int getFront() 
+    {
+        if (L.empty())
+            return -1;
+        
+        return L.front();
+    }
+    
+    int getRear() 
+    {
+        if (L.empty())
+            return -1;
+        
+        return L.back();
+    }
+    
+    bool isEmpty() 
+    {
+        return L.empty();
+    }
+    
+    bool isFull() 
+    {
+        return L.size() >= cap;
+    }
+private:
+    std::deque<int> L;
+    int cap;
+};
+
+/**
+ * Your MyCircularDeque object will be instantiated and called as such:
+ * MyCircularDeque* obj = new MyCircularDeque(k);
+ * bool param_1 = obj->insertFront(value);
+ * bool param_2 = obj->insertLast(value);
+ * bool param_3 = obj->deleteFront();
+ * bool param_4 = obj->deleteLast();
+ * int param_5 = obj->getFront();
+ * int param_6 = obj->getRear();
+ * bool param_7 = obj->isEmpty();
+ * bool param_8 = obj->isFull();
+ */

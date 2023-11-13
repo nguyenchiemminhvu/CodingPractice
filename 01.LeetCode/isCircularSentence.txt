@@ -1,0 +1,40 @@
+https://leetcode.com/problems/circular-sentence/description/
+
+class Solution 
+{
+public:
+    bool isCircularSentence(string& s) 
+    {
+        s += ' ';
+
+        bool start = true;
+        char prev = s[0];
+        std::string temp;
+        for (const char& c : s)
+        {
+            if (c == ' ')
+            {
+                temp += prev;
+                start = true;
+                continue;
+            }
+
+            if (start)
+            {
+                temp += c;
+                start = false;
+            }
+
+            prev = c;
+        }
+
+        temp.insert(temp.begin(), temp.back());
+        temp.pop_back();
+        for (int i = 1; i < temp.length(); i+=2)
+        {
+            if (temp[i] != temp[i - 1])
+                return false;
+        }
+        return true;
+    }
+};

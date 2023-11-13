@@ -1,0 +1,57 @@
+https://leetcode.com/problems/number-of-days-between-two-dates/
+
+class Solution 
+{
+public:
+    int daysBetweenDates(string& date1, string& date2) 
+    {
+        int y1 = std::stoi(date1.substr(0, 4).c_str());
+        int m1 = std::stoi(date1.substr(5, 2).c_str());
+        int d1 = std::stoi(date1.substr(8, 2).c_str());
+        
+        int y2 = std::stoi(date2.substr(0, 4).c_str());
+        int m2 = std::stoi(date2.substr(5, 2).c_str());
+        int d2 = std::stoi(date2.substr(8, 2).c_str());
+        
+        int n1 = numDayFrom1900(d1, m1, y1);
+        int n2 = numDayFrom1900(d2, m2, y2);
+        
+        return std::abs(n2 - n1);
+    }
+private:
+    int numDayFrom1900(int d, int m, int y)
+    {
+        int dom[] = { 31,
+                      28,
+                      31,
+                      30,
+                      31,
+                      30,
+                      31,
+                      31,
+                      30,
+                      31,
+                      30,
+                      31 };
+        
+        int n = 0;
+        for (int i = 1900; i < y; i++)
+        {
+            n += (365 + isLeap(i));
+        }
+        
+        for (int i = 1; i < m; i++)
+            n += dom[i - 1];
+        n += ((m > 2) ? isLeap(y) : 0); 
+        n += d;
+        
+        return n;
+    }
+    
+    bool isLeap(int year)
+    {
+        if(year % 400 == 0 || (year % 4 == 0  && year % 100 != 0))
+            return true;
+        return false;
+    }
+};

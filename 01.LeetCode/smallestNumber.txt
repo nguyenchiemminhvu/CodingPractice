@@ -1,0 +1,43 @@
+https://leetcode.com/problems/construct-smallest-number-from-di-string/description/
+
+class Solution 
+{
+public:
+    string smallestNumber(const string& pattern) 
+    {
+        std::deque<int> list;
+        for (int i = 1; i <= pattern.length() + 1; i++)
+        {
+            list.push_back(i);
+        }
+
+        std::string res;
+        char prev = 0;
+        for (int i = 0; i < pattern.size(); i++)
+        {
+            if (pattern[i] == 'I')
+            {
+                res.push_back('0' + list.front());
+                list.pop_front();
+            }
+            else
+            {
+                // count D
+                int count = 0;
+                for (int id = i; id < pattern.size(); id++)
+                {
+                    if (pattern[id] == 'I')
+                        break;
+                    count++;
+                }
+
+                res.push_back('0' + *(list.begin() + count));
+                list.erase(list.begin() + count);
+            }
+            
+            prev = pattern[i];
+        }
+        res.push_back('0' + list.front());
+        return res;
+    }
+};

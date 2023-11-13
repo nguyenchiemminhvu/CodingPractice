@@ -1,0 +1,24 @@
+https://leetcode.com/problems/check-if-word-equals-summation-of-two-words/
+
+class Solution 
+{
+public:
+    bool isSumEqual(const string& a, const string& b, const string& t) 
+    {
+        long long first = numericUtil(a);
+        long long second = numericUtil(b);
+        long long target = numericUtil(t);
+        
+        return first + second == target;
+    }
+private:
+    long long numericUtil(const std::string& s)
+    {
+        long long res = 0;
+        for (const char& c : s)
+        {
+            res = res * 10 + (c - 'a');
+        }
+        return res;
+    }
+};

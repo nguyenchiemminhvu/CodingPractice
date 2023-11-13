@@ -1,0 +1,47 @@
+https://leetcode.com/problems/lucky-numbers-in-a-matrix/
+
+class Solution 
+{
+public:
+    vector<int> luckyNumbers(vector<vector<int>>& mat) 
+    {
+        std::vector<int> res;
+        
+        std::vector<int> min_col_indices(mat.size(), -1);
+        for (int i = 0; i < mat.size(); i++)
+        {
+            int min_val = INT_MAX;
+            int min_index = -1;
+            for (int j = 0; j < mat[i].size(); j++)
+            {
+                if (min_val > mat[i][j])
+                {
+                    min_val = mat[i][j];
+                    min_index = j;
+                }
+            }
+            min_col_indices[i] = min_index;
+        }
+        
+        for (int j = 0; j < mat[0].size(); j++)
+        {
+            int max_val = INT_MIN;
+            int max_index = -1;
+            for (int i = 0; i < mat.size(); i++)
+            {
+                if (max_val < mat[i][j])
+                {
+                    max_val = mat[i][j];
+                    max_index = i;
+                }
+            }
+            
+            if (j == min_col_indices[max_index])
+            {
+                res.push_back(mat[max_index][min_col_indices[max_index]]);
+            }
+        }
+        
+        return res;
+    }
+};

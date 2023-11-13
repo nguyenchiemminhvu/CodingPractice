@@ -1,0 +1,38 @@
+https://leetcode.com/problems/goal-parser-interpretation/
+
+class Solution 
+{
+public:
+    string interpret(string& s) 
+    {
+        int is = 0;
+        std::string temp;
+        for (const char& c : s)
+        {
+            if (c == 'G')
+            {
+                s[is++] = c;
+            }
+            else if (c == ')')
+            {
+                if (temp.length() == 1)
+                {
+                    s[is++] = 'o';
+                }
+                else
+                {
+                    s[is++] = 'a';
+                    s[is++] = 'l';
+                }
+                
+                temp.clear();
+            }
+            else
+            {
+                temp += c;
+            }
+        }
+        
+        return std::string(s.begin(), s.begin() + is);
+    }
+};

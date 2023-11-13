@@ -1,0 +1,29 @@
+https://leetcode.com/problems/check-if-the-number-is-fascinating/description/
+
+class Solution 
+{
+public:
+    bool isFascinating(int n) 
+    {
+        std::multiset<int> target = {1,2,3,4,5,6,7,8,9};
+        std::multiset<int> s;
+
+        int n2 = n * 2;
+        int n3 = n * 3;
+
+        extractDigits(n, s);
+        extractDigits(n2, s);
+        extractDigits(n3, s);
+
+        return s == target;
+    }
+private:
+    void extractDigits(int n, std::multiset<int>& s)
+    {
+        while (n)
+        {
+            s.insert(n % 10);
+            n /= 10;
+        }
+    }
+};

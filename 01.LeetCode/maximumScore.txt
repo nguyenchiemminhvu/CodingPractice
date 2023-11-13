@@ -1,0 +1,21 @@
+https://leetcode.com/problems/maximum-score-from-performing-multiplication-operations/
+
+class Solution 
+{
+public:
+    int maximumScore(vector<int>& nums, vector<int>& multipliers) 
+    {
+        return maxScoreBT(nums, 0, nums.size() - 1, multipliers, 0);
+    }
+private:
+    int maxScoreBT(const std::vector<int>& nums, int left, int right, const std::vector<int>& multi, int im)
+    {
+        if (im >= multi.size())
+            return 0;
+        
+        return std::max(
+                nums[left] * multi[im] + maxScoreBT(nums, left + 1, right, multi, im + 1),
+                nums[right] * multi[im] + maxScoreBT(nums, left, right - 1, multi, im + 1)
+        );
+    }
+};

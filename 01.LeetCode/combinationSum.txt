@@ -1,0 +1,34 @@
+https://leetcode.com/problems/combination-sum/
+
+class Solution 
+{
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) 
+    {
+        std::vector<std::vector<int>> res;
+        std::vector<int> temp;
+        combineUtil(candidates, target, 0, temp, res);
+        return res;
+    }
+private:
+    void combineUtil(const std::vector<int>& nums, int target, int i, std::vector<int>& temp, std::vector<std::vector<int>>& res)
+    {
+        if (target == 0)
+        {
+            res.push_back(temp);
+            return;
+        }
+        
+        if (target < 0 || i >= nums.size())
+        {
+            return;
+        }
+        
+        for (int j = i; j < nums.size(); j++)
+        {
+            temp.push_back(nums[j]);
+            combineUtil(nums, target - nums[j], j, temp, res);
+            temp.pop_back();
+        }
+    }
+};

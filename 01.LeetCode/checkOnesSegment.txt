@@ -1,0 +1,19 @@
+https://leetcode.com/problems/check-if-binary-string-has-at-most-one-segment-of-ones/
+
+class Solution 
+{
+public:
+    bool checkOnesSegment(const string& s) 
+    {
+        size_t left = s.find_first_of('1');
+        size_t right = s.find_last_of('1');
+        
+        for (int i = left; i <= right; i++)
+        {
+            if (s[i] == '0')
+                return false;
+        }
+        
+        return true;
+    }
+};

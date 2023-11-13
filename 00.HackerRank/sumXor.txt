@@ -1,0 +1,18 @@
+https://www.hackerrank.com/challenges/sum-vs-xor/problem
+
+// (n + i) = (n ^ i) + 2 * (n & i)
+// => find (n & i) = 0
+long sumXor(long n)
+{
+    long non_set_bit = 0;
+    while (n)
+    {
+        if ((n & 1) == 0)
+        {
+            non_set_bit++;      
+        }
+        n >>= 1;
+    }
+     
+    return (long)1 << non_set_bit;
+}

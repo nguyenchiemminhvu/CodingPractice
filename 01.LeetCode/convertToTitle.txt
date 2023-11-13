@@ -1,0 +1,26 @@
+https://leetcode.com/problems/excel-sheet-column-title/
+
+class Solution 
+{
+public:
+    string convertToTitle(int col) 
+    {
+        std::string res; 
+        while (col)
+        {
+            int rem = col % 26;
+            if (rem == 0)
+            {
+                res += 'Z';
+                col = col / 26 - 1;
+            }
+            else
+            {
+                res += 'A' + (rem - 1);
+                col = col / 26;
+            }
+        }
+        std::reverse(res.begin(), res.end());
+        return res;
+    }
+};

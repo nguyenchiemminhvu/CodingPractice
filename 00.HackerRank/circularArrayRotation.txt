@@ -1,0 +1,21 @@
+https://www.hackerrank.com/challenges/circular-array-rotation/problem
+
+std::vector<int> circularArrayRotation(std::vector<int> a, int k, std::vector<int> queries)
+{
+    std::vector<int> res;
+      
+    k %= a.size();
+    for (int q : queries)
+    {
+        int rem = q - k;
+        if (rem >= 0)
+            res.push_back(a[rem]);
+        else
+        {
+            rem = a.size() + rem;
+            res.push_back(a[rem]);
+        }
+    }
+      
+    return res;
+}

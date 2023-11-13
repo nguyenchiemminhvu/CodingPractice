@@ -1,0 +1,39 @@
+https://leetcode.com/problems/minimum-distance-between-bst-nodes/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution 
+{
+public:
+    int minDiffInBST(TreeNode* root) 
+    {
+        int min_diff = INT_MAX;
+        std::vector<int> v;
+        minDiffUtil(root, v);
+        
+        for (int i = 1; i < v.size(); i++)
+        {
+            min_diff = std::min(min_diff, v[i] - v[i - 1]);
+        }
+        return min_diff;
+    }
+private:
+    void minDiffUtil(TreeNode* root, std::vector<int>& v)
+    {
+        if (!root)
+            return;
+        
+        minDiffUtil(root->left, v);
+        v.push_back(root->val);
+        minDiffUtil(root->right, v);
+    }
+};

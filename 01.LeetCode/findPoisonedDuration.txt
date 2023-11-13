@@ -1,0 +1,32 @@
+https://leetcode.com/problems/teemo-attacking/
+
+class Solution 
+{ 
+public:
+    int findPoisonedDuration(vector<int>& attacks, int d) 
+    {
+        if (attacks.empty())
+            return 0;
+        if (attacks.size() == 1)
+            return attacks[0] + d - 1;
+        
+        int total_duration = d;
+        int cur_end = attacks[0] + d;
+        
+        for (int i = 1; i < attacks.size(); i++)
+        {
+            if (attacks[i] < cur_end)
+            {
+                total_duration += attacks[i] + d - cur_end;
+            }
+            else
+            {
+                total_duration += d;
+            }
+            
+            cur_end = attacks[i] + d;
+        }
+        
+        return total_duration;
+    }
+};

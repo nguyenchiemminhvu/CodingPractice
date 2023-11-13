@@ -1,0 +1,31 @@
+https://leetcode.com/problems/find-all-lonely-numbers-in-the-array/description/
+
+class Solution 
+{
+public:
+    vector<int> findLonely(vector<int>& nums) 
+    {
+        if (nums.size() == 1)
+        {
+            return {nums[0]};
+        }
+
+        std::vector<int> res;
+        std::sort(nums.begin(), nums.end());
+        for (int i = 0; i < nums.size(); i++)
+        {
+            auto left = std::lower_bound(nums.begin(), nums.end(), nums[i]);
+            auto right = std::upper_bound(nums.begin(), nums.end(), nums[i]);
+            if (left == right - 1)
+            {
+                if (!std::binary_search(nums.begin(), nums.end(), nums[i] - 1)
+                &&  !std::binary_search(nums.begin(), nums.end(), nums[i] + 1))
+                {
+                    res.push_back(nums[i]);
+                }
+            }
+        }
+
+        return res; 
+    }
+};

@@ -1,0 +1,51 @@
+https://leetcode.com/problems/available-captures-for-rook/
+
+class Solution 
+{
+public:
+    int numRookCaptures(vector<vector<char>>& board) 
+    {
+        int rr, rc;
+        findRookPos(board, rr, rc);
+        return countAttackablePawns(board, rr, rc, -1, 0)
+             + countAttackablePawns(board, rr, rc, 1, 0)
+             + countAttackablePawns(board, rr, rc, 0, 1)
+             + countAttackablePawns(board, rr, rc, 0, -1);
+    }
+private:
+    void findRookPos(const vector<vector<char>>& board, int& rr, int& rc)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                if (board[i][j] == 'R')
+                {
+                    rr = i;
+                    rc = j;
+                    return;
+                }
+            }
+        }
+    }
+    
+    int countAttackablePawns(const vector<vector<char>>& board, int rr, int rc, int dr, int dc)
+    {
+        int ir, ic;
+        ir = rr;
+        ic = rc;
+        while (ir >= 0 && ic >= 0 && ir < 8 && ic < 8)
+        {
+            if (board[ir][ic] == 'B')
+                return 0;
+            
+            if (board[ir][ic] == 'p')
+                return 1;
+            
+            ir += dr;
+            ic += dc;
+        }
+        
+        return 0;
+    }
+};

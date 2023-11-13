@@ -1,0 +1,26 @@
+https://leetcode.com/problems/x-of-a-kind-in-a-deck-of-cards/
+
+class Solution 
+{
+public:
+    bool hasGroupsSizeX(vector<int>& deck) 
+    {
+        std::unordered_map<int, int> freq;
+        for (const int& n : deck)
+            freq[n]++;
+        
+        if (freq.size() < 1)
+            return false;
+        
+        if (freq.size() == 1)
+            return freq.begin()->second >= 2;
+        
+        int G = freq.begin()->second;
+        for (const auto& p : freq)
+        {
+            G = std::gcd(G, p.second);
+        }
+        
+        return G > 1;
+    }
+};

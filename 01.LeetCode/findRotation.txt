@@ -1,0 +1,66 @@
+https://leetcode.com/problems/determine-whether-matrix-can-be-obtained-by-rotation/
+
+class Solution 
+{
+public:
+    bool findRotation(vector<vector<int>>& mat, vector<vector<int>>& target) 
+    {
+        if (mat == target)
+            return true;
+        
+        rotateMat(mat);
+        
+        if (mat == target)
+            return true;
+        
+        rotateMat(mat);
+        
+        if (mat == target)
+            return true;
+        
+        rotateMat(mat);
+        
+        if (mat == target)
+            return true;
+        
+        rotateMat(mat);
+        
+        if (mat == target)
+            return true;
+        
+        return false;
+    }
+private:
+    void rotateMat(std::vector<std::vector<int>>& mat)
+    {      
+        transpose(mat);
+        for (std::vector<int>& row : mat)
+            std::reverse(row.begin(), row.end());
+    }
+    
+    void transpose(std::vector<std::vector<int>>& mat)
+    {
+        int N = mat.size();
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = i + 1; j < N; j++)
+            {
+                std::swap(mat[j][i], mat[i][j]);
+            }
+        }
+    }
+    
+    bool isSame(std::vector<std::vector<int>>& mat, std::vector<std::vector<int>>& target)
+    {
+        for (int i = 0; i < mat.size(); i++)
+        {
+            for (int j = 0; j < mat.size(); j++)
+            {
+                if (mat[i][j] != target[i][j])
+                    return false;
+            }
+        }
+        
+        return true;
+    }
+};

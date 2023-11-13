@@ -1,0 +1,15 @@
+https://www.hackerrank.com/challenges/strong-password/problem
+
+int minimumNumber(int n, string password)
+{
+    int res = 0;
+     
+    int special_char = (std::string::npos == password.find_first_of("!@#$%^&*()-+"));
+    int lower_case = (std::string::npos == password.find_first_of("abcdefghijklmnopqrstuvwxyz"));
+    int upper_case = (std::string::npos == password.find_first_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+    int number = (std::string::npos == password.find_first_of("0123456789"));
+     
+    res += (special_char + lower_case + upper_case + number);
+     
+    return (res > (6 - n) ? res : (6 - n));
+}

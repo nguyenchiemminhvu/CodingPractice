@@ -1,0 +1,33 @@
+class Solution 
+{
+public:
+    int minimumOperations(vector<int>& nums) 
+    {
+        std::priority_queue<int, std::vector<int>, std::greater<int>> pq;
+        
+        for (const int& n : nums)
+        {
+            pq.push(n);
+        }
+        
+        int count = 0;
+        int sum = 0;
+        while (!pq.empty())
+        {
+            int cur_min = pq.top();
+            pq.pop();
+            
+            if (cur_min == sum)
+            {
+                continue;
+            }
+            
+            cur_min -= sum;
+            sum += cur_min;
+            
+            count++;
+        }
+        
+        return count;
+    }
+};

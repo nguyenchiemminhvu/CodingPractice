@@ -1,0 +1,26 @@
+https://leetcode.com/problems/split-strings-by-separator/description/
+
+class Solution 
+{
+public:
+    vector<string> splitWordsBySeparator(vector<string>& words, char separator) 
+    {
+        std::vector<std::string> res;
+
+        for (std::string& word : words)
+        {
+            std::stringstream ss(word);
+            std::string substring;
+
+            while (std::getline(ss, substring, separator))
+            {
+                if (!substring.empty())
+                {
+                    res.push_back(substring);
+                }
+            }
+        }
+
+        return res;    
+    }
+};

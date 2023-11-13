@@ -1,0 +1,36 @@
+https://leetcode.com/problems/all-paths-from-source-to-target/description/
+
+class Solution 
+{
+public:
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) 
+    {
+        std::vector<std::vector<int>> res;
+        BFS(graph, 0, graph.size() - 1, res);
+        return res;
+    }
+private:
+    void BFS(const std::vector<std::vector<int>>& graph, int from, int to, std::vector<std::vector<int>>& res)
+    {
+        std::queue<std::vector<int>> Q;
+        Q.push({ from });
+
+        while (!Q.empty())
+        {
+            std::vector<int> cur = Q.front();
+            Q.pop();
+            if (cur.back() == to)
+            {
+                res.push_back(cur);
+                continue;
+            }
+
+            for (int n : graph[cur.back()])
+            {
+                cur.push_back(n);
+                Q.push(cur);
+                cur.pop_back();
+            }
+        }
+    }
+};

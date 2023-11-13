@@ -1,0 +1,16 @@
+https://leetcode.com/problems/check-if-all-as-appears-before-all-bs/
+
+class Solution 
+{
+public:
+    bool checkString(const string& s) 
+    {
+        size_t last_a = s.find_last_of('a');
+        if (last_a == std::string::npos)
+            return true;
+        
+        size_t first_b = s.find_first_of('b');
+        
+        return last_a < first_b;
+    }
+};

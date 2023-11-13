@@ -1,0 +1,30 @@
+https://leetcode.com/problems/take-gifts-from-the-richest-pile/description/
+
+class Solution 
+{
+public:
+    long long pickGifts(vector<int>& gifts, int k) 
+    {
+        std::priority_queue<int, std::vector<int>, std::less<int>> pq;
+        for (int g : gifts)
+        {
+            pq.push(g);
+        }
+
+        while (k)
+        {
+            int temp = pq.top();
+            pq.pop();
+            pq.push(sqrt(temp));
+            k--;
+        }
+
+        long long res = 0;
+        while (!pq.empty())
+        {
+            res += pq.top();
+            pq.pop();
+        }
+        return res;
+    }
+};

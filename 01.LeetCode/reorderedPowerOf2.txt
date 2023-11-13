@@ -1,0 +1,38 @@
+https://leetcode.com/problems/reordered-power-of-2/
+
+class Solution 
+{
+public:
+    bool reorderedPowerOf2(int n) 
+    {
+        std::vector<std::vector<int>> pow_of_2_freq;
+        int temp = 1;
+        for (int i = 0; i < 31; i++)
+        {
+            pow_of_2_freq.push_back(getFreq((temp << i)));
+        }
+        
+        std::vector<int> n_freq = getFreq(n);
+        for (int i = 0; i < pow_of_2_freq.size(); i++)
+        {
+            if (n_freq == pow_of_2_freq[i])
+                return true;
+        }
+        
+        return false;
+    }
+private:
+    std::vector<int> getFreq(int val)
+    {
+        std::vector<int> freq(10, 0);
+        while (val)
+        {
+            int digit = val % 10;
+            freq[digit]++;
+            
+            val /= 10;
+        }
+        
+        return freq;
+    }
+};

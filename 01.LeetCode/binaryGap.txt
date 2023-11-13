@@ -1,0 +1,25 @@
+https://leetcode.com/problems/binary-gap/
+
+class Solution 
+{
+public:
+    int binaryGap(int n) 
+    {
+        std::vector<char> pos;
+        char i = 0; 
+        while (n)
+        {
+            if (n & 1)
+                pos.push_back(i);
+            n >>= 1;
+            i++;
+        }
+        
+        int dist = 0;
+        for (int i = 1; i < pos.size(); i++)
+        {
+            dist = std::max(dist, pos[i] - pos[i - 1]);
+        }
+        return dist;
+    }
+};

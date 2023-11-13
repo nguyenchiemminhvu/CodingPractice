@@ -1,0 +1,41 @@
+https://leetcode.com/problems/make-the-string-great/
+
+class Solution 
+{
+public:
+    string makeGood(string& s) 
+    {
+        bool mark[101];
+        std::memset(mark, false, 101);
+        
+        for (int i = 1; i < s.length(); i++)
+        {
+            int right = i;
+            int left = i - 1;
+            while (left >= 0 && mark[left])
+                left--;
+            
+            if (left < 0)
+                continue;
+            
+            if 
+            (
+                ((s[left] | 32) == (s[right] | 32))
+             && ((std::isupper(s[left]) && std::islower(s[right])) || (std::islower(s[left]) && std::isupper(s[right])))
+            )
+            {
+                mark[left] = mark[right] = true;
+                right++;
+            }
+        }
+        
+        int is = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (!mark[i])
+                s[is++] = s[i];
+        }
+        
+        return std::string(s.begin(), s.begin() + is);
+    }
+};

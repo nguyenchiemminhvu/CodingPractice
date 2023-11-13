@@ -1,0 +1,28 @@
+https://leetcode.com/problems/cells-with-odd-values-in-a-matrix/
+
+class Solution 
+{
+public:
+    int oddCells(int m, int n, vector<vector<int>>& indices) 
+    {
+        std::vector<int> row_actions(m, 0);
+        std::vector<int> col_actions(n, 0);
+        
+        for (const std::vector<int>& i : indices)
+        {
+            row_actions[i[0]]++;
+            col_actions[i[1]]++;
+        }
+        
+        int count = 0;
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if ((row_actions[i] + col_actions[j]) & 1)
+                    count++;
+            }
+        }
+        return count;
+    }
+};

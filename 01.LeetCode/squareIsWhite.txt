@@ -1,0 +1,10 @@
+https://leetcode.com/problems/determine-color-of-a-chessboard-square/
+
+class Solution 
+{
+public:
+    bool squareIsWhite(const string& coordinates) 
+    {
+        return (coordinates[1] - 'a' + coordinates[0] - '1') & 1;
+    }
+};

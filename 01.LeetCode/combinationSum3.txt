@@ -1,0 +1,36 @@
+https://leetcode.com/problems/combination-sum-iii/
+
+class Solution 
+{
+public:
+    vector<vector<int>> combinationSum3(int k, int n) 
+    {
+        std::vector<std::vector<int>> res;
+        std::vector<int> temp;
+        generating(n, 0, k, 0, res, temp);
+        return res;
+    }
+private:
+    void generating(int n, int i, int k, int cur, std::vector<std::vector<int>>& res, std::vector<int>& temp)
+    {
+        if (n < 0)
+            return;
+        
+        if (i >= k)
+        {
+            if (n == 0)
+            {
+                res.push_back(temp);
+            }
+            
+            return;
+        }
+        
+        for (int j = cur + 1; j <= 9; j++)
+        {
+            temp.push_back(j);
+            generating(n - j, i + 1, k, j, res, temp);
+            temp.pop_back();
+        }
+    }
+};

@@ -1,0 +1,25 @@
+https://leetcode.com/problems/valid-palindrome-ii/
+
+class Solution 
+{
+public:
+    bool validPalindrome(const string& s) 
+    {
+        return palindromeUtil(s, 0, s.length() - 1, 1);
+    }
+private:
+    bool palindromeUtil(const std::string& s, int left, int right, int delTime)
+    {
+        if (left >= right)
+            return true;
+        
+        if (s[left] != s[right])
+        {
+            if (delTime <= 0)
+                return false;
+            return palindromeUtil(s, left + 1, right, delTime - 1) || palindromeUtil(s, left, right - 1, delTime - 1);
+        }
+        
+        return palindromeUtil(s, left + 1, right - 1, delTime);
+    }
+};

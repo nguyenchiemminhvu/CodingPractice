@@ -1,0 +1,86 @@
+https://leetcode.com/problems/shortest-bridge/description/
+
+class Solution 
+{
+public:
+    int shortestBridge(vector<vector<int>>& grid) 
+    {
+        std::vector<std::pair<int, int>> groupA;
+        std::vector<std::pair<int, int>> groupB;
+        bool foundA = false;
+        bool foundB = false;
+
+        for (int i = 0; i < grid.size(); i++)
+        {
+            if (foundA)
+                break;
+            
+            for (int j = 0; j < grid[i].size(); j++)
+            {
+                if (grid[i][j] == 1)
+                {
+                    DFS(grid, i, j, groupA);
+                    foundA = true;
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < grid.size(); i++)
+        {
+            if (foundB)
+                break;
+            
+            for (int j = 0; j < grid[i].size(); j++)
+            {
+                if (grid[i][j] == 1)
+                {
+                    DFS(grid, i, j, groupB);
+                    foundB = true;
+                    break;
+                }
+            }
+        }
+
+        for (std::pair<int, int> p : groupA)
+        {
+            cout << p.first << " " << p.second << endl;
+        }
+
+        int shortest = INT_MAX;
+        for (int i = 0; i < groupA.size(); i++)
+        {
+            for (int j = 0; j < groupB.size(); j++)
+            {
+                int dx = std::abs(groupA[i].first - groupB[j].first) - 1;
+                int dy = std::abs(groupA[i].second - groupB[j].second) - 1;
+
+                shortest = std::min(shortest, dx + dy);
+            }
+        }
+
+        return shortest + 1;
+    }
+private:
+    void DFS(std::vector<std::vector<int>>& grid, int r, int c, std::vector<std::pair<int, int>>& group)
+    {
+        if (!isValid(grid, r, c))
+            return;
+        
+        if (grid[r][c] == 0)
+            return;
+        
+        group.push_back({r, c});
+        grid[r][c] = 0;
+
+        DFS(grid, r - 1, c, group);
+        DFS(grid, r + 1, c, group);
+        DFS(grid, r, c - 1, group);
+        DFS(grid, r, c + 1, group);
+    }
+
+    bool isValid(const std::vector<std::vector<int>>& grid, int r, int c)
+    {
+        return r >= 0 && r < grid.size() && c >= 0 && c < grid[0].size();
+    }
+};

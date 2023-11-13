@@ -1,0 +1,40 @@
+https://leetcode.com/problems/height-checker/
+
+class Solution 
+{
+public:
+    int heightChecker(vector<int>& heights) 
+    {
+//         std::vector<int> expected(heights.begin(), heights.end());
+//         std::sort(expected.begin(), expected.end());
+        
+//         int count = 0;
+//         for (int i = 0; i < heights.size(); i++)
+//         {
+//             if (heights[i] != expected[i])
+//                 count++;
+//         }
+//         return count;
+        
+        int count = 0;
+        
+        int freq[101] = { 0 };
+        for (const int& h : heights)
+            freq[h]++;
+        
+        int ih = 0;
+        for (int i = 1; i <= 100; i++)
+        {
+            while (freq[i])
+            {
+                if (heights[ih] != i)
+                    count++;
+                
+                ih++;
+                freq[i]--;
+            }
+        }
+        
+        return count;
+    }
+};

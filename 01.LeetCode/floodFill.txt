@@ -1,0 +1,42 @@
+https://leetcode.com/problems/flood-fill/
+
+class Solution 
+{
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) 
+    {
+        if (image[sr][sc] == newColor)
+            return image;
+        
+        int curColor = image[sr][sc];
+        int rowDir[] = { 0, -1, 0, 1 };
+        int colDir[] = { -1, 0, 1, 0 };
+        
+        std::queue<std::pair<int, int>> Q;
+        Q.push({sr, sc});
+        
+        while (!Q.empty())
+        {
+            std::pair<int, int> cur = Q.front();
+            image[cur.first][cur.second] = newColor;
+            Q.pop();
+            
+            for (int i = 0; i < 4; i++)
+            {
+                std::pair<int, int> next(cur.first + rowDir[i], cur.second + colDir[i]);
+                if (inImageBoundary(image, next.first, next.second) 
+                 && image[next.first][next.second] == curColor)
+                {
+                    Q.push(next);
+                }
+            }
+        }
+        
+        return image;
+    }
+private:
+    bool inImageBoundary(const vector<vector<int>>& image, int r, int c)
+    {
+        return r >= 0 && r < image.size() && c >= 0 && c < image[0].size();
+    }
+};

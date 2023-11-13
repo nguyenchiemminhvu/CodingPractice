@@ -1,0 +1,50 @@
+https://leetcode.com/problems/most-common-word/
+
+class Solution 
+{
+public:
+    string mostCommonWord(const string& s, vector<string>& banned) 
+    {
+        std::unordered_map<std::string, int> freq;
+        
+        std::string temp;
+        for (char c : s)
+        {
+            if (std::isalpha(c) && c != ' ')
+            {
+                temp += (c | 32);
+            }
+            else
+            {
+                if (!temp.empty() && !isBanned(temp, banned))
+                    freq[temp]++;
+                temp = "";
+            }
+        }
+        
+        if (!temp.empty())
+            if (!isBanned(temp, banned))
+                freq[temp]++;
+        
+        int cur_freq = 0;
+        for (const std::pair<std::string, int>& p : freq)
+        {
+            if (cur_freq < p.second)
+            {
+                cur_freq = p.second;
+                temp = p.first;
+            }
+        }
+        return temp;
+    }
+private:
+    bool isBanned(const std::string& s, const std::vector<std::string>& banned)
+    {
+        for (const std::string& b : banned)
+        {
+            if (s.compare(b) == 0)
+                return true;
+        }
+        return false;
+    }
+};

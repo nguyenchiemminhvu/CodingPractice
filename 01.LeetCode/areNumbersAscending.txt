@@ -1,0 +1,42 @@
+https://leetcode.com/problems/check-if-numbers-are-ascending-in-a-sentence/
+
+class Solution 
+{
+public:
+    bool areNumbersAscending(string& s) 
+    {
+        int prev = -1;
+        int cur = -1;
+        
+        std::string temp;
+        for (const char& c : s)
+        {
+            if (std::isdigit(c))
+            {
+                temp += c;
+            }
+            else
+            {
+                if (!temp.empty())
+                {
+                    prev = cur;
+                    cur = std::stoi(temp.c_str());
+                    if (cur <= prev)
+                        return false;
+                    
+                    temp.clear();
+                }
+            }
+        }
+        
+        if (!temp.empty())
+        {
+            prev = cur;
+            cur = std::stoi(temp.c_str());
+            if (cur <= prev)
+                return false;
+        }
+        
+        return true;
+    }
+};

@@ -1,0 +1,39 @@
+https://leetcode.com/problems/sum-of-all-subset-xor-totals/
+
+class Solution 
+{
+public:
+    int subsetXORSum(vector<int>& nums) 
+    {
+        int res = 0;
+        std::vector<int> temp;
+        subsetsUtil(nums, temp, 0, res);
+        
+        return res;
+    }
+private:
+    void subsetsUtil(vector<int>& A, vector<int>& subset, int index, int& res)
+    {
+        // calculate xor of total
+        int x = 0;
+        for (const int& n : subset)
+            x ^= n;
+        res += x;
+        
+        for (int i = index; i < A.size(); i++) 
+        {
+
+            // include the A[i] in subset.
+            subset.push_back(A[i]);
+
+            // move onto the next element.
+            subsetsUtil(A, subset, i + 1, res);
+
+            // exclude the A[i] from subset and triggers
+            // backtracking.
+            subset.pop_back();
+        }
+
+        return;
+    }
+};

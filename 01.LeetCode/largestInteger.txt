@@ -1,0 +1,49 @@
+https://leetcode.com/problems/largest-number-after-digit-swaps-by-parity/
+
+class Solution 
+{
+public:
+    int largestInteger(int num) 
+    {
+        std::vector<int> arr;
+        while (num)
+        {
+            arr.push_back(num % 10);
+            num /= 10;
+        }
+        sortParity(arr);
+        std::reverse(arr.begin(), arr.end());
+        
+        for (const int& n : arr)
+        {
+            num = num * 10 + n;
+        }
+        return num;
+    }
+private:
+    void sortParity(std::vector<int>& arr)
+    {
+        std::vector<int> odd;
+        std::vector<int> even;
+        for (int i = 0; i < arr.size(); i++)
+        {
+            if (arr[i] & 1)
+                odd.push_back(arr[i]);
+            else
+                even.push_back(arr[i]);
+        }
+        
+        std::sort(odd.begin(), odd.end());
+        std::sort(even.begin(), even.end());
+        
+        int io = 0;
+        int ie = 0;
+        for (int i = 0; i < arr.size(); i++)
+        {
+            if (arr[i] & 1)
+                arr[i] = odd[io++];
+            else
+                arr[i] = even[ie++];
+        }
+    }
+};

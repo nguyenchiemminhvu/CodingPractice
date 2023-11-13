@@ -1,0 +1,44 @@
+https://leetcode.com/problems/decode-ways/
+
+class Solution 
+{
+public:
+    int numDecodings(const string& s) 
+    {
+        std::unordered_map<int, int> mem;
+        return generating(s, 0, mem);
+    }
+private:
+    int generating(const std::string& s, int i, std::unordered_map<int, int>& mem)
+    {
+        if (i >= s.length())
+            return 1;
+        
+        char c = s[i];
+        if (c == '0')
+            return 0;
+        
+        if (mem.find(i) != mem.end())
+            return mem[i];
+        
+        int num = generating(s, i + 1, mem);
+        if (i < s.length() - 1)
+        {
+            char next = s[i + 1];
+            if (c == '1')
+            {
+                num += generating(s, i + 2, mem);
+            }
+            else if (c == '2')
+            {
+                if (next <= '6')
+                {
+                    num += generating(s, i + 2, mem);
+                }
+            }
+        }
+        
+        mem[i] = num;
+        return num;
+    }
+};

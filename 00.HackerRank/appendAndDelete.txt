@@ -1,0 +1,24 @@
+https://www.hackerrank.com/challenges/append-and-delete/problem
+
+string appendAndDelete(string s, string t, int k)
+{
+    if (s.length() + t.length() <= k)
+        return "Yes";
+      
+    int prefix_length = 0;
+    for (int i = 0; i < s.length() && i < t.length(); i++)
+    {
+        if (s[i] == t[i])
+            prefix_length++;
+        else
+            break;
+    }
+      
+    int diff = k - (s.length() + t.length()) + prefix_length * 2;
+    if (diff >= 0 && diff % 2 == 0)
+    {
+        return "Yes";
+    }
+          
+    return "No";
+}

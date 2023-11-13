@@ -1,0 +1,32 @@
+https://leetcode.com/problems/subsets/
+
+class Solution 
+{
+public:
+    vector<vector<int>> subsets(vector<int>& nums) 
+    {
+        std::vector<std::vector<int>> res;
+        
+        int N = pow(2, nums.size()) - 1;
+        for (int mask = 0; mask <= N; mask++)
+        {
+            std::vector<int> subset;
+            int temp = mask;
+            int i = 1;
+            while (temp)
+            {
+                if (temp & 1)
+                {
+                    subset.push_back(nums[nums.size() - i]);
+                }
+                
+                i++;
+                temp >>= 1;
+            }
+            
+            res.push_back(subset);
+        }
+        
+        return res;
+    }
+};

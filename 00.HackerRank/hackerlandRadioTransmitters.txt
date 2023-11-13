@@ -1,0 +1,27 @@
+https://www.hackerrank.com/challenges/hackerland-radio-transmitters/problem
+
+int hackerlandRadioTransmitters(vector<int> pos, int k)
+{
+    std::sort(pos.begin(), pos.end());
+     
+    int count = 0;
+     
+    int i = 0;
+    while (i < pos.size())
+    {
+        count++;
+         
+        int cur = pos[i] + k;
+        while (i < pos.size() && pos[i] <= cur)
+            i++;
+         
+        i--;
+        cout << i << endl;
+         
+        int far = pos[i] + k;
+        while (i < pos.size() && pos[i] <= far)
+            i++;
+    }
+     
+    return count;
+}

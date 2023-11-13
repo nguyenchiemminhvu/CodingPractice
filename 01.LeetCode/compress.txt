@@ -1,0 +1,48 @@
+https://leetcode.com/problems/string-compression/
+
+class Solution 
+{
+public:
+    int compress(vector<char>& chars) 
+    {
+        chars.push_back(' ');
+        
+        std::vector<std::pair<int, int>> res;
+        char cur = chars[0];
+        int count = 1;
+        
+        for (int i = 1; i < chars.size(); i++)
+        {
+            if (chars[i] == ' ')
+            {
+                res.push_back({cur, count});
+                break;
+            }
+            
+            if (chars[i] == cur)
+            {
+                count++;
+            }
+            else
+            {
+                res.push_back({cur, count});
+                cur = chars[i];
+                count = 1;
+            }
+        }
+        
+        chars.clear();
+        for (int i = 0; i < res.size(); i++)
+        {
+            chars.push_back(res[i].first);
+            if (res[i].second > 1)
+            {
+                std::string temp = std::to_string(res[i].second);
+                for (const char& c : temp)
+                    chars.push_back(c);
+            }
+        }
+        
+        return chars.size();
+    }
+};

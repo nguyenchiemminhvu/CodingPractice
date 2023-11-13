@@ -1,0 +1,23 @@
+https://leetcode.com/problems/destination-city/
+
+class Solution 
+{
+public:
+    string destCity(vector<vector<string>>& paths) 
+    {
+        std::unordered_map<std::string, std::vector<std::string>> checker;
+        
+        for (const std::vector<std::string>& path : paths)
+        {
+            checker[path[0]].push_back(path[1]);
+        }
+        
+        for (const std::vector<std::string>& path : paths)
+        {
+            if (checker[path[1]].size() == 0)
+                return path[1];
+        }
+        
+        return "";
+    }
+};

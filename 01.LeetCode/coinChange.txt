@@ -1,0 +1,43 @@
+https://leetcode.com/problems/coin-change/
+
+class Solution 
+{
+public:
+    int coinChange(vector<int>& coins, int amount) 
+    {
+        // std::sort(coins.begin(), coins.end());
+        // int res = trying(coins, amount, coins.size() - 1, 0);
+        // return res == INT_MAX ? -1 : res;
+        
+        std::sort(coins.begin(), coins.end());
+        std::vector<int> dp(amount + 1, INT_MAX);
+        dp[0] = 0;
+        
+        for (int i = 1; i < dp.size(); i++)
+        {
+            for (int j = 0; j < coins.size(); j++)
+            {
+                if (coins[j] <= i)
+                {
+                    int temp = dp[i - coins[j]];
+                    if (temp != INT_MAX && temp + 1 < dp[i])
+                        dp[i] = temp + 1;
+                }
+            }
+        }
+        
+        return dp[dp.size() - 1] == INT_MAX ? -1 : dp[dp.size() - 1];
+    }
+private:
+    int trying(std::vector<int>& coins, int amount, int i, int n)
+    {
+        if (amount < 0)
+            return INT_MAX;
+        if (i < 0)
+            return INT_MAX;
+        if (amount == 0)
+            return n;
+        
+        return std::min(trying(coins, amount - coins[i], i, n + 1), trying(coins, amount, i - 1, n));
+    }
+};

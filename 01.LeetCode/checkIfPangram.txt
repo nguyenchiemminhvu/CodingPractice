@@ -1,0 +1,23 @@
+https://leetcode.com/problems/check-if-the-sentence-is-pangram/
+
+class Solution 
+{
+public:
+    bool checkIfPangram(const string& s) 
+    {
+        int freq[26];
+        std::memset(freq, 0, 26 * sizeof(int));
+        for (const char& c : s)
+        {
+            freq[c - 'a']++;
+        }
+        
+        for (int i = 0; i < 26; i++)
+        {
+            if (freq[i] == 0)
+                return false;
+        }
+        
+        return true;
+    }
+};

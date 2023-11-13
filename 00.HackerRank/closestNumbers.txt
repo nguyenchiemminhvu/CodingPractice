@@ -1,0 +1,28 @@
+https://www.hackerrank.com/challenges/closest-numbers/problem
+
+std::vector<int> closestNumbers(std::vector<int> arr)
+{
+    std::vector<int> min_diff_pairs;
+     
+    std::sort(arr.begin(), arr.end());
+     
+    int min_diff = 10e7 + 1;
+    for (int i = 1; i < arr.size(); i++)
+    {
+        int cur_diff = arr[i] - arr[i - 1];
+        if (cur_diff && cur_diff < min_diff)
+        {
+            min_diff = cur_diff;
+            min_diff_pairs = std::vector<int>();
+            min_diff_pairs.push_back(arr[i - 1]);
+            min_diff_pairs.push_back(arr[i]);
+        }
+        else if (cur_diff && cur_diff == min_diff)
+        {
+            min_diff_pairs.push_back(arr[i - 1]);
+            min_diff_pairs.push_back(arr[i]);
+        }
+    }
+     
+    return min_diff_pairs;
+}

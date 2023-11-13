@@ -1,0 +1,84 @@
+https://leetcode.com/problems/network-delay-time/
+
+class Solution 
+{
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) 
+    {
+        std::unordered_map<int, std::vector<std::pair<int, int>>> graph;
+        for (const std::vector<int>& time : times)
+        {
+            graph[time[0] - 1].push_back( { time[1] - 1, time[2] } );
+        }
+        
+        std::vector<int> dist(n, INT_MAX);
+        dist[k - 1] = 0;
+        
+        std::vector<bool> visited(n, false);
+        visited[k - 1] = true;
+        
+        std::queue<int> Q;
+        Q.push(k - 1);
+        
+        while (!Q.empty())
+        {
+            int u = Q.front();
+            Q.pop();
+            
+            visited[u] = true;
+            
+            for (int i = 0; i < graph[u].size(); i++)
+            {
+                int v = graph[u][i].first;
+                int w = graph[u][i].second;
+                
+                if (!visited[v])
+                    Q.push(v);
+                
+                if (dist[u] != INT_MAX && dist[u] + w < dist[v])
+                {
+                    dist[v] = dist[u] + w;
+                    Q.push(v);
+                }
+            }
+        }
+        
+        // DFS(graph, dist, visited, n, k - 1);
+        
+        int max_time = 0;
+        for (const int& n : dist)
+        {
+            cout << n << " ";
+            max_time = std::max(max_time, n);
+        }
+        cout << endl;
+        
+        return max_time == INT_MAX ? -1 : max_time;
+    }
+private:
+    void DFS(std::unordered_map<int, std::vector<std::pair<int, int>>>& G, std::vector<int>& dist, std::vector<bool>& visited, int num, int cur)
+    {
+        if (cur < 0 || cur >= num)
+            return;
+        
+        for (int i = 0; i < G[cur].size(); i++)
+        {
+            int next = G[cur][i].first;
+            int weight = G[cur][i].second;
+            
+            if (!visited[next])
+            {
+                visited[next] = true;
+                dist[next] = dist[cur] + weight;
+                DFS(G, dist, visited, num, next);
+            }
+            else if (dist[cur] != INT_MAX && dist[cur] + weight < dist[next])
+            {
+                cout << cur << " " << next << " " << dist[next] << endl;
+                dist[next] = dist[cur] + weight;
+                cout << cur << " " << next << " " << dist[next] << endl;
+                DFS(G, dist, visited, num, next);
+            }
+        }
+    }
+};

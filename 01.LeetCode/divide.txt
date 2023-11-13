@@ -1,0 +1,19 @@
+https://leetcode.com/problems/divide-two-integers/
+
+class Solution 
+{
+public:
+    int divide(int a, int b) 
+    {
+        long long aa = a;
+        long long bb = b;
+        
+        double cc = aa / bb;
+        if (cc < INT_MIN)
+            return INT_MIN;
+        if (cc > INT_MAX)
+            return INT_MAX;
+        
+        return cc;
+    }
+};

@@ -1,0 +1,22 @@
+https://leetcode.com/problems/maximum-number-of-pairs-in-array/
+
+class Solution 
+{
+public:
+    vector<int> numberOfPairs(vector<int>& nums) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        int num_pairs = 0;
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (nums[i] == nums[i - 1])
+            {
+                num_pairs++;
+                i++;
+            }
+        }
+        
+        return { num_pairs, (int)nums.size() - num_pairs * 2 };
+    }
+};

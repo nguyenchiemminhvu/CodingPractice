@@ -1,0 +1,40 @@
+https://leetcode.com/problems/baseball-game/submissions/
+
+class Solution 
+{
+public:
+    int calPoints(vector<string>& ops) 
+    {
+        std::vector<int> scores;
+        
+        int temp;
+        for (const std::string& op : ops)
+        {
+            if (op[0] == '+')
+            {
+                temp = scores[scores.size() - 1] + scores[scores.size() - 2];
+                scores.push_back(temp);
+            }
+            else if (op[0] == 'D')
+            {
+                temp = scores[scores.size() - 1] * 2;
+                scores.push_back(temp);
+            }
+            else if (op[0] == 'C')
+            {
+                scores.pop_back();
+            }
+            else
+            {
+                temp = std::stoi(op);
+                scores.push_back(temp);
+            }
+        }
+        
+        int sum = 0;
+        for (const int& n : scores)
+            sum += n;
+        
+        return sum;
+    }
+};

@@ -1,0 +1,35 @@
+https://leetcode.com/problems/furthest-building-you-can-reach/
+
+class Solution 
+{
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) 
+    {
+        heights.push_back(INT_MAX);
+        return movingBT(heights, 0, bricks, ladders);
+    }
+private:
+    int movingBT(const std::vector<int>& h, int i, int bricks, int ladders)
+    {
+        if (i >= h.size() - 1)
+            return h.size() - 2;
+        
+        if (h[i] >= h[i + 1])
+        {
+            return movingBT(h, i + 1, bricks, ladders);
+        }
+        else
+        {
+            int res = i;
+            if (ladders > 0)
+            {
+                res = std::max(res, movingBT(h, i + 1, bricks, ladders - 1));
+            }
+            if (h[i + 1] - h[i] <= bricks)
+            {
+                res = std::max(res, movingBT(h, i + 1, bricks - (h[i + 1] - h[i]), ladders));
+            }
+            return res;
+        }
+    }
+};

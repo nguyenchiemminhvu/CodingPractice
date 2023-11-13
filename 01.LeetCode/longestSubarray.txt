@@ -1,0 +1,47 @@
+https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/
+
+class Solution 
+{
+public:
+    int longestSubarray(vector<int>& nums) 
+    {
+        int cur_max = 0;
+        
+        std::vector<std::vector<int>> segments;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[i] == 1)
+            {
+                int start = i;
+                int end = start;
+                while (end < nums.size() && nums[end] == 1)
+                {
+                    end++;
+                }
+                end--;
+                
+                cur_max = std::max(cur_max, end - start + 1);
+                segments.push_back({start, end});
+                
+                i = end;
+            }
+        }
+        
+        if (cur_max == nums.size())
+            return nums.size() - 1;
+        
+        for (int i = 1; i < segments.size(); i++)
+        {
+            if (segments[i][0] - segments[i - 1][1] <= 2)
+            {
+                cur_max = std::max(
+                    cur_max, 
+                    segments[i - 1][1] - segments[i - 1][0] + 1
+                  + segments[i][1] - segments[i][0] + 1
+                );
+            }
+        }
+        
+        return cur_max;
+    }
+};

@@ -1,0 +1,36 @@
+class Solution 
+{
+public:
+    vector<vector<int>> findMatrix(vector<int>& nums) 
+    {
+        std::vector<std::vector<int>> res;
+        
+        std::sort(nums.begin(), nums.end());
+        std::vector<bool> visited(nums.size(), false);
+        int used_elements = 0;
+        while (used_elements < nums.size())
+        {
+            std::vector<int> row;
+            buildRow(nums, visited, used_elements, row);
+            res.push_back(row);
+        }
+        
+        return res;
+    }
+private:
+    void buildRow(const std::vector<int>& nums, std::vector<bool>& visited, int& used_elements, std::vector<int>& row)
+    {
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (visited[i])
+                continue;
+            
+            if (row.empty() || nums[i] != row.back())
+            {
+                row.push_back(nums[i]);
+                visited[i] = true;
+                used_elements++;
+            }
+        }
+    }
+};

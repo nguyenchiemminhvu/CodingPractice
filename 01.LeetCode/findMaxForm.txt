@@ -1,0 +1,56 @@
+https://leetcode.com/problems/ones-and-zeroes/
+
+class Solution 
+{
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) 
+    {
+        std::vector<std::pair<int, int>> pairs;
+        for (const std::string& s : strs)
+        {
+            int zero = 0;
+            int one = 0;
+            for (const char& c : s)
+            {
+                if (c == '0')
+                    zero++;
+                else
+                    one++;
+            }
+            pairs.push_back( { zero, one } );
+        }
+        
+        // return maxUtil(pairs, m, n, 0, 0);
+        
+        std::vector<std::vector<int>> dp(m + 1, std::vector<int>(n + 1, 0));
+        for (const std::pair<int, int>& p : pairs)
+        {
+            for (int i = m; i - p.first >= 0; i--)
+            {
+                for (int j = n; j - p.second >= 0; j--)
+                {
+                    dp[i][j] = std::max(dp[i][j], dp[i - p.first][j - p.second] + 1);
+                }
+            }
+        }
+        
+        return dp[m][n];
+    }
+private:
+    int maxUtil(const std::vector<std::pair<int, int>>& pairs, int m, int n, int i, int res)
+    {
+        if (m < 0 || n < 0)
+            return 0;
+        
+        if (i >= pairs.size())
+            return res;
+        
+        if (m - pairs[i].first < 0 || n - pairs[i].second < 0)
+            return maxUtil(pairs, m, n, i + 1, res);
+        
+        return std::max(
+            maxUtil(pairs, m, n, i + 1, res), 
+            maxUtil(pairs, m - pairs[i].first, n - pairs[i].second, i + 1, res + 1)
+        );
+    }
+};

@@ -1,0 +1,36 @@
+https://leetcode.com/problems/minimum-deletions-to-make-character-frequencies-unique/
+
+class Solution 
+{
+public:
+    int minDeletions(const string& s) 
+    {
+        std::vector<int> freq(26, 0);
+        for (const char& c : s)
+        {
+            freq[c - 'a']++;
+        }
+        
+        std::sort(freq.begin(), freq.end(), std::greater<int>());
+        
+        int res = 0;
+        for (int i = 1; i < freq.size(); i++)
+        {
+            if (freq[i] == 0)
+                break;
+            
+            if (freq[i] == freq[i - 1])
+            {
+                int j = i;
+                while (j < freq.size() && freq[j] == freq[i - 1])
+                {
+                    res++;
+                    freq[j]--;
+                    j++;
+                }
+            }
+        }
+        
+        return res;
+    }
+};

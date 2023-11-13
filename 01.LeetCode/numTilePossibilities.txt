@@ -1,0 +1,32 @@
+https://leetcode.com/problems/letter-tile-possibilities/description/
+
+class Solution 
+{
+public:
+    int numTilePossibilities(const string& tiles) 
+    {
+        std::set<std::string> S;
+        int len = tiles.length();
+        int n = (1 << len) - 1;
+
+        for (int mask = 1; mask <= n; mask++)
+        {
+            std::string temp;
+            for (int i = 0; i < len; i++)
+            {
+                if (mask & (1 << i))
+                {
+                    temp += tiles[i];
+                }
+            }
+
+            std::sort(temp.begin(), temp.end());
+            do
+            {
+                S.insert(temp);
+            }while (std::next_permutation(temp.begin(), temp.end()));
+        }
+
+        return S.size();
+    }
+};

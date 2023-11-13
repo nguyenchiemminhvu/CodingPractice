@@ -1,0 +1,16 @@
+https://leetcode.com/problems/number-of-segments-in-a-string/
+
+class Solution 
+{
+public:
+    int countSegments(string s) 
+    {
+        std::stringstream ss(s);
+        int count = 0;
+        while (ss >> s)
+        {
+            count++;
+        }
+        return count;
+    }
+};

@@ -1,0 +1,70 @@
+https://leetcode.com/problems/equal-sum-arrays-with-minimum-number-of-operations/description/
+
+class Solution 
+{
+public:
+    int minOperations(vector<int>& nums1, vector<int>& nums2) 
+    {
+        if (nums1.size() > nums2.size())
+            nums1.swap(nums2);
+        size_t buf[4] = { nums1.size(), nums1.size() * 6, nums2.size(), nums2.size() * 6 };
+        if (buf[2] > buf[1])
+            return -1;
+
+        int s1 = 0;
+        int s2 = 0;
+        for (int n : nums1)
+            s1 += n;
+        for (int n : nums2)
+            s2 += n;
+
+        if (s1 < s2)
+        {
+            nums1.swap(nums2);
+            std::swap(s1, s2);
+        }
+
+        std::sort(nums1.begin(), nums1.end(), std::greater<int>());
+        std::sort(nums2.begin(), nums2.end());
+
+        int count = 0;
+        int diff = s1 - s2;
+        int i1 = 0, i2 = 0;
+        while (i1 < nums1.size() && i2 < nums2.size() && diff > 0)
+        {
+            int d1 = nums1[i1] - 1;
+            int d2 = 6 - nums2[i2];
+
+            if (d1 >= d2)
+            {
+                diff -= d1;
+                count++;
+                i1++;
+            }
+            else
+            {
+                diff -= d2;
+                count++;
+                i2++;
+            }
+        }
+
+        while (i1 < nums1.size() && diff > 0)
+        {
+            int d1 = nums1[i1] - 1;
+            diff -= d1;
+            count++;
+            i1++;
+        }
+
+        while (i2 < nums2.size() && diff > 0)
+        {
+            int d2 = 6 - nums2[i2];
+            diff -= d2;
+            count++;
+            i2++;
+        }
+
+        return count;
+    }
+};

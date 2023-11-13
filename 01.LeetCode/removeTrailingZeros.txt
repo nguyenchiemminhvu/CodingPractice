@@ -1,0 +1,16 @@
+https://leetcode.com/problems/remove-trailing-zeros-from-a-string/description/
+
+class Solution 
+{
+public:
+    string removeTrailingZeros(const string& num) 
+    {
+        size_t found_non_zero = num.find_last_not_of("0");
+        if (found_non_zero == std::string::npos)
+        {
+            return num;
+        }
+
+        return std::string(num.begin(), num.begin() + found_non_zero + 1);
+    }
+};

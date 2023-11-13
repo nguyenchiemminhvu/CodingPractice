@@ -1,0 +1,63 @@
+https://leetcode.com/problems/coin-change-2/
+
+/*
+	0	1	2	3	4	5
+1	1	1	1	1	1	1
+2	1	1	2	2	3	3
+5	1	1	2	2	3	4
+*/
+
+class Solution 
+{
+public:
+    int change(int amount, vector<int>& coins) 
+    {
+        // return generating(coins, amount, 0);
+        
+        std::vector<std::vector<int>> dp(coins.size(), std::vector<int>(amount + 1, 0));
+        for (int i = 0; i < coins.size(); i++)
+        {
+            dp[i][0] = 1;
+        }
+        
+        for (int i = 0; i <= amount; i++)
+        {
+            if (i % coins[0] == 0)
+            {
+                dp[0][i] = 1;
+            }
+        }
+        
+        for (int i = 1; i < coins.size(); i++)
+        {
+            for (int j = 1; j <= amount; j++)
+            {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= coins[i])
+                    dp[i][j] += dp[i][j - coins[i]];
+            }
+        }
+        
+        return dp[coins.size() - 1][amount];
+    }
+private:
+    int generating(const std::vector<int>& coins, int amount, int i)
+    {
+        if (amount < 0)
+            return 0;
+        
+        if (amount == 0)
+            return 1;
+        
+        if (i >= coins.size())
+            return 0;
+        
+        int num = 0;
+        for (int j = i; j < coins.size(); j++)
+        {
+            num += generating(coins, amount - coins[j], j);
+        }
+        
+        return num;
+    }
+};

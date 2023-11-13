@@ -1,0 +1,73 @@
+https://leetcode.com/problems/perfect-squares/
+
+class Solution 
+{
+public:
+    int numSquares(int n) 
+    {
+        // return generating(n, 0);
+        
+        int start = sqrt(n);
+        std::vector<int> nums;
+        while (start)
+        {
+            nums.push_back(start * start);
+            start--;
+        }
+        std::reverse(nums.begin(), nums.end());
+        
+        // return minCoinChangeBacktrack(nums, 0, n, 0);
+        return minCoinChangeDP(nums, n);
+    }
+private:
+    int generating(int n, int res)
+    {
+        if (n == 0)
+            return res;
+        
+        int start = sqrt(n);
+        int num = INT_MAX;
+        for (int i = start; i >= 1; i--)
+        {
+            num = std::min(num, generating(n - i * i, res + 1));
+        }
+        return num;
+    }
+    
+    int minCoinChangeBacktrack(const vector<int>& nums, int i, int target, int len)
+    {
+        if (target == 0)
+            return len;
+        
+        if (target < 0 || i >= nums.size())
+            return INT_MAX;
+        
+        return std::min(
+            minCoinChangeBacktrack(nums, i + 1, target, len),
+            minCoinChangeBacktrack(nums, i, target - nums[i], len + 1)
+        );
+    }
+    
+    int minCoinChangeDP(const std::vector<int>& nums, int target)
+    {
+        std::vector<int> dp(target + 1, INT_MAX);
+        dp[0] = 0;
+        
+        for (int i = 1; i <= target; i++)
+        {
+            for (int j = 0; j < nums.size(); j++)
+            {
+                if (nums[j] <= i)
+                {
+                    int temp = dp[i - nums[j]];
+                    if (temp != INT_MAX && temp + 1 < dp[i])
+                    {
+                        dp[i] = temp + 1;
+                    }
+                }
+            }
+        }
+        
+        return dp.back();
+    }
+};

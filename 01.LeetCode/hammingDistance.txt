@@ -1,0 +1,20 @@
+https://leetcode.com/problems/hamming-distance/
+
+class Solution 
+{
+public:
+    int hammingDistance(int x, int y) 
+    {
+        int dist = 0;
+
+        // The ^ operators sets to 1 only the bits that are different
+        for (unsigned val = x ^ y; val > 0; ++dist)
+        {
+            // We then count the bit set to 1 using the Peter Wegner way
+            val = val & (val - 1); // Set to zero val's lowest-order 1
+        }
+
+        // Return the number of differing bits
+        return dist;
+    }
+};

@@ -1,0 +1,76 @@
+https://leetcode.com/problems/number-of-valid-words-in-a-sentence/
+
+class Solution 
+{
+public:
+    int countValidWords(std::string& s) 
+    {
+        int count = 0;
+        s += ' ';
+        std::string temp;
+        for (const char& c : s)
+        {
+            if (c == ' ')
+            {
+                if (checking(temp))
+                {
+                    count++;
+                }
+                
+                temp.clear();
+            }
+            else
+            {
+                temp += c;
+            }
+        }
+        
+        return count;
+    }
+private:
+    bool checking(const std::string& s)
+    {
+        if (s.empty())
+            return false;
+        
+        int freq[256];
+        std::memset(freq, 0, 256 * sizeof(int));
+        
+        for (const char& c : s)
+        {
+            freq[c]++;
+        }
+        
+        for (char c = '0'; c <= '9'; c++)
+        {
+            if (freq[c])
+                return false;
+        }
+        
+        if (freq['-'] > 1)
+            return false;
+        
+        if (freq['-'] == 1)
+        {
+            if (s[0] == '-' || s[s.length() - 1] == '-')
+                return false;
+            
+            size_t found_hyphen = s.find_first_of('-');
+            if (!std::isalpha(s[found_hyphen - 1]) || !std::isalpha(s[found_hyphen + 1]))
+                return false;
+        }
+        
+        int count_punc = freq[','] + freq['.'] + freq['!'];
+        if (count_punc > 1)
+            return false;
+        
+        if (count_punc == 1)
+        {
+            size_t found_punc = s.find_first_of(",.!");
+            if (found_punc != std::string::npos && found_punc < s.length() - 1)
+                return false;
+        }
+        
+        return true;
+    }
+};

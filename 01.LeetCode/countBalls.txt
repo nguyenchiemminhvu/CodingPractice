@@ -1,0 +1,35 @@
+https://leetcode.com/problems/maximum-number-of-balls-in-a-box/
+
+class Solution 
+{
+public:
+    int countBalls(int low, int high) 
+    {
+        std::unordered_map<int, int> freq;
+        for (int i = low; i <= high; i++)
+        {
+            freq[sumDigits(i)]++;
+        }
+        
+        int ma = 0;
+        for (const auto& p : freq)
+        {
+            if (p.second > ma)
+            {
+                ma = p.second;
+            }
+        }
+        return ma;
+    }
+private:
+    int sumDigits(int n)
+    {
+        int s = 0;
+        while (n)
+        {
+            s += (n % 10);
+            n /= 10;
+        }
+        return s;
+    }
+};

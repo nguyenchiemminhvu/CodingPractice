@@ -1,0 +1,25 @@
+https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/
+
+class Solution 
+{
+public:
+    int maxDepth(const string& s) 
+    {
+        int level = 0;
+        int maxLevel = 0;
+        for (const char& c : s)
+        {
+            if (c == '(')
+            {
+                level++;
+                maxLevel = std::max(maxLevel, level);
+            }
+            else if (c == ')')
+            {
+                level--;
+            }
+        }
+        
+        return maxLevel;
+    }
+};

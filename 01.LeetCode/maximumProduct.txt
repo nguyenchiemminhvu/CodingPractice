@@ -1,0 +1,15 @@
+https://leetcode.com/problems/maximum-product-of-three-numbers/submissions/
+
+class Solution 
+{
+public:
+    int maximumProduct(vector<int>& nums) 
+    {
+        if (nums.size() == 3)
+            return nums[0] * nums[1] * nums[2];
+        
+        std::sort(nums.begin(), nums.end(), std::greater<int>());
+        
+        return std::max(nums[0] * nums[1] * nums[2], nums[0] * nums[nums.size() - 1] * nums[nums.size() - 2]);
+    }
+};

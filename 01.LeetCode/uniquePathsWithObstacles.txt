@@ -1,0 +1,76 @@
+https://leetcode.com/problems/unique-paths-ii/
+
+class Solution 
+{
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& grid) 
+    {
+        // std::vector<std::pair<int, int>> move = { {1, 0}, {0, 1} };
+        // int count = 0;
+        // trying(grid, move, std::make_pair<int, int>(0, 0), count);
+        // return count;
+        
+        std::vector<std::vector<int>> dp(grid.size(), std::vector<int>(grid[0].size(), 0));
+        if (grid[0][0] == 1)
+            dp[0][0] = 0;
+        else
+            dp[0][0] = 1;
+        
+        for (int i = 1; i < grid.size(); i++)
+        {
+            if (grid[i][0] == 1)
+                dp[i][0] = 0;
+            else
+                dp[i][0] = dp[i - 1][0];
+        }
+        
+        for (int i = 1; i < grid[0].size(); i++)
+        {
+            if (grid[0][i] == 1)
+                dp[0][i] = 0;
+            else
+                dp[0][i] = dp[0][i - 1];
+        }
+        
+        for (int i = 1; i < grid.size(); i++)
+        {
+            for (int j = 1; j < grid[0].size(); j++)
+            {
+                if (grid[i][j] == 1)
+                    dp[i][j] = 0;
+                else
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        
+        return dp[grid.size() - 1][grid[0].size() - 1];
+    }
+private:
+    void trying(const std::vector<std::vector<int>>& grid, const std::vector<std::pair<int, int>>& move, std::pair<int, int> cur, int& count)
+    {
+        if (cur.first < 0 || cur.first >= grid.size() || cur.second < 0 || cur.second >= grid[0].size())
+        {
+            return;
+        }
+        
+        if (grid[cur.first][cur.second] == 1)
+        {
+            return;
+        }
+        
+        if (cur.first == grid.size() - 1 && cur.second == grid[0].size() - 1)
+        {
+            count++;
+            return;
+        }
+        
+        for (int i = 0; i < move.size(); i++)
+        {
+            std::pair<int, int> next;
+            next.first = cur.first + move[i].first;
+            next.second = cur.second + move[i].second;
+            
+            trying(grid, move, next, count);
+        }
+    }
+};

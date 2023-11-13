@@ -1,0 +1,36 @@
+https://leetcode.com/problems/find-a-corresponding-node-of-a-binary-tree-in-a-clone-of-that-tree/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution 
+{
+public:
+    TreeNode* getTargetCopy(TreeNode* original, TreeNode* cloned, TreeNode* target) 
+    {
+        TreeNode* res = nullptr;
+        findCopy(original, cloned, target, res);
+        return res;
+    }
+private:
+    void findCopy(TreeNode* original, TreeNode* cloned, TreeNode* target, TreeNode*& res)
+    {
+        if (!original)
+            return;
+        
+        findCopy(original->left, cloned->left, target, res);
+        if (original == target)
+        {
+            res = cloned;
+            return;
+        }
+        findCopy(original->right, cloned->right, target, res);
+    }
+};

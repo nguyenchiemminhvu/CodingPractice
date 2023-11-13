@@ -1,0 +1,51 @@
+https://leetcode.com/problems/two-sum-iv-input-is-a-bst/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution 
+{
+public:
+    bool findTarget(TreeNode* root, int k) 
+    {
+        return findUtil(root, root, k);
+    }
+private:
+    bool findUtil(TreeNode* root, TreeNode* traveler, int k)
+    {
+        if (!traveler)
+            return false;
+        
+        if (traveler->val * 2 != k)
+        {
+            if (findNodeWithVal(root, k - traveler->val))
+                return true;
+        }
+        
+        return findUtil(root, traveler->left, k) || findUtil(root, traveler->right, k);
+    }
+    
+    TreeNode* findNodeWithVal(TreeNode* root, int val)
+    {
+        TreeNode* traveler = root;
+        while (traveler)
+        {
+            if (val == traveler->val)
+                return traveler;
+            if (val < traveler->val)
+                traveler = traveler->left;
+            else
+                traveler = traveler->right;
+        }
+        
+        return traveler;
+    }
+};

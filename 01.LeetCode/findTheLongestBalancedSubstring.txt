@@ -1,0 +1,28 @@
+class Solution 
+{
+public:
+    int findTheLongestBalancedSubstring(string& s) 
+    {
+        int res = 0;
+        int cur_pos = 0;
+        while (cur_pos < s.length())
+        {
+            int count_zero = 0;
+            int count_one = 0;
+            while (cur_pos < s.length() && s[cur_pos] == '0')
+            {
+                count_zero++;
+                cur_pos++;
+            }
+            while (cur_pos < s.length() && s[cur_pos] == '1')
+            {
+                count_one++;
+                cur_pos++;
+            }
+            
+            res = std::max(res, std::min(count_zero, count_one) * 2);
+        }
+        
+        return res;
+    }
+};

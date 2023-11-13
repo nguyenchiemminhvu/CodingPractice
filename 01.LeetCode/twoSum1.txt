@@ -1,0 +1,36 @@
+https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+
+class Solution 
+{
+public:
+    vector<int> twoSum(vector<int>& nums, int target) 
+    {
+        for (int i = 0; i < nums.size(); i++)
+        {
+            int rest = target - nums[i];
+            if (rest < nums[i])
+                break;
+            if (rest == nums[i])
+                return { i + 1, i + 2 };
+            else
+            {
+                int found = binarySearch(nums, rest, i);
+                if (found != -1)
+                {
+                    return { i + 1, found + 1 };
+                }
+            }
+        }
+        
+        return { -1, - 1 };
+    }
+private:
+    int binarySearch(const std::vector<int>& sorted, int val, int start)
+    {
+        auto it = std::lower_bound(sorted.begin() + start, sorted.end(), val);
+        if (it == sorted.end() || *it != val)
+            return -1;
+        
+        return std::distance(sorted.begin(), it);
+    }
+};

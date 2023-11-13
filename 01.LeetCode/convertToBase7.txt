@@ -1,0 +1,27 @@
+https://leetcode.com/problems/base-7/
+
+class Solution 
+{
+public:
+    string convertToBase7(int num) 
+    {
+        if (num == 0)
+            return "0";
+        
+        bool isNegative = (num < 0);
+        num = num * (1 - isNegative * 2);
+        
+        std::string res;
+        while (num)
+        {
+            res.push_back('0' + (num % 7));
+            num /= 7;
+        }
+        
+        if (isNegative)
+            res.push_back('-');
+        
+        std::reverse(res.begin(), res.end());
+        return res;
+    }
+};

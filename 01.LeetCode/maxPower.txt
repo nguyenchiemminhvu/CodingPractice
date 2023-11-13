@@ -1,0 +1,26 @@
+https://leetcode.com/problems/consecutive-characters/
+
+class Solution 
+{
+public:
+    int maxPower(const string& s) 
+    {
+        int max_p = 1;
+        int cur = 1;
+        for (int i = 1; i < s.length(); i++)
+        {
+            if (s[i] == s[i - 1])
+            {
+                cur++;
+            }
+            else
+            {
+                cur = 1;
+            }
+            
+            max_p = std::max(max_p, cur);
+        }
+        
+        return max_p;
+    }
+};

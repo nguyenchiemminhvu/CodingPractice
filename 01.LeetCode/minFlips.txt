@@ -1,0 +1,29 @@
+https://leetcode.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/description/
+
+class Solution 
+{
+public:
+    int minFlips(int a, int b, int c) 
+    {
+        int num_flip = 0;
+        while (a || b || c)
+        {
+            int cc = c & 1;
+            if (cc == 0)
+            {
+                num_flip += ((a & 1) == 1);
+                num_flip += ((b & 1) == 1);
+            }
+            else
+            {
+                num_flip += (((a & 1) | (b & 1)) == 0);
+            }
+
+            a >>= 1;
+            b >>= 1;
+            c >>= 1;
+        }
+
+        return num_flip;
+    }
+};

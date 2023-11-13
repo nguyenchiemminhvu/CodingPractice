@@ -1,0 +1,19 @@
+https://www.hackerrank.com/challenges/picking-numbers/problem
+
+int pickingNumbers(std::vector<int> a)
+{
+    int res = 0;
+      
+    std::sort(a.begin(), a.end());
+      
+    for (int i = 0; i < a.size(); i++)
+    {
+        int curValue = a[i];
+        int count = std::count_if(a.begin() + i, a.end(), [=](const int& n) { return n - curValue <= 1; } );
+          
+        if (count > res)
+            res = count;
+    }
+      
+    return res;
+}

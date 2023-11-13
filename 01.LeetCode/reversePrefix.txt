@@ -1,0 +1,15 @@
+https://leetcode.com/problems/reverse-prefix-of-word/
+
+class Solution 
+{
+public:
+    string reversePrefix(string& word, char ch) 
+    {
+        size_t found = word.find_first_of(ch);
+        if (found == std::string::npos)
+            return word;
+        
+        std::reverse(word.begin(), word.begin() + found + 1);
+        return word;
+    }
+};

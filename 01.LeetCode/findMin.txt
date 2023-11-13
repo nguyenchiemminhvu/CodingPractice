@@ -1,0 +1,21 @@
+https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+
+class Solution 
+{
+public:
+    int findMin(vector<int>& nums) 
+    {
+        return minUtil(nums, 0, nums.size() - 1);
+    }
+private:
+    int minUtil(const std::vector<int>& nums, int left, int right)
+    {
+        if (nums[left] > nums[right])
+        {
+            int mid = left + (right - left) / 2;
+            return std::min(minUtil(nums, left, mid), minUtil(nums, mid + 1, right));
+        }
+        
+        return nums[left];
+    }
+};

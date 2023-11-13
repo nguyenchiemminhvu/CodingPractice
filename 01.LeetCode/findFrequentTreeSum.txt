@@ -1,0 +1,65 @@
+https://leetcode.com/problems/most-frequent-subtree-sum/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution 
+{
+public:
+    vector<int> findFrequentTreeSum(TreeNode* root) 
+    {
+        std::vector<int> res;
+        
+        std::unordered_map<int, int> freq;
+        traversal(root, freq);
+        
+        int max_freq = INT_MIN;
+        for (const std::pair<int, int>& f : freq)
+        {
+            if (max_freq < f.second)
+            {
+                max_freq = f.second;
+                res.clear();
+                res.push_back(f.first);
+            }
+            else if (max_freq == f.second)
+            {
+                res.push_back(f.first);
+            }
+        }
+        
+        return res;
+    }
+private:
+    void traversal(TreeNode* root, std::unordered_map<int, int>& freq)
+    {
+        if (!root)
+            return;
+        
+        traversal(root->left, freq);
+        
+        int sum = sumSubTree(root);
+        freq[sum]++;
+        
+        traversal(root->right, freq);
+    }
+    
+    long long int sumSubTree(TreeNode* root)
+    {
+        if (!root)
+            return 0;
+        
+        long long int sum = root->val;
+        sum += sumSubTree(root->left);
+        sum += sumSubTree(root->right);
+        return sum;
+    }
+};

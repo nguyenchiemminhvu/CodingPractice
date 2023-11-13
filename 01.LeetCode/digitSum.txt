@@ -1,0 +1,25 @@
+https://leetcode.com/problems/calculate-digit-sum-of-a-string/
+
+class Solution 
+{
+public:
+    string digitSum(string& s, int k) 
+    {
+        while (s.length() > k)
+        {
+            std::string temp;
+            for (int is = 0; is < s.length(); is += k)
+            {
+                int sumK = 0;
+                for (int ik = is; ik < is + k && ik < s.length(); ik++)
+                {
+                    sumK += (s[ik] - '0');
+                }
+                temp += std::to_string(sumK);
+            }
+            s.swap(temp);
+        }
+        
+        return s;
+    }
+};

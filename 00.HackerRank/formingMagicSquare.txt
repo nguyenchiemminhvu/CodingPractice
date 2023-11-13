@@ -1,0 +1,101 @@
+https://www.hackerrank.com/challenges/magic-square-forming/problem
+
+int DiffSquare(std::vector<int> s1, std::vector<int> s2)
+{
+    int diff = 0;
+    for (size_t i = 0; i < s1.size() && i < s2.size(); i++)
+    {
+        diff += abs(s1[i] - s2[i]);
+    }
+     
+    return diff;
+}
+ 
+bool IsMagicSquare(std::vector<int> square, int n)
+{
+    std::set<int> S;
+     
+    int sum = 0;
+     
+    // check diag 1
+    for (int ir = 0; ir < n; ir++)
+    {
+        int ic = ir;
+        sum += square[ir * n + ic];
+    }
+    S.insert(sum);
+    sum = 0;
+     
+    // check diag 2
+    for (int ir = 0; ir < n; ir++)
+    {
+        int ic = n - ir - 1;
+        sum += square[ir * n + ic];
+    }
+    S.insert(sum);
+        
+    // check row
+    for (int ir = 0; ir < n; ir++)
+    {
+        sum = 0;
+        for (int ic = 0; ic < n; ic++)
+        {
+            sum += square[ir * n + ic];
+        }
+        S.insert(sum);
+    }
+     
+    //check col
+    for (int ic = 0; ic < n; ic++)
+    {
+        sum = 0;
+        for (int ir = 0; ir < n; ir++)
+        {
+            sum += square[ir * n + ic];
+        }
+        S.insert(sum);
+    }
+     
+    return S.size() == 1;
+}
+ 
+void GenerateAllMagicSquare(std::vector<std::vector<int>> &res, int n)
+{
+    int total = n * n;
+    std::vector<int> temp(total);
+    for (int i = 1; i <= total; i++)
+    {
+        temp[i - 1] = i;
+    }
+     
+    do
+    {
+        if (IsMagicSquare(temp, n))
+        {
+            res.push_back(temp);
+        }
+    } while (std::next_permutation(temp.begin(), temp.end()));
+}
+ 
+int formingMagicSquare(std::vector<std::vector<int>> s)
+{
+    std::vector<int> origin(s.size() * s[0].size(), 0);
+    for (size_t ir = 0; ir < s.size(); ir++)
+    {
+        for (size_t ic = 0; ic < s[ir].size(); ic++)
+        {
+            origin[ir * s.size() + ic] = s[ir][ic];
+        }
+    }
+     
+    std::vector<std::vector<int>> all_magic_squares;
+    GenerateAllMagicSquare(all_magic_squares, 3);
+     
+    int min_cost = 0x0FFFFFFF;
+    for (std::vector<int> magic_square : all_magic_squares)
+    {
+        min_cost = std::min(min_cost, DiffSquare(origin, magic_square));
+    }
+     
+    return min_cost;
+}

@@ -1,0 +1,10 @@
+https://leetcode.com/problems/defanging-an-ip-address/
+
+class Solution 
+{
+public:
+    string defangIPaddr(string& address) 
+    {
+        return std::regex_replace(address, std::regex("([^0-9]{1})"), "\[$1\]");
+    }
+};

@@ -1,0 +1,44 @@
+https://leetcode.com/problems/find-smallest-letter-greater-than-target/
+
+class Solution 
+{
+public:
+    char nextGreatestLetter(vector<char>& letters, char target) 
+    {
+        int freq[26] = {0};
+        for (const char& c : letters)
+            freq[c - 'a']++;
+        
+        for (char c = target + 1; c <= 'z'; c++)
+        {
+            if (freq[c - 'a'])
+                return c;
+        }
+        
+        for (char c = 'a'; c < target; c++)
+        {
+            if (freq[c - 'a'])
+                return c;
+        }
+        
+        return -1;
+    }
+};
+
+class Solution 
+{
+public:
+    char nextGreatestLetter(vector<char>& letters, char target) 
+    {
+        auto it = std::upper_bound(letters.begin(), letters.end(), target);
+        while (it != letters.end() && *it == target)
+        {
+            it++;
+        }
+        
+        if (it == letters.end())
+            return letters[0];
+        
+        return *it;
+    }
+};

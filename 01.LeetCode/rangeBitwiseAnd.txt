@@ -1,0 +1,34 @@
+https://leetcode.com/problems/bitwise-and-of-numbers-range/
+
+class Solution 
+{
+public:
+    int rangeBitwiseAnd(int left, int right) 
+    {
+        int msbLeft = mostSetBitPos(left);
+        int msbRight = mostSetBitPos(right);
+        
+        if (msbLeft != msbRight)
+            return 0;
+        
+        if (!msbLeft || !msbRight)
+            return 0;
+        
+        int n = (1 << (msbLeft - 1));
+        left -= n;
+        right -= n;
+        
+        return n + rangeBitwiseAnd(left, right);
+    }
+private:
+    int mostSetBitPos(int n)
+    {
+        int pos = 0;
+        while (n)
+        {
+            n >>= 1;
+            pos++;
+        }
+        return pos;
+    }
+};

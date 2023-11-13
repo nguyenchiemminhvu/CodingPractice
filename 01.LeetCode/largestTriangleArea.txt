@@ -1,0 +1,98 @@
+https://leetcode.com/problems/largest-triangle-area/
+
+class Solution 
+{
+public:
+    double largestTriangleArea(vector<vector<int>>& p) 
+    {
+        double res = 0;
+        
+        p = findConvexHull(p);
+        
+        for (int i = 0; i < p.size(); i++)
+        {
+            for (int j = i + 1; j < p.size(); j++)
+            {
+                for (int k = j + 1; k < p.size(); k++)
+                {
+                    double ab = distance(p[i], p[j]);
+                    double ac = distance(p[i], p[k]);
+                    double bc = distance(p[j], p[k]);
+                    res = std::max(res, area(ab, ac, bc));
+                }
+            }
+        }
+        return res;
+    }
+private:
+    std::vector<std::vector<int>> findConvexHull(std::vector<std::vector<int>>& p)
+    {
+        std::vector<std::vector<int>> hull;
+        
+        // Find the leftmost point
+        int l = 0;
+        for (int i = 1; i < p.size(); i++)
+            if (p[i][0] < p[l][0])
+                l = i;
+
+        // Start from leftmost point, keep moving counterclockwise
+        // until reach the start point again.  This loop runs O(h)
+        // times where h is number of points in result or output.
+        int ip = l, q;
+        do
+        {
+            // Add current point to result
+            hull.push_back(p[ip]);
+
+            // Search for a point 'q' such that orientation(p, q,
+            // x) is counterclockwise for all points 'x'. The idea
+            // is to keep track of last visited most counterclock-
+            // wise point in q. If any point 'i' is more counterclock-
+            // wise than q, then update q.
+            q = (ip+1)%p.size();
+            for (int i = 0; i < p.size(); i++)
+            {
+               // If i is more counterclockwise than current q, then
+               // update q
+               if (orientation(p[ip], p[i], p[q]) == 2)
+                   q = i;
+            }
+
+            // Now q is the most counterclockwise with respect to p
+            // Set p as q for next iteration, so that q is added to
+            // result 'hull'
+            ip = q;
+
+        } while (ip != l);  // While we don't come to first point
+        
+        return hull;
+    }
+    
+    int orientation(std::vector<int>& p1, std::vector<int>& p2, std::vector<int>& p3)
+    {
+        // See 10th slides from following link for derivation
+        // of the formula
+        int val = (p2[1] - p1[1]) * (p3[0] - p2[0]) -
+                  (p2[0] - p1[0]) * (p3[1] - p2[1]);
+
+        if (val == 0) return 0;  // collinear
+
+        return (val > 0)? 1: 2; // clock or counterclock wise
+    }
+    
+    double distance(std::vector<int>& a, std::vector<int>& b)
+    {
+        return sqrt((double)(b[0]-a[0]) * (b[0]-a[0]) + (b[1]-a[1]) * (b[1]-a[1]));
+    }
+    
+    double area(double a, double b, double c)
+    {
+        if (a+b > c && a+c > b && b+c > a)
+        {
+            double s = (a + b + c) / 2;
+            return sqrt( s * (s-a) * (s-b) * (s-c));
+        }
+        
+        return 0;
+    }
+};

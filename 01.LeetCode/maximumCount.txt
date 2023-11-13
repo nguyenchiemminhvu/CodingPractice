@@ -1,0 +1,13 @@
+https://leetcode.com/problems/maximum-count-of-positive-integer-and-negative-integer/description/
+
+class Solution 
+{
+public:
+    int maximumCount(vector<int>& nums) 
+    {
+        auto left = std::lower_bound(nums.begin(), nums.end(), 0);
+        auto right = std::upper_bound(nums.begin(), nums.end(), 0);
+
+        return std::max(std::distance(nums.begin(), left), std::distance(right, nums.end()));
+    }
+};

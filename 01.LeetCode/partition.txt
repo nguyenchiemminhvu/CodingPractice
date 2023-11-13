@@ -1,0 +1,81 @@
+https://leetcode.com/problems/partition-list/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    ListNode* partition(ListNode* head, int x) 
+    {
+        if (!head || !head->next)
+            return head;
+        
+        ListNode* tail = head;
+        while (tail->next)
+        {
+            tail = tail->next;
+        }
+        
+        ListNode* pivot = tail;
+        
+        ListNode* prev = nullptr;
+        ListNode* cur = head;
+        while (cur != pivot)
+        {
+            if (cur->val >= x)
+            {
+                if (!prev)
+                {
+                    head = head->next;
+                    cur->next = nullptr;
+                    tail->next = cur;
+                    tail = cur;
+                    cur = head;
+                }
+                else
+                {
+                    prev->next = cur->next;
+                    cur->next = nullptr;
+                    tail->next = cur;
+                    tail = cur;
+                    cur = prev->next;
+                }
+            }
+            else
+            {
+                prev = cur;
+                cur = cur->next;
+            }
+        }
+        
+        if (pivot->val >= x && pivot->next)
+        {
+            if (!prev)
+            {
+                head = head->next;
+                cur->next = nullptr;
+                tail->next = cur;
+                tail = cur;
+                cur = head;
+            }
+            else
+            {
+                prev->next = cur->next;
+                cur->next = nullptr;
+                tail->next = cur;
+                tail = cur;
+                cur = prev->next;
+            }
+        }
+        
+        return head;
+    }
+};

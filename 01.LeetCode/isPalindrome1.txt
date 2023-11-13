@@ -1,0 +1,37 @@
+https://leetcode.com/problems/valid-palindrome/
+
+class Solution 
+{
+public:
+    bool isPalindrome(string s) 
+    {
+        int left = 0, right = s.length() - 1;
+        
+        while (left < right)
+        {
+            if (!findAndCompare(s, left, right))
+            {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        
+        return true;
+    }
+private:
+    bool findAndCompare(const std::string& s, int& left, int& right)
+    {
+        while (left < right && !isConsiderCharacter(s[left]))
+            left++;
+        while (right > left && !isConsiderCharacter(s[right]))
+            right--;
+        
+        return (s[left] | 32) == (s[right] | 32);
+    }
+    
+    bool isConsiderCharacter(const char& c)
+    {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+    }
+};

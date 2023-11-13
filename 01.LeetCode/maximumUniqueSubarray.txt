@@ -1,0 +1,39 @@
+https://leetcode.com/problems/maximum-erasure-value/
+
+class Solution
+{
+public:
+    int maximumUniqueSubarray(vector<int>& nums)
+    {
+        std::unordered_map<int, bool> checker;
+        
+        int max_score = 0;
+        int cur_score = 0;
+        int left = 0, right = 0;
+        while (right < nums.size())
+        {
+            if (!checker[nums[right]])
+            {
+                checker[nums[right]] = true;
+                cur_score += nums[right];
+            }
+            else
+            {
+                while (checker[nums[right]])
+                {
+                    checker[nums[left]] = false;
+                    cur_score -= nums[left];
+                    left++;
+                }
+                
+                checker[nums[right]] = true;
+                cur_score += nums[right];
+            }
+            
+            max_score = std::max(max_score, cur_score);
+            right++;
+        }
+        
+        return max_score;
+    }
+};

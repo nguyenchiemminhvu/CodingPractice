@@ -1,0 +1,31 @@
+https://leetcode.com/problems/difference-between-element-sum-and-digit-sum-of-an-array/description/
+
+class Solution 
+{
+public:
+    int differenceOfSum(vector<int>& nums) 
+    {
+        int e_sum = 0;
+        int d_sum = 0;
+
+        for (const int& n : nums)
+        {
+            e_sum += n;
+            d_sum += digitSum(n);
+        }
+
+        return std::abs(e_sum - d_sum);
+    }
+private:
+    int digitSum(int n)
+    {
+        int s = 0;
+        while (n)
+        {
+            int d = (n % 10);
+            s += d;
+            n /= 10;
+        }
+        return s;
+    }
+};

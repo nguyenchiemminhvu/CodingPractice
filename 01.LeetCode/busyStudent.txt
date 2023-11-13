@@ -1,0 +1,17 @@
+https://leetcode.com/problems/number-of-students-doing-homework-at-a-given-time/
+
+class Solution 
+{
+public:
+    int busyStudent(vector<int>& start, vector<int>& end, int q) 
+    {
+        int count = 0;
+        for (int i = 0; i < start.size(); i++)
+        {
+            if (q >= start[i] && q <= end[i])
+                count++;
+        }
+        
+        return count;
+    }
+};

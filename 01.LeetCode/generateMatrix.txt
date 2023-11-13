@@ -1,0 +1,45 @@
+https://leetcode.com/problems/spiral-matrix-ii/
+
+class Solution 
+{
+public:
+    vector<vector<int>> generateMatrix(int n) 
+    {
+        std::vector<std::vector<int>> res(n, std::vector<int>(n, 0));
+        
+        int left = 0, right = n - 1;
+        int up = 0, down = n - 1;
+        
+        int in = 1;
+        int nn = n * n;
+        while (in <= nn)
+        {
+            for (int i = left; i <= right; i++)
+            {
+                res[up][i] = in++;
+            }
+            
+            for (int i = up + 1; i <= down; i++)
+            {
+                res[i][right] = in++;
+            }
+            
+            for (int i = right - 1; i >= left; i--)
+            {
+                res[down][i] = in++;
+            }
+            
+            for (int i = down - 1; i >= up + 1; i--)
+            {
+                res[i][left] = in++;
+            }
+            
+            left++;
+            right--;
+            up++;
+            down--;
+        }
+        
+        return res;
+    }
+};

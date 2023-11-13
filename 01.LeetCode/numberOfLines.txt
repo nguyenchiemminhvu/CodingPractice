@@ -1,0 +1,25 @@
+https://leetcode.com/problems/number-of-lines-to-write-string/
+
+#define MAX_PER_LINE 100
+
+class Solution 
+{
+public:
+    vector<int> numberOfLines(vector<int>& widths, string s) 
+    {
+        int cur_line = 1;
+        int cur_line_pixel = 0;
+        for (const char& c : s)
+        {
+            if (cur_line_pixel + widths[c - 'a'] > MAX_PER_LINE)
+            {
+                cur_line++;
+                cur_line_pixel = 0;
+            }
+            
+            cur_line_pixel += widths[c - 'a'];
+        }
+        
+        return { cur_line, cur_line_pixel };
+    }
+};

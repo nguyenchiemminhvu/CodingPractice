@@ -1,0 +1,33 @@
+class Solution 
+{
+public:
+    int longestContinuousSubstring(const string& s) 
+    {
+        int max_len = 0;
+        std::string temp;
+        for (const char& c : s)
+        {
+            if (temp.empty())
+            {
+                temp += c;
+            }
+            else
+            {
+                if (temp.back() + 1 == c)
+                {
+                    temp += c;
+                }
+                else
+                {
+                    max_len = std::max(max_len, (int)temp.length());
+                    temp.clear();
+                    temp += c;
+                }
+            }
+        }
+        
+        max_len = std::max(max_len, (int)temp.length());
+        
+        return max_len;
+    }
+};

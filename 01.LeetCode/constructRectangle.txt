@@ -1,0 +1,20 @@
+https://leetcode.com/problems/construct-the-rectangle/
+
+class Solution 
+{
+public:
+    vector<int> constructRectangle(int area) 
+    {
+        int L = 0, W = 0;
+        for (int i = 1; area / i >= i; i++)
+        {
+            if (area % i == 0)
+            {
+                W = i;
+                L = area / W;
+            }
+        }
+        
+        return { L , W };
+    }
+};

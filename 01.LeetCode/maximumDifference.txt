@@ -1,0 +1,29 @@
+https://leetcode.com/problems/maximum-difference-between-increasing-elements/
+
+class Solution 
+{
+public:
+    int maximumDifference(vector<int>& nums) 
+    {
+        int max_diff = -1;
+        
+        std::stack<int> st;
+        st.push(nums[nums.size() - 1]);
+        int i = nums.size() - 2;
+        
+        while (i >= 0)
+        {
+            if (nums[i] >= st.top())
+            {
+                st.push(nums[i]);
+            }
+            else
+            {
+                max_diff = std::max(max_diff, st.top() - nums[i]);
+            }
+            i--;
+        }
+        
+        return max_diff;
+    }
+};

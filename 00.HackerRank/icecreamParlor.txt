@@ -1,0 +1,30 @@
+https://www.hackerrank.com/challenges/icecream-parlor/problem
+
+std::vector<int> icecreamParlor(int m, std::vector<int> arr)
+{
+    std::vector<int> freq(10e4 + 1, 0);
+     
+    for (int i = 0; i < arr.size(); i++)
+    {
+        if (freq[m - arr[i]])
+        {
+            int found = 0;
+            bool bFound = false;
+            while (found < i)
+            {
+                if (arr[found] == m - arr[i])
+                {
+                    bFound = true;
+                    break;
+                }
+                found++;
+            }
+             
+            if (bFound)
+                return { found + 1, i + 1 };
+        }
+        freq[arr[i]]++;
+    }
+     
+    return { };
+}

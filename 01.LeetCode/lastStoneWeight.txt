@@ -1,0 +1,30 @@
+https://leetcode.com/problems/last-stone-weight/
+
+class Solution 
+{
+public:
+    int lastStoneWeight(vector<int>& stones) 
+    {
+        std::priority_queue<int> Q;
+        for (int n : stones)
+            Q.push(n);
+        
+        while (Q.size() > 1)
+        {
+            int x = Q.top();
+            Q.pop();
+            int y = Q.top();
+            Q.pop();
+            
+            if (x > y)
+            {
+                Q.push(x - y);
+            }
+        }
+        
+        if (Q.empty())
+            return 0;
+        
+        return Q.top();
+    }
+};

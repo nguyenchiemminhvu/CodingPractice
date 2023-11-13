@@ -1,0 +1,22 @@
+https://www.hackerrank.com/challenges/permutation-equation/problem
+
+std::vector<int> permutationEquation(std::vector<int> p)
+{
+    std::map<int, int> m;
+      
+    for (int i = 0; i < p.size(); i++)
+    {
+        m[p[i]] = i;
+    }
+      
+    std::vector<int> res;
+    for (int x = 1; x <= p.size(); x++)
+    {
+        int ix = m[x];
+        int pix = m[ix + 1];
+          
+        res.push_back(pix + 1);
+    }
+      
+    return res;
+}

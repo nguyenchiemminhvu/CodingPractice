@@ -1,0 +1,39 @@
+https://leetcode.com/problems/unique-email-addresses/
+
+class Solution 
+{
+public:
+    int numUniqueEmails(vector<string>& emails) 
+    {
+        std::unordered_map<std::string, std::set<std::string>> M;
+        for (const std::string& email : emails)
+        {
+            std::pair<std::string, std::string> temp = parse1(email);
+            temp.first = parse2(temp.first);
+            M[temp.second].insert(temp.first);
+        }
+        
+        int count = 0;
+        for (auto it : M)
+        {
+            count += it.second.size();
+        }
+        return count;
+    }
+private:
+    std::pair<std::string, std::string> parse1(std::string s)
+    {
+        size_t pos = s.find_first_of('@');
+        return std::pair<std::string, std::string>(std::string(s.begin(), s.begin() + pos), std::string(s.begin() + pos + 1, s.end()));
+    }
+    
+    std::string parse2(std::string s)
+    {
+        std::string realName = s;
+        size_t pos = s.find_first_of('+');
+        if (pos != std::string::npos)
+            realName = std::string(s.begin(), s.begin() + pos);
+        realName.erase(std::remove(realName.begin(), realName.end(), '.'), realName.end());
+        return realName;
+    }
+};

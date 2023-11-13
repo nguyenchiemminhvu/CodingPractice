@@ -1,0 +1,87 @@
+https://leetcode.com/problems/di-string-match/
+
+class Solution 
+{
+public:
+    vector<int> diStringMatch(const string& s) 
+    {
+//         int slen = s.length();
+//         std::vector<int> res(slen + 1, 0);
+//         std::vector<bool> checker(slen + 1, false);
+        
+//         for (int i = 0; i <= slen + 1; i++)
+//         {
+//             res[0] = i;
+//             checker[i] = true;
+//             if (buildPermutation(s, slen + 1, 0, 1, res, checker))
+//                 return res;
+//             checker[i] = false;
+//         }
+        
+//         return res;
+        
+        std::vector<int> res(s.length() + 1);
+        
+        int left = 0, right = s.length();
+        int ir = 0;
+        for (int is = 0; is < s.length(); is++)
+        {
+            if (s[is] == 'I')
+            {
+                res[ir++] = left++;
+            }
+            else
+            {
+                res[ir++] = right--;
+            }
+        }
+        
+        if (s.back() == 'I')
+        {
+            res[ir] = left;
+        }
+        else
+        {
+            res[ir] = right;
+        }
+        
+        return res;
+    }
+private:
+    bool buildPermutation(const std::string& s, int n, int is, int in, std::vector<int>& res, std::vector<bool>& checker)
+    {
+        if (is >= n - 1)
+            return true;
+        
+        if (s[is] == 'I')
+        {
+            for (int i = res[in - 1] + 1; i <= n; i++)
+            {
+                if (!checker[i])
+                {
+                    res[in] = i;
+                    checker[i] = true;
+                    if (buildPermutation(s, n, is + 1, in + 1, res, checker))
+                        return true;
+                    checker[i] = false;
+                }
+            }
+        }
+        else if (s[is] == 'D')
+        {
+            for (int i = res[in - 1] - 1; i >= 0; i--)
+            {
+                if (!checker[i])
+                {
+                    res[in] = i;
+                    checker[i] = true;
+                    if (buildPermutation(s, n, is + 1, in + 1, res, checker))
+                        return true;
+                    checker[i] = false;
+                }
+            }
+        }
+        
+        return false;
+    }
+};

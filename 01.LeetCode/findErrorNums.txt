@@ -1,0 +1,30 @@
+https://leetcode.com/problems/set-mismatch/
+
+class Solution 
+{
+public:
+    vector<int> findErrorNums(vector<int>& nums) 
+    {
+        nums.insert(nums.begin(), 0);
+        int i = 0;
+        
+        // move the elements to its right place
+        while (i < nums.size())
+        {
+            while (nums[i] != i && nums[i] != nums[nums[i]])
+                std::swap(nums[i], nums[nums[i]]);
+            i++;
+        }
+        
+        // find the element that its value different from its index
+        for (i = 0; i < nums.size(); i++)
+        {
+            if (nums[i] != i)
+            {
+                return { nums[i], i };
+            }
+        }
+        
+        return { };
+    }
+};

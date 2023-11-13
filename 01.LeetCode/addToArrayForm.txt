@@ -1,0 +1,68 @@
+https://leetcode.com/problems/add-to-array-form-of-integer/
+
+class Solution 
+{
+public:
+    vector<int> addToArrayForm(vector<int>& num, int k) 
+    {
+        std::vector<int> vk;
+        while (k)
+        {
+            vk.push_back(k % 10);
+            k /= 10;
+        }
+        std:reverse(vk.begin(), vk.end());
+        
+        return addTwoArraysFormOfInteger(num, vk);
+    }
+private:
+    std::vector<int> addTwoArraysFormOfInteger(std::vector<int>& a, std::vector<int>& b) 
+    {
+        if (a.size() < b.size())
+            std::swap(a, b);
+        
+        a.insert(a.begin(), 0);
+        
+        int ia = a.size() - 1;
+        int ib = b.size() - 1;
+        int temp = 0;
+        int tempa, tempb;
+        while (ia >= 0 && ib >= 0)
+        {
+            tempa = a[ia];
+            tempb = b[ib];
+            tempa += tempb + temp;
+            temp = 0;
+            if (tempa > 9)
+            {
+                tempa -= 10;
+                temp++;
+            }
+            a[ia] = tempa;
+            
+            ia--;
+            ib--;
+        }
+        
+        while (temp)
+        {
+            tempa = a[ia];
+            tempa += temp;
+            temp = 0;
+            if (tempa > 9)
+            {
+                tempa -= 10;
+                temp++;
+            }
+            a[ia] = tempa;
+            
+            ia--;
+        }
+        
+        
+        if (a[0] == 0)
+            a.erase(a.begin());
+        
+        return a;
+    }
+};

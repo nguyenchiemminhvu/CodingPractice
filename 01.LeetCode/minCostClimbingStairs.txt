@@ -1,0 +1,35 @@
+https://leetcode.com/problems/min-cost-climbing-stairs/
+
+class Solution 
+{
+public:
+    int minCostClimbingStairs(const vector<int>& cost) 
+    {
+        // return std::min(minCostRecur(cost, 0), minCostRecur(cost, 1));
+        
+        return std::min(minCostDP(cost, 0), minCostDP(cost, 1));
+    }
+private:
+    int minCostRecur(const std::vector<int>& cost, int i)
+    {
+        if (i >= cost.size())
+            return 0;
+        
+        return cost[i] + std::min(minCostRecur(cost, i + 1), minCostRecur(cost, i + 2));
+    }
+    
+    int minCostDP(const std::vector<int>& cost, int start)
+    {
+        int N = cost.size();
+        std::vector<int> dp(N, INT_MAX);
+        
+        dp[0] = cost[0];
+        dp[1] = cost[1];
+        for (int i = 2; i < N; i++)
+        {
+            dp[i] = cost[i] + std::min(dp[i - 1], dp[i - 2]);
+        }
+        
+        return std::min(dp[N - 1], dp[N - 2]);
+    }
+};

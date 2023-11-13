@@ -1,0 +1,29 @@
+https://www.hackerrank.com/challenges/gem-stones/problem
+
+int gemstones(vector<string> arr)
+{
+    int res = 0;
+     
+    bool mark[26] = { false };
+    for (char c : arr[0])
+        mark[c - 'a'] = true;
+     
+    std::unordered_map<char, bool> filter;
+    for (int i = 1; i < arr.size(); i++)
+    {
+        filter.clear();
+        for (char c : arr[i])
+            filter[c] = true;
+             
+        for (char c : arr[0])
+            if (filter[c] == false)
+                mark[c - 'a'] = false;
+    }
+     
+    for (int i = 0; i < 26; i++)
+    {
+        res += mark[i];
+    }
+     
+    return res;
+}

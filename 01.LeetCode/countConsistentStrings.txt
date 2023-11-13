@@ -1,0 +1,33 @@
+https://leetcode.com/problems/count-the-number-of-consistent-strings/
+
+class Solution 
+{
+public:
+    int countConsistentStrings(string allowed, vector<string>& words) 
+    {
+        int filter[26];
+        std::memset(filter, 0, 26 * sizeof(int));
+        for (const char&c : allowed)
+        {
+            filter[c - 'a']++;
+        }
+        
+        int count = 0;
+        bool checker;
+        for (const std::string& s : words)
+        {
+            checker = true;
+            for (const char& c : s)
+            {
+                if (filter[c - 'a'] == 0)
+                {
+                    checker = false;
+                    break;
+                }
+            }
+            
+            count += (int)checker;
+        }
+        return count;
+    }
+};

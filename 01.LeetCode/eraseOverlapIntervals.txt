@@ -1,0 +1,100 @@
+https://leetcode.com/problems/non-overlapping-intervals/
+
+class Solution 
+{
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) 
+    {
+        std::sort(
+            intervals.begin(), 
+            intervals.end(), 
+            [](const std::vector<int>& a, const std::vector<int>& b)
+            {
+                if (a[0] > b[0])
+                    return false;
+                if (a[0] < b[0])
+                    return true;
+                
+                return a[1] < b[1];
+            }
+        );
+        
+        // std::vector<std::vector<int>> temp;
+        // return intervals.size() - longestNonOverlapped(intervals, 0, temp);
+        
+        // return intervals.size() - longestNonOverlappedDP(intervals);
+        
+        return minRemoveUtil(intervals);
+    }
+private:
+    int longestNonOverlapped(const std::vector<std::vector<int>>& intervals, int i, std::vector<std::vector<int>>& temp)
+    {
+        if (i >= intervals.size())
+        {
+            return temp.size();
+        }
+        
+        int longest = 0;
+        for (int j = i; j < intervals.size(); j++)
+        {
+            if (temp.empty())
+            {
+                temp.push_back(intervals[j]);
+                longest = std::max(longest, longestNonOverlapped(intervals, j + 1, temp));
+                temp.pop_back();
+            }
+            else
+            {
+                if (intervals[j][0] < temp.back()[1])
+                {
+                    longest = std::max(longest, longestNonOverlapped(intervals, j + 1, temp));
+                }
+                else
+                {
+                    temp.push_back(intervals[j]);
+                    longest = std::max(longest, longestNonOverlapped(intervals, j + 1, temp));
+                    temp.pop_back();
+                }
+            }
+        }
+        return longest;
+    }
+    
+    int longestNonOverlappedDP(const std::vector<std::vector<int>>& intervals)
+    {
+        std::vector<int> dp(intervals.size(), 1);
+        for (int i = 1; i < intervals.size(); i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (intervals[j][1] <= intervals[i][0])
+                {
+                    dp[i] = std::max(dp[i], 1 + dp[j]);
+                }
+            }
+        }
+        
+        return dp.back();
+    }
+    
+    int minRemoveUtil(const std::vector<std::vector<int>>& intervals)
+    {
+        int count = 0;
+        
+        int cur_end = intervals[0][1];
+        for (int i = 1; i < intervals.size(); i++)
+        {
+            if (cur_end > intervals[i][0])
+            {
+                count++;
+                cur_end = std::min(cur_end, intervals[i][1]);
+            }
+            else
+            {
+                cur_end = intervals[i][1];
+            }
+        }
+        
+        return count;
+    }
+};

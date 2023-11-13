@@ -1,0 +1,30 @@
+https://leetcode.com/problems/valid-parentheses/
+
+class Solution 
+{
+public:
+    bool isValid(string s) 
+    {
+        std::stack<char> st;
+        for (const char& c : s)
+        {
+            if (c == '(' || c == '[' || c == '{')
+            {
+                st.push(c);
+            }
+            else
+            {
+                if (st.empty())
+                    return false;
+                
+                char temp = st.top();
+                if ((c == ')' && temp != '(') || (c == ']' && temp != '[') || (c == '}' && temp != '{'))
+                    return false;
+                
+                st.pop();
+            }
+        }
+        
+        return st.empty();
+    }
+};

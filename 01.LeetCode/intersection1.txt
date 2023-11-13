@@ -1,0 +1,26 @@
+https://leetcode.com/problems/intersection-of-multiple-arrays/
+
+class Solution 
+{
+public:
+    vector<int> intersection(vector<vector<int>>& nums) 
+    {
+        std::multiset<int> checker;
+        for (const std::vector<int>& row : nums)
+        {
+            for (const int& n : row)
+            {
+                checker.insert(n);
+            }
+        }
+        
+        std::set<int> res;
+        for (const auto& p : checker)
+        {
+            if (checker.count(p) == nums.size())
+                res.insert(p);
+        }
+        
+        return {res.begin(), res.end()};
+    }
+};

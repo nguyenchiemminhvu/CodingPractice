@@ -1,0 +1,55 @@
+https://leetcode.com/problems/day-of-the-week/
+
+class Solution 
+{
+public:
+    string dayOfTheWeek(int day, int month, int year) 
+    {
+        std::string weekDays[] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+        
+        int from1967 = countDays(1, 1, 1967); // 01/01/1967 is Monday
+        int fromNow = countDays(day, month, year);
+        
+        int res = (fromNow - from1967) % 7;
+        return weekDays[res];
+    }
+private:
+    int countDays(int d, int m, int y)
+    {
+        int daysOfMonth[12] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
+        
+        int count = 0;
+        for (int i = 1900; i < y; i++)
+        {
+            count += (isLeapYear(i) ? 366 : 365);
+        }
+        
+        count += daysOfMonth[m - 1];
+        if (m > 2 && isLeapYear(y))
+            count++;
+        
+        count += d;
+        
+        return count;
+    }
+    
+    bool isLeapYear(int y)
+    {
+        if (y % 4 == 0) 
+        {
+            if (y % 100 == 0) 
+            {
+                if (y % 400 == 0) 
+                {
+                    return true;
+                }
+            } 
+            else 
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+};

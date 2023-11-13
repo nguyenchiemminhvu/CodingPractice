@@ -1,0 +1,51 @@
+https://leetcode.com/problems/delete-operation-for-two-strings/
+
+class Solution 
+{
+public:
+    int minDistance(const std::string& a, const std::string& b) 
+    {
+        int common = longestCommonSub(a, b);
+        return (a.length() - common) + (b.length() - common);
+    }
+private:
+    int longestCommonSub(const std::string& a, const std::string& b)
+    {
+        // return longestBacktrack(a, b, a.length() - 1, b.length() - 1);
+        return longestDP(a, b);
+    }
+    
+    int longestBacktrack(const std::string& a, const std::string& b, int ia, int ib)
+    {
+        if (ia < 0 || ib < 0)
+            return 0;
+        
+        if (a[ia] == b[ib])
+        {
+            return 1 + longestBacktrack(a, b, ia - 1, ib - 1);
+        }
+        
+        return std::max(longestBacktrack(a, b, ia - 1, ib), longestBacktrack(a, b, ia, ib - 1));
+    }
+    
+    int longestDP(const std::string& a, const std::string& b)
+    {
+        std::vector<std::vector<int>> dp(a.length() + 1, std::vector<int>(b.length() + 1, 0));
+        for (int ia = 1; ia <= a.length(); ia++)
+        {
+            for (int ib = 1; ib <= b.length(); ib++)
+            {
+                if (a[ia - 1] == b[ib - 1])
+                {
+                    dp[ia][ib] = 1 + dp[ia - 1][ib - 1];
+                }
+                else
+                {
+                    dp[ia][ib] = std::max(dp[ia - 1][ib], dp[ia][ib - 1]);
+                }
+            }
+        }
+        
+        return dp[a.length()][b.length()];
+    }
+};

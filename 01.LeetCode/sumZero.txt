@@ -1,0 +1,36 @@
+https://leetcode.com/problems/find-n-unique-integers-sum-up-to-zero/
+
+class Solution 
+{
+public:
+    vector<int> sumZero(int n) 
+    {
+        std::vector<int> res(n, 0);
+        
+        int left, right;
+        if (n & 1)
+        {
+            left = n / 2 - 1;
+            right = n / 2 + 1;
+        }
+        else
+        {
+            left = n / 2 - 1;
+            right = n / 2;
+        }
+        
+        int cur = 1;
+        while (left >= 0 && right < n)
+        {
+            res[left] = -cur;
+            res[right] = cur;
+            
+            left--;
+            right++;
+            
+            cur++;
+        }
+        
+        return res;
+    }
+};

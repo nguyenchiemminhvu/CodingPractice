@@ -1,0 +1,14 @@
+https://www.hackerrank.com/challenges/connecting-towns/problem
+
+int connectingTowns(int n, vector<int> routes)
+{
+    if (routes.empty())
+        return 0;
+         
+    int res = 1;
+    for (int i : routes)
+    {
+        res = ((res % MOD) * (i % MOD)) % MOD;
+    }
+    return res;
+}

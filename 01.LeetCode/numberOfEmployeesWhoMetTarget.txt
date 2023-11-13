@@ -1,0 +1,11 @@
+https://leetcode.com/problems/number-of-employees-who-met-the-target/description/
+
+class Solution 
+{
+public:
+    int numberOfEmployeesWhoMetTarget(vector<int>& hours, int target) 
+    {
+        std::sort(hours.begin(), hours.end());
+        return std::distance(std::lower_bound(hours.begin(), hours.end(), target), hours.end());
+    }
+};

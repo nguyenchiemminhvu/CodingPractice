@@ -1,0 +1,37 @@
+https://leetcode.com/problems/relative-sort-array/
+
+class Solution 
+{
+public:
+    vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) 
+    {
+        std::unordered_map<int, int> hm; // hash map
+        for (int i = 0; i < arr2.size(); i++)
+        {
+            hm[arr2[i]] = i + 1;
+        }
+        
+        std::sort
+        (
+            arr1.begin(),
+            arr1.end(),
+            [&] (const int& n1, const int& n2)
+            {
+                if (hm[n1] == 0)
+                    hm[n1] = INT_MAX;
+                if (hm[n2] == 0)
+                    hm[n2] = INT_MAX;
+                return hm[n1] < hm[n2];
+            }
+        );
+        
+        int n;
+        for (n = 0; n < arr1.size() && hm[arr1[n]] != INT_MAX; n++)
+        {
+        }
+        
+        std::sort(arr1.begin() + n, arr1.end());
+        
+        return arr1;
+    }
+};

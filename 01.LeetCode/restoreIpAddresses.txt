@@ -1,0 +1,72 @@
+https://leetcode.com/problems/restore-ip-addresses/
+
+class Solution 
+{
+public:
+    vector<string> restoreIpAddresses(const string& s) 
+    {
+        std::vector<std::string> res;
+        std::vector<std::string> ip(4, "");
+        std::unordered_map<std::string, bool> checker;
+        restore(s, 0, 0, ip, res, checker);
+        return res;
+    }
+private:
+    void restore(const std::string& s, int is, int iip, std::vector<std::string>& ip, std::vector<std::string>& res, std::unordered_map<std::string, bool>& checker)
+    {
+        if (iip >= 4)
+        {
+            if (is < s.length())
+                return;
+            
+            if (ip[0].empty() || (ip[0][0] == '0' && ip[0].length() > 1))
+                return;
+            if (ip[1].empty() || (ip[1][0] == '0' && ip[1].length() > 1))
+                return;
+            if (ip[2].empty() || (ip[2][0] == '0' && ip[2].length() > 1))
+                return;
+            if (ip[3].empty() || (ip[3][0] == '0' && ip[3].length() > 1))
+                return;
+            
+            std::string temp = ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3];
+            if (!ip[3].empty() && checker.find(temp) == checker.end())
+            {
+                res.push_back(temp);
+                checker[temp] = true;
+            }
+            return;
+        }
+        
+        if (is >= s.length())
+        {
+            if (iip < 3)
+                return;
+            
+            if (ip[0].empty() || (ip[0][0] == '0' && ip[0].length() > 1))
+                return;
+            if (ip[1].empty() || (ip[1][0] == '0' && ip[1].length() > 1))
+                return;
+            if (ip[2].empty() || (ip[2][0] == '0' && ip[2].length() > 1))
+                return;
+            if (ip[3].empty() || (ip[3][0] == '0' && ip[3].length() > 1))
+                return;
+            
+            std::string temp = ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3];
+            if (!ip[3].empty() && checker.find(temp) == checker.end())
+            {
+                res.push_back(temp);
+                checker[temp] = true;
+            }
+            return;
+        }
+        
+        ip[iip].push_back(s[is]);
+        int cur_value = std::stoi(ip[iip].c_str());
+        if (ip[iip].length() <= 3 && cur_value >= 0 && cur_value <= 255)
+        {
+            restore(s, is + 1, iip, ip, res, checker);
+            restore(s, is + 1, iip + 1, ip, res, checker);
+        }
+        ip[iip].pop_back();
+    }
+};

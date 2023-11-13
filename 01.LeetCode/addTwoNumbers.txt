@@ -1,0 +1,103 @@
+https://leetcode.com/problems/add-two-numbers/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    ListNode* addTwoNumbers(ListNode* L1, ListNode* L2) 
+    {
+        int n1 = countList(L1);
+        int n2 = countList(L2);
+        
+        ListNode* res = nullptr;
+        if (n1 > n2)
+            res = sumList(L1, L2);
+        else
+            res = sumList(L2, L1);
+        
+        return res;
+    }
+private:
+    int countList(ListNode* L)
+    {
+        int count = 0;
+        while (L)
+        {
+            count++;
+            L = L->next;
+        }
+        return count;
+    }
+    
+    ListNode* sumList(ListNode* L1, ListNode* L2)
+    {
+        ListNode* head = L1;
+        
+        int carry = 0;
+        while (L2)
+        {
+            int s = L1->val + L2->val + carry;
+            carry = 0;
+            
+            if (s > 9)
+                carry = s / 10;
+            s %= 10;
+            
+            L1->val = s;
+            
+            if (L1->next)
+            {
+                L1 = L1->next;
+            }
+            else
+            {
+                if (carry)
+                {
+                    L1->next = new ListNode(carry);
+                    carry = 0;
+                    L1 = L1->next;
+                }
+                break;
+            }
+            L2 = L2->next;
+        }
+        
+        while (L1)
+        {
+            int s = L1->val + carry;
+            carry = 0;
+            
+            if (s > 9)
+                carry = s / 10;
+            s %= 10;
+            
+            L1->val = s;
+            
+            if (L1->next)
+            {
+                L1 = L1->next;
+            }
+            else
+            {
+                if (carry)
+                {
+                    L1->next = new ListNode(carry);
+                    carry = 0;
+                    L1 = L1->next;
+                }
+                break;
+            }
+        }
+        
+        return head;
+    }
+};

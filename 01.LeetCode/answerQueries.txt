@@ -1,0 +1,30 @@
+class Solution 
+{
+public:
+    vector<int> answerQueries(vector<int>& nums, vector<int>& queries) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        std::vector<int> res;
+        for (const int& q : queries)
+        {
+            int sum = 0;
+            int count = 0;
+            
+            for (int i = 0; i < nums.size(); i++)
+            {
+                if (sum + nums[i] > q)
+                {
+                    break;
+                }
+                
+                sum += nums[i];
+                count++;
+            }
+            
+            res.push_back(count);
+        }
+        
+        return res;
+    }
+};

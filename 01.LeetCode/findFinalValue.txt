@@ -1,0 +1,31 @@
+https://leetcode.com/problems/keep-multiplying-found-values-by-two/
+
+class Solution 
+{
+public:
+    int findFinalValue(vector<int>& nums, int ori) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        int idx = -1;
+        while (true)
+        {
+            idx = searchUtil(nums, ori);
+            if (idx == -1)
+                break;
+            
+            ori <<= 1;
+        }
+        
+        return ori;
+    }
+private:
+    int searchUtil(const std::vector<int>& nums, int val)
+    {
+        auto it = std::lower_bound(nums.begin(), nums.end(), val);
+        if (it != nums.end() && *it == val)
+            return std::distance(nums.begin(), it);
+        
+        return -1;
+    }
+};

@@ -1,0 +1,140 @@
+https://leetcode.com/problems/non-decreasing-array/
+
+class Solution 
+{
+public:
+    bool checkPossibility(vector<int>& nums) 
+    {
+        // std::vector<int> sorted(nums.begin(), nums.end());
+        // std::sort(sorted.begin(), sorted.end());
+        // int common = longestCommonBT(nums, sorted, nums.size() - 1, sorted.size() - 1);
+        // int common = longestCommonDP(nums, sorted);
+        // return nums.size() - common <= 1;
+        
+        // int longest = 1;
+        // for (int i = 0; i < nums.size(); i++)
+        // {
+        //     longest = std::max(longest, longestIncreaseBT(nums, i));
+        // }
+        // longest = longestIncreaseDP(nums);
+        // return nums.size() - longest <= 1;
+        
+        return checking(nums, 1, 1);
+    }
+private:
+    int longestCommonBT(const std::vector<int>& a, const std::vector<int>& b, int ia, int ib)
+    {
+        if (ia < 0 || ib < 0)
+            return 0;
+        
+        if (a[ia] == b[ib])
+        {
+            return 1 + longestCommonBT(a, b, ia - 1, ib - 1);
+        }
+        
+        return std::max(longestCommonBT(a, b, ia - 1, ib), longestCommonBT(a, b, ia, ib - 1));
+    }
+    
+    int longestCommonDP(const std::vector<int>& a, const std::vector<int>& b)
+    {
+        std::vector<std::vector<int>> dp(a.size() + 1, std::vector<int>(b.size() + 1, 0));
+        
+        for (int i = 1; i <= a.size(); i++)
+        {
+            for (int j = 1; j <= b.size(); j++)
+            {
+                if (a[i - 1] == b[j - 1])
+                {
+                    dp[i][j] = 1 + dp[i - 1][j - 1];
+                }
+                else
+                {
+                    dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        
+        return dp[a.size()][b.size()];
+    }
+    
+    int longestIncreaseBT(const std::vector<int>& nums, int i)
+    {
+        if (i < 0)
+            return 0;
+        if (i == 0)
+            return 1;
+        
+        int res = 1;
+        for (int j = 0; j < i; j++)
+        {
+            if (nums[j] <= nums[i])
+            {
+                res = std::max(res, 1 + longestIncreaseBT(nums, j));
+            }
+        }
+        
+        return res;
+    }
+    
+    int longestIncreaseDP(const std::vector<int>& nums)
+    {
+        int longest = 1;
+        
+        std::vector<int> dp(nums.size(), 1);
+        dp[0] = 1;
+        
+        for (int i = 1; i < nums.size(); i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (nums[j] <= nums[i])
+                {
+                    dp[i] = std::max(dp[i], 1 + dp[j]);
+                }
+            }
+            
+            longest = std::max(longest, dp[i]);
+        }
+        
+        return longest;
+    }
+    
+    bool checking(std::vector<int>& nums, int start, int limits)
+    {
+        bool changed = false;
+        int changed_pos = -1;
+        for (int i = start; i < nums.size(); i++)
+        {
+            if (nums[i] < nums[i - 1])
+            {
+                if (limits <= 0)
+                    return false;
+                
+                changed = true;
+                changed_pos = i - 1;
+                break;
+            }
+        }
+        
+        bool res = false;
+        if (changed)
+        {
+            int left = nums[changed_pos];
+            int right = nums[changed_pos + 1];
+            
+            nums[changed_pos] = right;
+            res |= checking(nums, std::max(changed_pos - 1, 1), limits - 1);
+            nums[changed_pos] = left;
+            
+            nums[changed_pos + 1] = left;
+            res |= checking(nums, std::max(changed_pos - 1, 1), limits - 1);
+            nums[changed_pos + 1] = right;
+        }
+        else
+        {
+            res = true;
+        }
+        
+        return res;
+    }
+};

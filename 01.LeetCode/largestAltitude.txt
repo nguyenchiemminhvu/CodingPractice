@@ -1,0 +1,19 @@
+https://leetcode.com/problems/find-the-highest-altitude/
+
+class Solution 
+{
+public:
+    int largestAltitude(vector<int>& gain) 
+    {
+        int res = INT_MIN;
+        
+        int cur = 0;
+        for (const int& n : gain)
+        {
+            cur += n;
+            res = std::max(res, cur);
+        }
+        
+        return res < 0 ? 0 : res;
+    }
+};

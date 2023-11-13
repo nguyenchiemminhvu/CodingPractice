@@ -1,0 +1,26 @@
+https://leetcode.com/problems/xor-queries-of-a-subarray/
+
+class Solution 
+{
+public:
+    vector<int> xorQueries(vector<int>& arr, vector<vector<int>>& queries) 
+    {
+        std::vector<int> xor_arr(arr.begin(), arr.end());
+        for (int i = 1; i < xor_arr.size(); i++)
+        {
+            xor_arr[i] ^= xor_arr[i - 1];
+        }
+        
+        std::vector<int> res;
+        for (const std::vector<int>& query : queries)
+        {
+            int all = xor_arr[xor_arr.size() - 1];
+            int left = query[0] > 0 ? xor_arr[query[0] - 1] : 0;
+            int right = query[1] < xor_arr.size() - 1 ? all ^ xor_arr[query[1]] : 0;
+            
+            res.push_back(all ^ left ^ right);
+        }
+        
+        return res;
+    }
+};

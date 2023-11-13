@@ -1,0 +1,33 @@
+https://leetcode.com/problems/wiggle-sort-ii/
+
+class Solution 
+{
+public:
+    void wiggleSort(vector<int>& nums) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        int left = 0, right = (nums.size() + 1) / 2;
+        while (right < nums.size())
+        {
+            int temp = nums[right];
+            nums.erase(nums.begin() + right);
+            nums.insert(nums.begin() + left + 1, temp);
+            left += 2;
+            right++;
+        }
+        
+        if (nums.size() < 4)
+            return;
+        
+        for (int i = 0; i < nums.size() - 2; i++)
+        {
+            if (nums[i] == nums[i + 1])
+            {
+                std::swap(nums[i - 1], nums[i + 1]);
+                std::swap(nums[i], nums[i + 2]);
+                i = 0;
+            }
+        }
+    }
+};

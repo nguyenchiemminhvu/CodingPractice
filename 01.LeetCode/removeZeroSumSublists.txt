@@ -1,0 +1,75 @@
+https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    ListNode* removeZeroSumSublists(ListNode* head) 
+    {
+        std::vector<int> arr;
+        buildArray(head, arr);
+        removeZeroSumSegment(arr);
+        
+        ListNode* prev = nullptr;
+        ListNode* cur = head;
+        for (int n : arr)
+        {
+            cur->val = n;
+            prev = cur;
+            cur = cur->next;
+        }
+        if (!prev)
+            return nullptr;
+        else
+            prev->next = nullptr;
+        
+        return head;
+    }
+private:
+    void buildArray(ListNode* head, std::vector<int>& arr)
+    {
+        while (head)
+        {
+            arr.push_back(head->val);
+            head = head->next;
+        }
+    }
+    
+    void removeZeroSumSegment(std::vector<int>& arr)
+    {
+        std::vector<int> sum(arr.begin(), arr.end());
+        for (int i = 1; i < sum.size(); i++)
+            sum[i] += sum[i - 1];
+        
+        std::vector<std::pair<int, int>> zeroSegments;
+        int is = 0;
+        while (is < sum.size())
+        {
+            for (int i = sum.size() - 1; i >= is; i--)
+            {
+                if (sum[i] - sum[is] + arr[is] == 0)
+                {
+                    zeroSegments.push_back({ is, i + 1 });
+                    is = i;
+                    break;
+                }
+            }
+            
+            is++;
+        }
+        
+        for (int i = zeroSegments.size() - 1; i >= 0; i--)
+        {
+            arr.erase(arr.begin() + zeroSegments[i].first, arr.begin() + zeroSegments[i].second);
+        }
+    }
+};

@@ -1,0 +1,93 @@
+https://leetcode.com/problems/longest-word-in-dictionary/
+
+class Trie
+{
+public:
+    Trie() {}
+    Trie(char c, bool completed = false) 
+    {
+        ch = c;
+        isWord = completed;
+    }
+    ~Trie() {}
+    
+    void addWord(const std::string& word)
+    {
+        Trie* p = this;
+        for (const char& c : word)
+        {
+            if (p->next[c] == nullptr)
+            {
+                p->next[c] = new Trie(c, false);
+                p = p->next[c];
+            }
+            else
+            {
+                p = p->next[c];
+            }
+        }
+        p->isWord = true;
+    }
+    
+    bool checkPrefix(const std::string& word)
+    {
+        Trie* p = this;
+        for (const char& c : word)
+        {
+            if (p->next[c] == nullptr)
+            {
+                return false;
+            }
+            else
+            {
+                if (p->next[c]->isWord == false)
+                {
+                    return false;
+                }
+                
+                p = p->next[c];
+            }
+        }
+        
+        return true;
+    }
+    
+private:
+    char ch;
+    bool isWord;
+    std::unordered_map<char, Trie*> next;
+};
+
+class Solution 
+{
+public:
+    string longestWord(vector<string>& words) 
+    {
+        Trie *root = new Trie();
+        for (const std::string& word : words)
+        {
+            root->addWord(word);
+        }
+        
+        size_t longest_len = 0;
+        std::string longest_word = "";
+        for (std::string& word : words)
+        {
+            bool rc = root->checkPrefix(word);
+            if (rc && longest_len < word.length())
+            {
+                longest_len = word.length();
+                longest_word.swap(word);
+            }
+            else if (rc && longest_len == word.length())
+            {
+                if (longest_word > word)
+                {
+                    longest_word.swap(word);
+                }
+            }
+        }
+        
+        return longest_word;
+    }
+};

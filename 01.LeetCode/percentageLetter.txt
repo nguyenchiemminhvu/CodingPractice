@@ -1,0 +1,19 @@
+https://leetcode.com/problems/percentage-of-letter-in-string/
+
+class Solution 
+{
+public:
+    int percentageLetter(const string& s, char letter) 
+    {
+        int count = 0;
+        for (const char& c : s)
+        {
+            if (c == letter)
+            {
+                count++;
+            }
+        }
+        
+        return ((double)count / s.length()) * 100;
+    }
+};

@@ -1,0 +1,26 @@
+https://leetcode.com/problems/water-bottles/
+
+class Solution 
+{
+public:
+    int numWaterBottles(int numBottles, int numExchange) 
+    {
+        int count = 0;
+        
+        int count_empty = 0;
+        while (numBottles)
+        {
+            numBottles--;
+            count_empty++;
+            if (count_empty == numExchange)
+            {
+                numBottles++;
+                count_empty = 0;
+            }
+            
+            count++;
+        }
+        
+        return count;
+    }
+};

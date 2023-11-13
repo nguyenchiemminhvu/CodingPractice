@@ -1,0 +1,32 @@
+https://leetcode.com/problems/majority-element-ii/
+
+class Solution 
+{
+public:
+    vector<int> majorityElement(vector<int>& nums) 
+    {
+        std::vector<int> res;
+        int n = nums.size() / 3;
+        
+        std::sort(nums.begin(), nums.end());
+        int count = 1;
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (nums[i] == nums[i - 1])
+            {
+                count++;
+            }
+            else
+            {
+                if (count > n)
+                   res.push_back(nums[i - 1]); 
+                count = 1;
+            }
+        }
+        
+        if (count > n)
+            res.push_back(nums.back());
+        
+        return res;
+    }
+};

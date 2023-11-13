@@ -1,0 +1,29 @@
+https://leetcode.com/problems/find-the-distance-value-between-two-arrays/
+
+class Solution 
+{
+public:
+    int findTheDistanceValue(vector<int>& arr1, vector<int>& arr2, int d) 
+    {
+        std::sort(arr2.begin(), arr2.end());
+        
+        int count = 0;
+        for (const int& n : arr1)
+        {
+            auto L = std::lower_bound(arr2.begin(), arr2.end(), n);
+            
+            if (L != arr2.end() && std::abs(n - *L) <= d)
+                continue;
+            
+            if (std::distance(arr2.begin(), L) > 0)
+            {
+                auto prev = L - 1;
+                if (std::abs(n - *prev) <= d)
+                    continue;
+            }
+            
+            count++;
+        }
+        return count;
+    }
+};

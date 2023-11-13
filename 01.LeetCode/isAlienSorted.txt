@@ -1,0 +1,47 @@
+https://leetcode.com/problems/verifying-an-alien-dictionary/
+
+class Solution 
+{
+public:
+    bool isAlienSorted(vector<string>& words, const string& order) 
+    {
+        char om[26];
+        for (char i = 0; i < order.length(); i++)
+        {
+            om[order[i] - 'a'] = i;
+        }
+        
+        for (char i = 1; i < words.size(); i++)
+        {
+            if (compareUtil(words[i - 1], words[i], om) > 0)
+                return false;
+        }
+        
+        return true;
+    }
+private:
+    int compareUtil(std::string& s1, std::string& s2, char* om)
+    {
+        char i1 = 0;
+        char i2 = 0;
+        while (i1 < s1.length() && i2 < s2.length() && s1[i1] == s2[i2])
+        {
+            i1++;
+            i2++;
+        }
+        
+        if (i1 == s1.length() && i2 == s2.length())
+            return 0;
+        
+        if (i1 == s1.length() && i2 < s2.length())
+            return -1;
+        
+        if (i1 < s1.length() && i2 == s2.length())
+            return 1;
+        
+        if (om[s1[i1] - 'a'] < om[s2[i2] - 'a'])
+            return -1;
+        
+        return 1;
+    }
+};

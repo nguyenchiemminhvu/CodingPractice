@@ -1,0 +1,48 @@
+class Solution 
+{
+public:
+    int reachableNodes(int n, vector<vector<int>>& edges, vector<int>& unreachable) 
+    {
+        std::sort(unreachable.begin(), unreachable.end());
+        
+        std::vector<std::vector<int>> graph(n);
+        for (const std::vector<int>& edge : edges)
+        {
+            if (std::binary_search(unreachable.begin(), unreachable.end(), edge[0])
+             || std::binary_search(unreachable.begin(), unreachable.end(), edge[1]))
+            {
+                continue;
+            }
+            
+            graph[edge[0]].push_back(edge[1]);
+            graph[edge[1]].push_back(edge[0]);
+        }
+        
+        std::queue<int> Q;
+        Q.push(0);
+        
+        std::vector<bool> visited(n, false);
+        visited[0] = true;
+        
+        int count = 0;
+        while (!Q.empty())
+        {
+            int cur = Q.front();
+            Q.pop();
+            
+            count++;
+            
+            std::vector<int>& adj = graph[cur];
+            for (const int& v : adj)
+            {
+                if (!visited[v])
+                {
+                    Q.push(v);
+                    visited[v] = true;
+                }
+            }
+        }
+        
+        return count;
+    }
+};

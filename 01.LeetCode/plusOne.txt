@@ -1,0 +1,31 @@
+https://leetcode.com/problems/plus-one/
+
+class Solution 
+{
+public:
+    vector<int> plusOne(vector<int>& digits) 
+    {
+        int n = digits.size() - 1;
+        digits[n]++;
+        
+        int i = 0, temp = 0;
+        for (int i = n; i >= 0; i--)
+        {
+            digits[i] += temp;
+            temp = 0;
+            
+            if (digits[i] > 9)
+            {
+                digits[i] = 0;
+                temp = 1;
+            }
+        }
+        
+        if (temp == 1)
+        {
+            digits.insert(digits.begin(), 1);
+        }
+        
+        return digits;
+    }
+};

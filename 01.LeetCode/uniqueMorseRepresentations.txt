@@ -1,0 +1,20 @@
+https://leetcode.com/problems/unique-morse-code-words/
+
+class Solution 
+{
+public:
+    int uniqueMorseRepresentations(vector<string>& words) 
+    {
+        std::string table[] = {".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
+        
+        std::set<std::string> S;
+        for (const std::string& word : words)
+        {
+            std::string temp;
+            for (const char& c : word)
+                temp += table[c - 'a'];
+            S.insert(temp);
+        }
+        return S.size();
+    }
+};

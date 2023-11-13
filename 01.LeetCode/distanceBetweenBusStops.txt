@@ -1,0 +1,33 @@
+https://leetcode.com/problems/distance-between-bus-stops/
+
+class Solution 
+{
+public:
+    int distanceBetweenBusStops(vector<int>& distance, int start, int destination) 
+    {
+        return std::min(distUtil(distance, start, destination, true), 
+                        distUtil(distance, start, destination, false));
+    }
+private:
+    int distUtil(vector<int>& distance, int start, int destination, bool clockwise)
+    {
+        int dist = 0;
+        
+        int i = start;
+        while (i != destination)
+        {
+            if (clockwise)
+            {
+                dist += distance[i];
+                i = (i + 1) % distance.size();
+            }
+            else
+            {
+                i = ((i - 1) + distance.size()) % distance.size();
+                dist += distance[i];
+            }
+        }
+        
+        return dist;
+    }
+};

@@ -1,0 +1,32 @@
+https://leetcode.com/problems/semi-ordered-permutation/description/
+
+class Solution 
+{
+public:
+    int semiOrderedPermutation(vector<int>& nums) 
+    {
+        int idx_1 = 0;
+        int idx_n = 0;
+
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[i] == 1)
+            {
+                idx_1 = i;
+            }
+
+            if (nums[i] == nums.size())
+            {
+                idx_n = i;
+            }
+        }
+
+        int res = 0;
+        res -= (idx_n < idx_1);
+
+        res += idx_1;
+        res += nums.size() - idx_n - 1;
+
+        return res;
+    }
+};

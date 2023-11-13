@@ -1,0 +1,28 @@
+https://leetcode.com/problems/find-subarrays-with-equal-sum/
+
+class Solution 
+{
+public:
+    bool findSubarrays(vector<int>& nums) 
+    {
+        if (nums.size() < 3)
+            return false;
+        
+        std::unordered_map<long long, int> checker;
+        
+        long long sum = nums[0] + nums[1];
+        checker[sum]++;
+        
+        for (int i = 2; i < nums.size(); i++)
+        {
+            sum += nums[i];
+            sum -= nums[i - 2];
+            if (checker.find(sum) != checker.end())
+                return true;
+            
+            checker[sum]++;
+        }
+        
+        return false;
+    }
+};

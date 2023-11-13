@@ -1,0 +1,70 @@
+https://leetcode.com/problems/ugly-number-ii/
+
+class Solution 
+{
+public:
+    int nthUglyNumber(int n) 
+    {
+//         int x = 1;
+//         while (n)
+//         {
+//             int val = x;
+//             val = dividing(val, 5);
+//             val = dividing(val, 3);
+//             val = dividing(val, 2);
+//             if (val == 1)
+//             {
+//                 n--;
+//                 if (n == 0)
+//                     break;
+//             }
+            
+//             x++;
+//         }
+        
+//         return x;
+        
+        std::vector<int> nums;
+        generating({2, 3, 5}, nums, n);
+        return nums.back();
+    }
+private:
+    void generating(const std::vector<int>& primes, std::vector<int>& nums, int n)
+    {
+        nums.push_back(1);
+        n--;
+        
+        std::vector<int> times(primes.size(), 0);
+        std::vector<int> candidates(primes.begin(), primes.end());
+        while (n)
+        {
+            int ic = 0;
+            int candidate = candidates[0];
+            for (int i = 1; i < primes.size(); i++)
+            {
+                if (candidate > candidates[i])
+                {
+                    candidate = candidates[i];
+                    ic = i;
+                }
+            }
+            
+            if (candidate > nums.back())
+            {
+                nums.push_back(candidate);
+                n--;
+            }
+            
+            times[ic]++;
+            candidates[ic] = primes[ic] * nums[times[ic]];
+        }
+    }
+    
+    int dividing(int n, int d)
+    {
+        while (n % d == 0)
+            n /= d;
+        
+        return n;
+    }
+};

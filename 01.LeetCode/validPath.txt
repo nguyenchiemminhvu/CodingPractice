@@ -1,0 +1,124 @@
+https://leetcode.com/problems/find-if-path-exists-in-graph/
+
+class DisjointSet
+{
+    std::vector<int> parents;
+    std::vector<int> size;
+
+public:
+    
+    DisjointSet(int n)
+    {
+        parents.resize(n);
+        size.resize(n);
+        for (int i = 0; i < n; i++)
+        {
+            parents[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    ~DisjointSet()
+    {
+
+    }
+
+    void Union(int x, int y)
+    {
+        x = Find(x);
+        y = Find(y);
+        
+        if (x != y)
+        {
+            if (size[x] < size[y])
+            {
+                std::swap(x, y);
+            }
+            
+            parents[y] = x;
+            size[x] += size[y];
+        }
+    }
+
+    int Find(int i)
+    {
+        int temp = i;
+        while (parents[temp] != temp)
+            temp = parents[temp];
+        
+        parents[i] = temp;
+        return temp;
+    }
+
+    bool IsSameSet(int x, int y)
+    {
+        return Find(x) == Find(y);
+    }
+
+    int CountConnectedComponents()
+    {
+        std::set<int> S;
+
+        for (int i = 0; i < parents.size(); i++)
+        {
+            S.insert(parents[i]);
+        }
+
+        return S.size();
+    }
+};
+
+class Solution 
+{
+public:
+    bool validPath(int n, vector<vector<int>>& edges, int s, int d) 
+    {
+//         std::unordered_map<int, std::vector<int>> graph;
+//         for (const std::vector<int>& edge : edges)
+//         {
+//             graph[edge[0]].push_back(edge[1]);
+//             graph[edge[1]].push_back(edge[0]);
+//         }
+        
+//         return BFS(n, graph, s, d);
+        
+        DisjointSet ds(n);
+        for (const std::vector<int>& edge : edges)
+        {
+            ds.Union(edge[0], edge[1]);
+            ds.Union(edge[1], edge[0]);
+        }
+        
+        return ds.IsSameSet(s, d);
+    }
+private:
+    bool BFS(int n, std::unordered_map<int, std::vector<int>>& graph, int s, int d)
+    {
+        std::queue<int> Q;
+        Q.push(s);
+        
+        std::vector<bool> checker(n, false);
+        
+        while (!Q.empty())
+        {
+            int cur = Q.front();
+            Q.pop();
+            
+            if (cur == d)
+                return true;
+            
+            checker[cur] = true;
+            
+            for (int i = 0; i < graph[cur].size(); i++)
+            {
+                int next = graph[cur][i];
+                if (!checker[next])
+                {
+                    Q.push(next);
+                }
+            }
+        }
+        
+        return false;
+    }
+};

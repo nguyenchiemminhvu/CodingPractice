@@ -1,0 +1,48 @@
+https://www.hackerrank.com/challenges/the-time-in-words/problem
+
+std::string timeInWords(int h, int m)
+{
+    std::vector<std::string> v = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twenty one", "twenty two", "twenty three", "twenty four", "twenty five", "twenty six", "twenty seven", "twenty eight", "twenty nine" };
+     
+    if (m == 0)
+    {
+        return v[h] + " o' clock";
+    }
+     
+    std::string res;
+     
+    if (m == 45)
+    {
+        res = "quarter to " + v[h + 1];
+        return res;
+    }
+     
+    if (m > 30)
+    {
+        m = 60 - m;
+        res = v[m] + " minutes to " + v[h + 1];
+        return res;
+    }
+     
+    if (m == 30)
+    {
+        res = "half past " + v[h];
+        return res;
+    }
+     
+    if (m == 15)
+    {
+        res = "quarter past " + v[h];
+        return res;
+    }
+     
+    if (m == 1)
+    {
+        res = v[m] + " minute past " + v[h];
+        return res;
+    }
+     
+    res = v[m] + " minutes past " + v[h];
+     
+    return res;
+}

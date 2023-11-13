@@ -1,0 +1,31 @@
+https://leetcode.com/problems/sort-characters-by-frequency/
+
+class Solution 
+{
+public:
+    string frequencySort(string& s) 
+    {
+        std::vector<int> freq(128, 0);
+        for (const char& c : s)
+        {
+            freq[c]++;
+        }
+        
+        std::sort
+        (
+            s.begin(), 
+            s.end(), 
+            [&](const char& a, const char& b)
+            {
+                if (freq[a] > freq[b])
+                    return true;
+                if (freq[a] < freq[b])
+                    return false;
+                
+                return a < b;
+            }
+        );
+        
+        return s;
+    }
+};

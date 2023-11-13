@@ -1,0 +1,20 @@
+https://leetcode.com/problems/total-distance-traveled/description/
+
+class Solution 
+{
+public:
+    int distanceTraveled(int mainTank, int additionalTank) 
+    {
+        int res = 0;
+        while (mainTank >= 5 && additionalTank > 0)
+        {
+            mainTank -= 5;
+            res += 50;
+            mainTank++;
+            additionalTank--;
+        }
+
+        res += mainTank * 10;
+        return res;
+    }
+};

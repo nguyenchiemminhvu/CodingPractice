@@ -1,0 +1,26 @@
+https://leetcode.com/problems/isomorphic-strings/
+
+class Solution 
+{
+public:
+    bool isIsomorphic(string s, string t) 
+    {
+        return checking(s, t) && checking(t, s);
+    }
+private:
+    bool checking(std::string s, std::string t)
+    {
+        std::unordered_map<char, int> checker;
+        for (int i = 0; i < s.length(); i++)
+        {
+            checker[s[i]] = t[i] - s[i];
+        }
+        
+        for (char& c : s)
+        {
+            c = c + checker[c];
+        }
+        
+        return s == t;
+    }
+};

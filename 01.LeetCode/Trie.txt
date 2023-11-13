@@ -1,0 +1,87 @@
+https://leetcode.com/problems/implement-trie-prefix-tree/
+
+struct TrieNode
+{
+    char ch;
+    bool isCompleted = false;
+    std::unordered_map<char, TrieNode*> nodes;
+};
+
+class Trie 
+{
+public:
+    Trie() 
+    {
+        root = new TrieNode();
+    }
+    
+    void insert(const string& word) 
+    {
+        TrieNode* p = root;
+        for (size_t i = 0; i < word.length(); i++)
+        {
+            if (p->nodes[word[i]] == nullptr)
+            {
+                p->nodes[word[i]] = createNode(word[i]);    
+            }
+            
+            if (i == word.length() - 1)
+            {
+                p->nodes[word[i]]->isCompleted = true;
+            }
+            
+            p = p->nodes[word[i]];
+        }
+    }
+    
+    bool search(const string& word) 
+    {
+        TrieNode* p = root;
+        for (size_t i = 0; i < word.length(); i++)
+        {
+            if (p->nodes[word[i]] == nullptr)
+            {
+                return false;
+            }
+            
+            p = p->nodes[word[i]];
+        }
+        
+        return p->isCompleted;
+    }
+    
+    bool startsWith(const string& prefix) 
+    {
+        TrieNode* p = root;
+        for (size_t i = 0; i < prefix.length(); i++)
+        {
+            if (p->nodes[prefix[i]] == nullptr)
+            {
+                return false;
+            }
+            
+            p = p->nodes[prefix[i]];
+        }
+        
+        return true;
+    }
+    
+private:
+    TrieNode* root;
+    
+    TrieNode* createNode(char c, bool completed = false)
+    {
+        TrieNode* node = new TrieNode();
+        node->ch = c;
+        node->isCompleted = completed;
+        return node;
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */

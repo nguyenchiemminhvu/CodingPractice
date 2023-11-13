@@ -1,0 +1,23 @@
+https://leetcode.com/problems/number-of-rectangles-that-can-form-the-largest-square/
+
+class Solution 
+{
+public:
+    int countGoodRectangles(vector<vector<int>>& rectangles) 
+    {
+        int max_edge = 0;
+        for (const std::vector<int>& rec : rectangles)
+        {
+            max_edge = std::max(max_edge, std::min(rec[0], rec[1]));
+        }
+        
+        int count = 0;
+        for (const std::vector<int>& rec : rectangles)
+        {
+            if (std::min(rec[0], rec[1]) == max_edge)
+                count++;
+        }
+        
+        return count;
+    }
+};

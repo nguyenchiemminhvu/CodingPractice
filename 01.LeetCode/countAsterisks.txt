@@ -1,0 +1,27 @@
+https://leetcode.com/problems/count-asterisks/
+
+class Solution 
+{
+public:
+    int countAsterisks(string& s) 
+    {
+        int res = 0;
+        bool should_count = true;
+        
+        for (const char& c : s)
+        {
+            if (c == '|')
+            {
+                should_count = !should_count;
+                continue;
+            }
+            
+            if (c == '*')
+            {
+                res += should_count;
+            }
+        }
+        
+        return res;
+    }
+};

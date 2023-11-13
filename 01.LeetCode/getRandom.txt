@@ -1,0 +1,52 @@
+https://leetcode.com/problems/linked-list-random-node/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    Solution(ListNode* head) 
+    {
+        L = head;
+        
+        count = 0;
+        while (head)
+        {
+            count++;
+            head = head->next;
+        }
+        
+        std::srand(std::time(nullptr));
+    }
+    
+    int getRandom() 
+    {
+        int idx = std::rand() % count;
+        
+        ListNode* temp = L;
+        while (idx)
+        {
+            temp = temp->next;
+            idx--;
+        }
+        
+        return temp->val;
+    }
+private:
+    ListNode* L;
+    int count;
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(head);
+ * int param_1 = obj->getRandom();
+ */

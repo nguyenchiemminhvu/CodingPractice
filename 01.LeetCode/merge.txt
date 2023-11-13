@@ -1,0 +1,23 @@
+https://leetcode.com/problems/merge-sorted-array/
+
+class Solution 
+{
+public:
+    void merge(vector<int>& a, int m, vector<int>& b, int n) 
+    {
+        if (m == 0)
+        {
+            a = b;
+            return;
+        }
+        
+        if (n == 0)
+        {
+            return;
+        }
+        
+        a.erase(a.begin() + m, a.end());
+        a.insert(a.begin() + m, b.begin(), b.end());
+        std::sort(a.begin(), a.end());
+    }
+};

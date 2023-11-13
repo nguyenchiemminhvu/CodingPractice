@@ -1,0 +1,64 @@
+https://leetcode.com/problems/n-queens/
+
+class Solution 
+{
+public:
+    vector<vector<string>> solveNQueens(int n) 
+    {
+        std::vector<std::vector<bool>> checker(n, std::vector<bool>(n, false));
+        
+        std::vector<std::vector<std::string>> res;
+        std::vector<int> temp;
+        generating(n, 0, temp, checker, res);
+        return res;
+    }
+private:
+    void generating(int n, int i, std::vector<int>& temp, std::vector<std::vector<bool>>& checker, std::vector<std::vector<std::string>>& res)
+    {
+        if (i >= n)
+        {
+            std::vector<std::string> solution(n, std::string(n, '.'));
+            for (int row = 0; row < n; row++)
+            {
+                solution[row][temp[row]] = 'Q';
+            }
+            res.push_back(solution);
+            return;
+        }
+        
+        for (int j = 0; j < n; j++)
+        {
+            if (isValid(checker, i, j))
+            {
+                temp.push_back(j);
+                checker[i][j] = true;
+                generating(n, i + 1, temp, checker, res);
+                checker[i][j] = false;
+                temp.pop_back();
+            }
+        }
+    }
+    
+    bool isValid(const std::vector<std::vector<bool>>& checker, int row, int col)
+    {
+        for (int i = 0; i < checker.size(); i++)
+        {
+            if (checker[i][col] == true)
+                return false;
+        }
+        
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+        {
+            if (checker[i][j] == true)
+                return false;
+        }
+        
+        for (int i = row, j = col; i >= 0 && j < checker.size(); i--, j++)
+        {
+            if (checker[i][j] == true)
+                return false;
+        }
+        
+        return true;
+    }
+};

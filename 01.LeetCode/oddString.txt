@@ -1,0 +1,32 @@
+https://leetcode.com/problems/odd-string-difference/description/
+
+class Solution 
+{
+public:
+    string oddString(vector<string>& words) 
+    {
+        std::map<std::vector<int>, std::pair<int, std::string>> checker;
+        for (const std::string& s : words)
+        {
+            std::vector<int> diff(s.length() - 1, 0);
+            for (int i = 1; i < s.length(); i++)
+            {
+                diff[i - 1] = s[i] - s[i - 1];
+            }
+
+            auto& temp = checker[diff];
+            temp.first++;
+            temp.second = s;
+        }
+
+        for (const auto& p : checker)
+        {
+            if (p.second.first == 1)
+            {
+                return p.second.second;
+            }
+        }
+
+        return "";
+    }
+};

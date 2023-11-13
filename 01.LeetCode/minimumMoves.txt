@@ -1,0 +1,19 @@
+https://leetcode.com/problems/minimum-moves-to-convert-string/
+
+class Solution 
+{
+public:
+    int minimumMoves(const string& s) 
+    {
+        int count = 0;
+        
+        size_t is = 0;
+        while ((is = s.find('X', is)) != std::string::npos)
+        {
+            count++;
+            is = is + 3;
+        }
+        
+        return count;
+    }
+};

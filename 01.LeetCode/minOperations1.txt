@@ -1,0 +1,46 @@
+https://leetcode.com/problems/minimum-changes-to-make-alternating-binary-string/
+
+class Solution 
+{
+public:
+    int minOperations(const string& s) 
+    {
+        std::string temp(s.length(), '0');
+        
+        int op1 = 0;
+        buildString(temp, '0', s.length());
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s[i] != temp[i])
+                op1++;
+        }
+        
+        int op2 = 0;
+        buildString(temp, '1', s.length());
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s[i] != temp[i])
+                op2++;
+        }
+        
+        return std::min(op1, op2);
+    }
+private:
+    void buildString(std::string& s, char startLetter, int len)
+    {
+        int is = 0;
+        s[is++] = startLetter;
+        
+        while (is < len)
+        {
+            if (s[is - 1] == '0')
+            {
+                s[is++] = '1';
+            }
+            else
+            {
+                s[is++] = '0';
+            }
+        }
+    }
+};

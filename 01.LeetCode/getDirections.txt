@@ -1,0 +1,75 @@
+https://leetcode.com/problems/step-by-step-directions-from-a-binary-tree-node-to-another/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution 
+{
+public:
+    string getDirections(TreeNode* root, int start, int end) 
+    {
+        std::vector<std::pair<int, bool>> path_to_start;
+        std::vector<std::pair<int, bool>> path_to_end;
+        
+        traversal(root, start, false, path_to_start);
+        traversal(root, end, false, path_to_end);
+        
+        int common_idx = 0;
+        while (common_idx < path_to_start.size() && common_idx < path_to_end.size())
+        {
+            if (path_to_start[common_idx].first != path_to_end[common_idx].first)
+            {
+                break;
+            }
+            
+            common_idx++;
+        }
+        common_idx--;
+        
+        std::string res;
+        for (int i = path_to_start.size() - 1; i > common_idx; i--)
+        {
+            res += "U";
+        }
+        
+        for (int i = common_idx + 1; i < path_to_end.size(); i++)
+        {
+            if (path_to_end[i].second)
+            {
+                res += "L";
+            }
+            else
+            {
+                res += "R";
+            }
+        }
+        
+        return res;
+    }
+private:
+    void traversal(TreeNode* root, int dest, bool isLeft, std::vector<std::pair<int, bool>>& path)
+    {
+        if (!root)
+            return;
+        
+        path.push_back({root->val, isLeft});
+        if (root->val == dest)
+            return;
+        
+        traversal(root->left, dest, true, path);
+        traversal(root->right, dest, false, path);
+        
+        if (!path.empty() && path.back().first == dest)
+            return;
+        
+        path.pop_back();
+    }
+};

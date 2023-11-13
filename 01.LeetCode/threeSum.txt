@@ -1,0 +1,38 @@
+https://leetcode.com/problems/3sum/
+
+class Solution 
+{
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) 
+    {
+        std::vector<std::vector<int>> res;
+        
+        std::sort(nums.begin(), nums.end());
+        int first = INT_MIN;
+        int second = INT_MIN;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[i] > 0)
+                break;
+            
+            if (nums[i] == first)
+                continue;
+            
+            first = nums[i];
+            for (int j = i + 1; j < nums.size(); j++)
+            {
+                if (nums[j] == second)
+                    continue;
+                
+                second = nums[j];
+                int rest = 0 - nums[i] - nums[j];
+                if (std::binary_search(nums.begin() + j + 1, nums.end(), rest))
+                {
+                    res.push_back({nums[i], nums[j], rest});
+                }
+            }
+        }
+        
+        return res;
+    }
+};

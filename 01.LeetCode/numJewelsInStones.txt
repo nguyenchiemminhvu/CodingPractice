@@ -1,0 +1,21 @@
+https://leetcode.com/problems/jewels-and-stones/
+
+class Solution 
+{
+public:
+    int numJewelsInStones(string jewels, string stones) 
+    {
+        std::unordered_map<char, int> checker;
+        for (const char& c : stones)
+        {
+            checker[c]++;
+        }
+        
+        int count = 0;
+        for (const char& c : jewels)
+        {
+            count += checker[c];
+        }
+        return count;
+    }
+};

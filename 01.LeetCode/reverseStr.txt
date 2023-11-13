@@ -1,0 +1,18 @@
+https://leetcode.com/problems/reverse-string-ii/
+
+class Solution 
+{
+public:
+    string reverseStr(string s, int k) 
+    {
+        for (size_t i = 0; i < s.length(); i += k * 2)
+        {
+            if (i + k <= s.length())
+                std::reverse(s.begin() + i, s.begin() + i + k);
+            else
+                std::reverse(s.begin() + i, s.end());
+        }
+        
+        return s;
+    }
+};

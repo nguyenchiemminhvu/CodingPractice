@@ -1,0 +1,20 @@
+https://leetcode.com/problems/richest-customer-wealth/
+
+class Solution 
+{
+public:
+    int maximumWealth(vector<vector<int>>& accounts) 
+    {
+        int max_money = 0;
+        
+        for (const std::vector<int>& row : accounts)
+        {
+            int temp = 0;
+            for (const int& n : row)
+                temp += n;
+            max_money = std::max(max_money, temp);
+        }
+        
+        return max_money;
+    }
+};

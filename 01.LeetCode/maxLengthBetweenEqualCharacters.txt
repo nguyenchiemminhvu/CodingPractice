@@ -1,0 +1,20 @@
+https://leetcode.com/problems/largest-substring-between-two-equal-characters/
+
+class Solution 
+{
+public:
+    int maxLengthBetweenEqualCharacters(const string& s) 
+    {
+        int maxLength = -1;
+        for (int i = 0; i < s.length(); i++)
+        {
+            auto found = s.find_last_of(s[i]);
+            if (found != std::string::npos)
+            {
+                maxLength = std::max(maxLength, (int)found - i - 1);
+            }
+        }
+        
+        return maxLength;
+    }
+};

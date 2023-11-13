@@ -1,0 +1,22 @@
+https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x/
+
+class Solution 
+{
+public:
+    int specialArray(vector<int>& nums) 
+    {
+        std::sort(nums.begin(), nums.end());
+        for (int x = 0; x <= nums.size(); x++)
+        {
+            auto L = std::lower_bound(nums.begin(), nums.end(), x);
+            if (L != nums.end())
+            {
+                //cout << x << " " << std::distance(L, nums.end()) << endl;
+                if (x == std::distance(L, nums.end()))
+                    return x;
+            }
+        }
+        
+        return -1;
+    }
+};

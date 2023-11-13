@@ -1,0 +1,25 @@
+https://leetcode.com/problems/minimize-string-length/description/
+
+class Solution 
+{
+public:
+    int minimizedStringLength(const string& s)
+    {
+        int freq[26] = {0};
+        for (char c : s)
+        {
+            freq[c - 'a']++;
+        }
+
+        int count = 0;
+        for (int i = 0; i < 26; i++)
+        {
+            if (freq[i] > 0)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+};

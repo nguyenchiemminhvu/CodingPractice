@@ -1,0 +1,24 @@
+https://leetcode.com/problems/longest-continuous-increasing-subsequence/submissions/
+
+class Solution 
+{
+public:
+    int findLengthOfLCIS(vector<int>& nums) 
+    {
+        int LCIS = 0;
+        
+        int cur = 1;
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (nums[i] <= nums[i - 1])
+            {
+                LCIS = std::max(LCIS, cur);
+                cur = 0;
+            }
+            
+            cur++;
+        }
+        
+        return std::max(LCIS, cur);
+    }
+};

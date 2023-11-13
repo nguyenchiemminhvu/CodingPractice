@@ -1,0 +1,21 @@
+https://leetcode.com/problems/maximum-number-of-words-you-can-type/
+
+class Solution 
+{
+public:
+    int canBeTypedWords(string& s, const string& broken) 
+    {
+        int count = 0;
+        
+        std::stringstream ss(s);
+        while (ss >> s)
+        {
+            if (s.find_first_of(broken) == std::string::npos)
+            {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+};

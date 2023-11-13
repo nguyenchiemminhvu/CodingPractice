@@ -1,0 +1,52 @@
+https://leetcode.com/problems/insert-delete-getrandom-o1/
+
+class RandomizedSet 
+{
+public:
+    std::vector<int> nums;
+    
+    RandomizedSet() 
+    {
+        nums.clear();
+    }
+    
+    bool insert(int val) 
+    {
+        auto it = std::lower_bound(nums.begin(), nums.end(), val);
+        if (it == nums.end() || *it != val)
+        {
+            nums.insert(it, val);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    bool remove(int val) 
+    {
+        auto it = std::lower_bound(nums.begin(), nums.end(), val);
+        if (it != nums.end() && *it == val)
+        {
+            nums.erase(it);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    int getRandom() 
+    {
+        if (nums.size() == 1)
+            return nums[0];
+        
+        return nums[rand() % nums.size()];
+    }
+};
+
+/**
+ * Your RandomizedSet object will be instantiated and called as such:
+ * RandomizedSet* obj = new RandomizedSet();
+ * bool param_1 = obj->insert(val);
+ * bool param_2 = obj->remove(val);
+ * int param_3 = obj->getRandom();
+ */

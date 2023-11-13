@@ -1,0 +1,29 @@
+https://leetcode.com/problems/minimum-hours-of-training-to-win-a-competition/
+
+class Solution 
+{
+public:
+    int minNumberOfHours(int cur_energy, int cur_exp, vector<int>& energy, vector<int>& exp) 
+    {
+        int hour_of_training = 0;
+        for (int i = 0; i < exp.size(); i++)
+        {
+            if (energy[i] >= cur_energy)
+            {
+                hour_of_training += (energy[i] - cur_energy + 1);
+                cur_energy += (energy[i] - cur_energy + 1);
+            }
+            
+            if (exp[i] >= cur_exp)
+            {
+                hour_of_training += (exp[i] - cur_exp + 1);
+                cur_exp += (exp[i] - cur_exp + 1);
+            }
+            
+            cur_energy -= energy[i];
+            cur_exp += exp[i];
+        }
+        
+        return hour_of_training;
+    }
+};

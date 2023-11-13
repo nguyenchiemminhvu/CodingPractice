@@ -1,0 +1,27 @@
+https://leetcode.com/problems/single-number-ii/
+
+class Solution 
+{
+public:
+    int singleNumber(vector<int>& nums) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        for (int i = 2; i < nums.size(); i += 3)
+        {
+            // cout << nums[i] << " " << nums[i - 1] << " " << nums[i - 2] << endl;
+            
+            int x = 0;
+            x ^= nums[i];
+            x ^= nums[i - 1];
+            x ^= nums[i - 2];
+            
+            if (x != nums[i])
+            {
+                return x;
+            }
+        }
+        
+        return nums[nums.size() - 1];
+    }
+};

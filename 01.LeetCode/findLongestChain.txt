@@ -1,0 +1,62 @@
+https://leetcode.com/problems/maximum-length-of-pair-chain/
+
+class Solution 
+{
+public:
+    int findLongestChain(vector<vector<int>>& pairs) 
+    {
+        std::sort(
+            pairs.begin(),
+            pairs.end(),
+            [](const std::vector<int>& a, const std::vector<int>& b)
+            {
+                return a[0] < b[0];
+            }
+        );
+        
+        // return longestBT(pairs, pairs.size() - 1);
+        return longestDP(pairs);
+    }
+private:
+    int longestBT(const std::vector<std::vector<int>>& pairs, int i)
+    {
+        if (i < 0)
+            return INT_MIN;
+        
+        if (i == 0)
+            return 1;
+        
+        int res = 1;
+        for (int j = 0; j < i; j++)
+        {
+            if (pairs[i][0] <= pairs[j][1])
+            {
+                res = std::max(res, longestBT(pairs, j));
+            }
+            else
+            {
+                res = std::max(res, 1 + longestBT(pairs, j));
+            }
+        }
+        return res;
+    }
+    
+    int longestDP(const std::vector<std::vector<int>>& pairs)
+    {
+        std::vector<int> dp(pairs.size(), 0);
+        dp[0] = 1;
+        
+        for (int i = 1; i < pairs.size(); i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (pairs[i][0] <= pairs[j][1])
+                    dp[i] = std::max(dp[i], dp[j]);
+                else
+                    dp[i] = std::max(dp[i], 1 + dp[j]);
+            }
+        }
+        
+        return dp.back();
+    }
+};

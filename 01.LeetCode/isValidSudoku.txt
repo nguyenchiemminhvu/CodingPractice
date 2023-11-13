@@ -1,0 +1,74 @@
+https://leetcode.com/problems/valid-sudoku/
+
+class Solution 
+{
+public:
+    bool isValidSudoku(vector<vector<char>>& board) 
+    {
+        // check rows
+        for (int r = 0; r < 9; r++)
+        {
+            std::vector<int> nums;
+            for (int c = 0; c < 9; c++)
+            {
+                if (std::isdigit(board[r][c]))
+                {
+                    nums.push_back(board[r][c] - '0');
+                }
+            }
+            if (!checkNonDuplicated(nums))
+                return false;
+        }
+        
+        // check cols
+        for (int c = 0; c < 9; c++)
+        {
+            std::vector<int> nums;
+            for (int r = 0; r < 9; r++)
+            {
+                if (std::isdigit(board[r][c]))
+                {
+                    nums.push_back(board[r][c] - '0');
+                }
+            }
+            if (!checkNonDuplicated(nums))
+                return false;
+        }
+        
+        // check windows
+        for (int r = 0; r < 9; r += 3)
+        {
+            for (int c = 0; c < 9; c += 3)
+            {
+                std::vector<int> nums;
+                
+                for (int i = r; i <= r + 2; i++)
+                {
+                    for (int j = c; j <= c + 2; j++)
+                    {
+                        if (std::isdigit(board[i][j]))
+                            nums.push_back(board[i][j]);
+                    }
+                }
+                
+                if (!checkNonDuplicated(nums))
+                    return false;
+            }
+        }
+        
+        return true;
+    }
+private:
+    bool checkNonDuplicated(const std::vector<int>& nums)
+    {
+        std::unordered_map<int, bool> checker;
+        for (const int& n : nums)
+        {
+            if (checker[n])
+                return false;
+            checker[n] = true;
+        }
+        
+        return true;
+    }
+};

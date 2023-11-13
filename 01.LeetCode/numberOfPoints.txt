@@ -1,0 +1,24 @@
+https://leetcode.com/problems/points-that-intersect-with-cars/description/
+
+class Solution 
+{
+public:
+    int numberOfPoints(vector<vector<int>>& nums) 
+    {
+        bool buff[101] = {false};
+        for (const std::vector<int>& pair : nums)
+        {
+            for (int i = pair[0]; i <= pair[1]; i++)
+            {
+                buff[i] = true;
+            }
+        }
+
+        int count = 0;
+        for (int i = 0; i < 101; i++)
+        {
+            count += buff[i];
+        }
+        return count;
+    }
+};

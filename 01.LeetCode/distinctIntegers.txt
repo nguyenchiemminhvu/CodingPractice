@@ -1,0 +1,35 @@
+https://leetcode.com/problems/count-distinct-numbers-on-board/description/
+
+class Solution 
+{
+public:
+    int distinctIntegers(int n) 
+    {
+        std::set<int> s;
+        int days = 1e9;
+
+        s.insert(n);
+        int prev_s_size = 1;
+        while (days)
+        {
+            for (int temp : s)
+            {
+                for (int i = 1; i <= n; i++)
+                {
+                    if (temp % i == 1)
+                    {
+                        s.insert(i);
+                    }
+                }
+            }
+
+            if (s.size() == prev_s_size)
+                break;
+            
+            prev_s_size = s.size();
+            days--;
+        }
+
+        return s.size();
+    }
+};

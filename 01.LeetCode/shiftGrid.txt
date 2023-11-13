@@ -1,0 +1,54 @@
+https://leetcode.com/problems/shift-2d-grid/
+
+class Solution 
+{
+public:
+    vector<vector<int>> shiftGrid(vector<vector<int>>& grid, int k) 
+    {
+        std::vector<int> nums;
+        for (const std::vector<int>& row : grid)
+        {
+            nums.insert(nums.end(), row.begin(), row.end());
+        }
+        
+        k %= nums.size();
+        std::rotate(nums.rbegin(), nums.rbegin() + k, nums.rend());
+        
+        for (int i = 0; i < nums.size(); i++)
+        {
+            grid[i / grid[0].size()][i % grid[0].size()] = nums[i];
+        }
+        
+        return grid;
+    }
+};
+
+
+class Solution 
+{
+public:
+    vector<vector<int>> shiftGrid(vector<vector<int>>& grid, int k) 
+    {
+        int M = grid.size();
+        int N = grid[0].size();
+        k %= (M * N);
+        
+        std::vector<int> nums;
+        for (int i = M * N - k; i < M * N; i++)
+        {
+            nums.push_back(grid[i / N][i % N]);
+        }
+        
+        for (int i = M * N - 1; i >= k; i--)
+        {
+            grid[i / N][i % N] = grid[(i - k) / N][(i - k) % N];
+        }
+        
+        for (int i = 0; i < nums.size(); i++)
+        {
+            grid[i / N][i % N] = nums[i];
+        }
+        
+        return grid;
+    }
+};

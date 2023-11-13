@@ -1,0 +1,17 @@
+https://www.hackerrank.com/challenges/sock-merchant/problem
+
+int sockMerchant(int n, vector<int> ar)
+{
+    int freq[101] = {0};
+    for (int color : ar)
+    {
+        freq[color]++;
+    }
+     
+    int count = 0;
+    for (int i = 0; i <= 100; i++)
+    {
+        count += (freq[i] >> 1);
+    }
+    return count;
+}

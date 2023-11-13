@@ -1,0 +1,33 @@
+https://leetcode.com/problems/minimum-time-visiting-all-points/
+
+class Solution 
+{
+public:
+    int minTimeToVisitAllPoints(vector<vector<int>>& points) 
+    {
+        int total_time = 0;
+        
+        for (int i = 1; i < points.size(); i++)
+        {
+            total_time += move(points[i - 1], points[i]);
+        }
+        
+        return total_time;
+    }
+private:
+    int move(const std::vector<int>& p1, const std::vector<int>& p2)
+    {
+        int t = 0;
+        
+        int diff_x = std::abs(p1[0] - p2[0]);
+        int diff_y = std::abs(p1[1] - p2[1]);
+        int m = std::min(diff_x, diff_y);
+        
+        t += m;
+        diff_x -= m;
+        diff_y -= m;
+        t += (diff_x + diff_y);
+        
+        return t;
+    }
+};

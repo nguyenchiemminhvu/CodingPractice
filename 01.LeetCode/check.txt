@@ -1,0 +1,32 @@
+https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/
+
+class Solution 
+{
+public:
+    bool check(vector<int>& nums) 
+    {
+        int start = 0;
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (nums[i] < nums[i - 1])
+            {
+                start = i;
+                break;
+            }
+        }
+        
+        int count = 0;
+        while (count < nums.size() - 1)
+        {
+            int next = (start + 1) % nums.size();
+            //cout << nums[start] << " " << nums[next] << endl;
+            if (nums[next] < nums[start])
+                return false;
+            
+            start = next;
+            count++;
+        }
+        
+        return true;
+    }
+};

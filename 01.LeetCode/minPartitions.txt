@@ -1,0 +1,16 @@
+https://leetcode.com/problems/partitioning-into-minimum-number-of-deci-binary-numbers/
+
+class Solution 
+{
+public:
+    int minPartitions(const string& n) 
+    {
+        int res = 0;
+        for (const char& c : n)
+        {
+            res = std::max(res, c - '0');
+        }
+        
+        return res;
+    }
+};

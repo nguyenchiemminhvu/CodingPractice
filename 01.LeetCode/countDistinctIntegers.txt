@@ -1,0 +1,26 @@
+https://leetcode.com/contest/weekly-contest-315/problems/count-number-of-distinct-integers-after-reverse-operations/
+
+class Solution 
+{
+public:
+    int countDistinctIntegers(vector<int>& nums) 
+    {
+        std::set<int> S(nums.begin(), nums.end());
+        for (const int& n : nums)
+        {
+            S.insert(reverse(n));
+        }
+        return S.size();
+    }
+private:
+    int reverse(int n)
+    {
+        int res = 0;
+        while (n)
+        {
+            res = res * 10 + (n % 10);
+            n /= 10;
+        }
+        return res;
+    }
+};

@@ -1,0 +1,32 @@
+https://leetcode.com/problems/long-pressed-name/
+
+class Solution 
+{
+public:
+    bool isLongPressedName(const string& name, const string& typed) 
+    {
+        if (typed.length() < name.length())
+            return false;
+        
+        int it = 0;
+        for (int i = 0; i < name.length(); i++)
+        {
+            if (name[i] != typed[it])
+                return false;
+            
+            while (i < name.length() - 1 && name[i] == name[i + 1] && typed[it + 1] == name[i])
+            {
+                i++;
+                it++;
+            }
+            
+            while (typed[it] == name[i])
+                it++;
+            
+            if (it >= typed.length())
+                return i >= name.length() - 1;
+        }
+        
+        return it >= typed.length();
+    }
+};

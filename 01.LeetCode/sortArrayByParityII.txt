@@ -1,0 +1,46 @@
+https://leetcode.com/problems/sort-array-by-parity-ii/
+
+class Solution 
+{
+public:
+    vector<int> sortArrayByParityII(const vector<int>& nums) 
+    {
+//         std::queue<int> q_even;
+//         std::queue<int> q_odd;
+//         for (const int& n : nums)
+//         {
+//             if (n & 1)
+//                 q_odd.push(n);
+//             else
+//                 q_even.push(n);
+//         }
+        
+//         int i = 0;
+//         while (!q_even.empty() && !q_odd.empty())
+//         {
+//             nums[i++] = q_even.front();
+//             nums[i++] = q_odd.front();
+            
+//             q_even.pop();
+//             q_odd.pop();
+//         }
+        
+        int i_even = 0;
+        int i_odd = 1;
+        std::vector<int> sorted(nums.size(), 0);
+        for (const int& n : nums)
+        {
+            if (n & 1)
+            {
+                sorted[i_odd] = n;
+                i_odd += 2;
+            }
+            else
+            {
+                sorted[i_even] = n;
+                i_even += 2;
+            }
+        }
+        return sorted;
+    }
+};

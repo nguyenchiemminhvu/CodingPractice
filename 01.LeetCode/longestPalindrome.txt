@@ -1,0 +1,36 @@
+https://leetcode.com/problems/longest-palindrome/
+
+class Solution 
+{
+public:
+    int longestPalindrome(string s) 
+    {
+        int freq[256] = { 0 };
+        for (const char& c : s)
+            freq[c]++;
+        
+        int cur_length = 0;
+        for (int i = 'a'; i <= 'z'; i++)
+        {
+            if (freq[i] % 2 == 0)
+                cur_length += freq[i];
+            else
+                cur_length += freq[i] - 1;
+        }
+        
+        for (int i = 'A'; i <= 'Z'; i++)
+        {
+            if (freq[i] % 2 == 0)
+                cur_length += freq[i];
+            else
+                cur_length += freq[i] - 1;
+        }
+        
+        if (cur_length < s.length())
+        {
+            cur_length++;
+        }
+        
+        return cur_length;
+    }
+};

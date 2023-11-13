@@ -1,0 +1,29 @@
+https://www.hackerrank.com/challenges/pairs/problem
+
+int pairs(int k, vector<int> arr)
+{
+    int count = 0;
+     
+    std::sort(arr.begin(), arr.end());
+     
+    int slow = 0, fast = 1;
+    while (fast < arr.size())
+    {
+        int diff = arr[fast] - arr[slow];
+        if (diff == k)
+        {
+            count++;
+            fast++;
+        }
+        else if (diff < k)
+        {
+            fast++;
+        }
+        else if (diff > k)
+        {
+            slow++;
+        }
+    }
+     
+    return count;
+}

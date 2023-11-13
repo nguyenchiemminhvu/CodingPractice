@@ -1,0 +1,104 @@
+https://www.hackerrank.com/challenges/red-knights-shortest-path/problem
+
+std::pair<std::string, std::pair<int, int>> moveDir[] =
+{
+    std::pair<std::string, std::pair<int, int>>("UL", {-2, -1}),
+    std::pair<std::string, std::pair<int, int>>("UR", {-2, 1}),
+    std::pair<std::string, std::pair<int, int>>("R", {0, 2}),
+    std::pair<std::string, std::pair<int, int>>("LR", {2, 1}),
+    std::pair<std::string, std::pair<int, int>>("LL", {2, -1}),
+    std::pair<std::string, std::pair<int, int>>("L", {0, -2}),
+};
+std::vector<std::string> shortestMove;
+ 
+bool isInBoard(int n, int r, int c)
+{
+    return r >= 0 && r < n && c >=0 && c < n;
+}
+ 
+void DFS(int n, int endR, int endC, int curR, int curC, std::vector<std::vector<bool>> &check, std::vector<std::string> &move)
+{
+    if (curR == endR && curC == endC)
+    {
+        if (shortestMove.empty() || shortestMove.size() > move.size())
+            shortestMove = move;
+        return;
+    }
+     
+    for (int i = 0; i < 6; i++)
+    {
+        int nextR = curR + moveDir[i].second.first;
+        int nextC = curC + moveDir[i].second.second;
+        if (isInBoard(n, nextR, nextC) && !check[nextR][nextC])
+        {
+            check[nextR][nextC] = true;
+            move.push_back(moveDir[i].first);
+            DFS(n, endR, endC, nextR, nextC, check, move);
+            check[nextR][nextC] = false;  
+            move.pop_back();
+        }
+    }
+}
+ 
+void BFS(int n, int endR, int endC, int curR, int curC, std::vector<std::vector<bool>> &check)
+{
+    std::queue<std::vector<std::pair<std::string, std::pair<int, int>>>> Q;
+    std::vector<std::pair<std::string, std::pair<int, int>>> path = { {"", {curR, curC} } };
+    Q.push(path);
+     
+    bool found = false;
+    while (!Q.empty())
+    {
+        path = Q.front();
+        Q.pop();
+         
+        if (path.back().second.first == endR && path.back().second.second == endC)
+        {
+            found = true;
+            break;
+        }
+         
+        for (int i = 0; i < 6; i++)
+        {
+            int nextR = path.back().second.first + moveDir[i].second.first;
+            int nextC = path.back().second.second + moveDir[i].second.second;
+             
+            if (isInBoard(n, nextR, nextC) && !check[nextR][nextC])
+            {
+                std::vector<std::pair<std::string, std::pair<int, int>>> newpath(path);
+                newpath.push_back({ moveDir[i].first , {nextR, nextC} });
+                Q.push(newpath);
+                check[nextR][nextC] = true;
+            }
+        }
+    }
+     
+    if (!found)
+        return;
+     
+    for (int i = 1; i < path.size(); i++)
+    {
+        shortestMove.push_back(path[i].first);
+    }
+}
+ 
+void printShortestPath(int n, int i_start, int j_start, int i_end, int j_end)
+{
+    std::vector<std::string> move;
+    std::vector<std::vector<bool>> check(n, std::vector<bool>(n, false));
+    check[i_start][j_start] = true;
+     
+    //DFS(n, i_end, j_end, i_start, j_start, check, move);
+    BFS(n, i_end, j_end, i_start, j_start, check);
+    if (shortestMove.empty())
+    {
+        cout << "Impossible" << endl;
+        return;
+    }
+     
+    cout << shortestMove.size() << endl;
+    for (std::string m : shortestMove)
+    {
+        cout << m << " ";
+    }
+}

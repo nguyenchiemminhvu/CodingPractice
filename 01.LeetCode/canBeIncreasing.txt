@@ -1,0 +1,45 @@
+https://leetcode.com/problems/remove-one-element-to-make-the-array-strictly-increasing/
+
+class Solution 
+{
+public:
+    bool canBeIncreasing(vector<int>& nums) 
+    {
+        return checking(nums, 1, 1);
+    }
+private:
+    bool checking(std::vector<int>& nums, int i, int delTime)
+    {
+        if (i >= nums.size())
+            return true;
+        
+        if (nums[i] <= nums[i - 1])
+        {
+            if (delTime == 0)
+                return false;
+            
+            delTime--;
+            
+            if (i == 1)
+            {
+                return checking(nums, i + 1, delTime);
+            }
+            else if (i < nums.size() - 1)
+            {
+                if (nums[i + 1] > nums[i - 1])
+                    return checking(nums, i + 1, delTime);
+                else
+                {
+                    nums[i - 1] = nums[i - 2];
+                    return checking(nums, i, delTime);
+                }
+            }
+            else
+            {
+                return checking(nums, i + 1, delTime);
+            }
+        }
+        
+        return checking(nums, i + 1, delTime);
+    }
+};

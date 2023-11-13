@@ -1,0 +1,42 @@
+https://leetcode.com/problems/reformat-phone-number/
+
+class Solution 
+{
+public:
+    string reformatNumber(string& number) 
+    {
+        std::string res;
+        
+        number.erase(std::remove(number.begin(), number.end(), ' '), number.end());
+        number.erase(std::remove(number.begin(), number.end(), '-'), number.end());
+        if (number.length() < 4)
+            return number;
+        
+        int i = 0;
+        while (i <= number.length() - 4)
+        {
+            res.insert(res.end(), number.begin() + i, number.begin() + i + 3);
+            res += '-';
+            i += 3;
+        }
+        
+        if (number.length() - i == 1)
+        {
+            std::swap(res[res.length() - 1], res[res.length() - 2]);
+            res.insert(res.end(), number.begin() + i, number.end());
+        }
+        else if (number.length() - i < 4)
+        {
+            res.insert(res.end(), number.begin() + i, number.end());
+        }
+        else if (number.length() - i == 4)
+        {
+            res.insert(res.end(), number.begin() + i, number.begin() + i + 2);
+            res += '-';
+            i += 2;
+            res.insert(res.end(), number.begin() + i, number.end());
+        }
+        
+        return res;
+    }
+};

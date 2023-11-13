@@ -1,0 +1,47 @@
+https://leetcode.com/problems/rearrange-spaces-between-words/
+
+class Solution 
+{
+public:
+    string reorderSpaces(string& text) 
+    {
+        std::stringstream ss(text);
+        std::vector<std::string> words;
+        std::string temp;
+        
+        while (ss >> temp)
+        {
+            words.push_back(temp);
+        }
+        
+        int count_space = 0;
+        if (words.size() == 1)
+        {
+            count_space = text.length() - words[0].length();
+            text = words[0];
+            text.insert(text.end(), count_space, ' ');
+            return text;
+        }
+        
+        for (const std::string& w : words)
+        {
+            count_space += w.length();
+        }
+        count_space = text.length() - count_space;
+        int space_between_words = count_space / (words.size() - 1);
+        
+        text.clear();
+        for (int i = 0; i < words.size(); i++)
+        {
+            text += words[i];
+            if (i < words.size() - 1)
+            {
+                text.insert(text.end(), space_between_words, ' ');
+            }
+        }
+        count_space = count_space - space_between_words * (words.size() - 1);
+        text.insert(text.end(), count_space, ' ');
+        
+        return text;
+    }
+};

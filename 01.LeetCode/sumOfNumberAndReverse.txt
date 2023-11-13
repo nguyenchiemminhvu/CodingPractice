@@ -1,0 +1,31 @@
+https://leetcode.com/contest/weekly-contest-315/problems/sum-of-number-and-its-reverse/
+
+class Solution 
+{
+public:
+    bool sumOfNumberAndReverse(int num) 
+    {
+        int half = num / 2;
+        
+        for (int i = num; i >= half; i--)
+        {
+            if (i + reverse(i) == num)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+private:
+    int reverse(int n)
+    {
+        int res = 0;
+        while (n)
+        {
+            res = res * 10 + (n % 10);
+            n /= 10;
+        }
+        return res;
+    }
+};

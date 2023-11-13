@@ -1,0 +1,24 @@
+https://leetcode.com/problems/find-nearest-point-that-has-the-same-x-or-y-coordinate/
+
+class Solution 
+{
+public:
+    int nearestValidPoint(int x, int y, vector<vector<int>>& points) 
+    {
+        int cur_diff = INT_MAX;
+        int res = -1;
+        for (int i = 0; i < points.size(); i++)
+        {
+            if (points[i][0] == x || points[i][1] == y)
+            {
+                int dist = std::abs(points[i][0] - x) + std::abs(points[i][1] - y);
+                if (dist < cur_diff)
+                {
+                    res = i;
+                    cur_diff = dist;
+                }
+            }
+        }
+        return res;
+    }
+};

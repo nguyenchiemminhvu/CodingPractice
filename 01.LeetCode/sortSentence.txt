@@ -1,0 +1,46 @@
+https://leetcode.com/problems/sorting-the-sentence/
+
+class Solution 
+{
+public:
+    string sortSentence(string& s) 
+    {
+        std::stringstream ss(s);
+        s.clear();
+        
+        std::vector<std::string> vs;
+        while (ss >> s)
+        {
+            vs.push_back(s);
+        }
+        s.clear();
+        
+        std::sort
+        (
+            vs.begin(),
+            vs.end(),
+            [](const std::string& a, const std::string& b)
+            {
+                size_t found_a = a.find_first_of("1234567890");
+                size_t found_b = b.find_first_of("1234567890");
+                
+                int num_a = std::stoi(a.substr(found_a).c_str());
+                int num_b = std::stoi(b.substr(found_b).c_str());
+                
+                return num_a < num_b;
+            }
+        );
+        
+        for (std::string& temp : vs)
+        {
+            while (std::isdigit(temp.back()))
+                temp.pop_back();
+            
+            s += temp;
+            s += ' ';
+        }
+        
+        s.pop_back();
+        return s;
+    }
+};

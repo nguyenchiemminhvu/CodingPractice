@@ -1,0 +1,32 @@
+https://leetcode.com/problems/second-largest-digit-in-a-string/
+
+class Solution 
+{
+public:
+    int secondHighest(const string& s) 
+    {
+        int M = -1;
+        for (const char& c : s)
+        {
+            if (std::isdigit(c))
+            {
+                M = std::max(M, c - '0');
+            }
+        }
+        
+        int S = -1;
+        for (const char& c : s)
+        {
+            if (std::isdigit(c))
+            {
+                int d = c - '0';
+                if (d > S && d < M)
+                {
+                    S = d;
+                }
+            }
+        }
+        
+        return S;
+    }
+};

@@ -1,0 +1,62 @@
+https://leetcode.com/problems/word-search/
+
+class Solution 
+{
+public:
+    bool exist(vector<vector<char>>& board, const string& word) 
+    {
+        int dir_r[] = { 0, -1, 0, 1 };
+        int dir_c[] = { -1, 0, 1, 0 };
+        std::vector<std::vector<bool>> visited(board.size(), std::vector<bool>(board[0].size(), false));
+        for (int r = 0; r < board.size(); r++)
+        {
+            for (int c = 0; c < board[r].size(); c++)
+            {
+                if (board[r][c] == word[0])
+                {
+                    visited[r][c] = true;
+                    if (trace(board, word, 0, r, c, dir_r, dir_c, visited))
+                        return true;
+                    visited[r][c] = false;
+                }
+            }
+        }
+        
+        return false;
+    }
+private:
+    bool trace(const std::vector<std::vector<char>>& board, const std::string& word, int iw, int r, int c, int* dir_r, int* dir_c, std::vector<std::vector<bool>>& visited)
+    {
+        if (iw >= word.size())
+            return true;
+        
+        if (iw == word.size() - 1)
+        {
+            if (board[r][c] == word[iw])
+                return true;
+        }
+        
+        if (board[r][c] != word[iw])
+            return false;
+        
+        bool res = false;
+        for (int i = 0; i < 4; i++)
+        {
+            int next_r = r + dir_r[i];
+            int next_c = c + dir_c[i];
+            if (isValid(board, next_r, next_c) && !visited[next_r][next_c])
+            {
+                visited[next_r][next_c] = true;
+                res |= trace(board, word, iw + 1, next_r, next_c, dir_r, dir_c, visited);
+                visited[next_r][next_c] = false;
+            }
+        }
+        
+        return res;
+    }
+    
+    bool isValid(const std::vector<std::vector<char>>& board, int r, int c)
+    {
+        return r >= 0 && r < board.size() && c >= 0 && c < board[0].size();
+    }
+};

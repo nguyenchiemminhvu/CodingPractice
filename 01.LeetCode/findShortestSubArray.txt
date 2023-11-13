@@ -1,0 +1,43 @@
+https://leetcode.com/problems/degree-of-an-array/
+
+class Solution 
+{
+public:
+    int findShortestSubArray(vector<int>& nums) 
+    {
+        std::unordered_map<int, int> freq;
+        std::unordered_map<int, std::pair<int, int>> checker;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            freq[nums[i]]++;
+            
+            auto found = checker.find(nums[i]);
+            if (found == checker.end())
+            {
+                checker[nums[i]] = {i, i};
+            }
+            else
+            {
+                checker[nums[i]].second = i;
+            }
+        }
+        
+        int degree = 50000;
+        int cur_max_freq = 0;
+        for (std::pair<int, int> p : freq)
+        {
+            if (cur_max_freq < p.second)
+            {
+                degree = 50000;
+                cur_max_freq = p.second;
+                degree = std::min(degree, checker[p.first].second - checker[p.first].first + 1);
+            }
+            else if (cur_max_freq == p.second)
+            {
+                degree = std::min(degree, checker[p.first].second - checker[p.first].first + 1);
+            }
+        }
+        
+        return degree;
+    }
+};

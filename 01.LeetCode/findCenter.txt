@@ -1,0 +1,23 @@
+https://leetcode.com/problems/find-center-of-star-graph/
+
+class Solution 
+{
+public:
+    int findCenter(vector<vector<int>>& edges) 
+    {
+        std::unordered_map<int, int> freq;
+        for (const std::vector<int>& edge : edges)
+        {
+            freq[edge[0]]++;
+            freq[edge[1]]++;
+        }
+        
+        for (const std::pair<int, int>& p : freq)
+        {
+            if (p.second == edges.size())
+                return p.first;
+        }
+        
+        return -1;
+    }
+};

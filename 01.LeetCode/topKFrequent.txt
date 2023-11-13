@@ -1,0 +1,112 @@
+https://leetcode.com/problems/top-k-frequent-elements/
+
+class Solution 
+{
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) 
+    {
+        std::vector<int> res;
+        
+        std::unordered_map<int, int> freq;
+        for (const int& n : nums)
+            freq[n]++;
+        
+        std::sort
+        (
+            nums.begin(), 
+            nums.end(), 
+            [&](int a, int b)
+            {
+                return freq[a] > freq[b];
+            }
+        );
+        
+        std::unordered_map<int, bool> checker;
+        for (const int& n : nums)
+        {
+            if (k == 0)
+                break;
+            
+            if (!checker[n])
+            {
+                checker[n] = true;
+                k--;
+                res.push_back(n);
+            }
+        }
+        
+        return res;
+    }
+};
+
+class Solution 
+{
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) 
+    {
+        std::vector<int> res;
+        
+        std::unordered_map<int, int> freq;
+        for (const int& n : nums)
+            freq[n]++;
+        
+        auto comp = [](const std::pair<int, int>& a, const std::pair<int, int>& b)
+        {
+            return a.second > b.second;
+        };
+        std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(comp)> Q(comp);
+        
+        std::unordered_map<int, bool> checker;
+        for (const int& n : nums)
+        {
+            if (!checker[n])
+            {
+                checker[n] = true;
+                Q.push({n, freq[n]});
+            }
+            
+            while (Q.size() > k)
+                Q.pop();
+        }
+        
+        while (!Q.empty()) 
+        {
+            res.push_back(Q.top().first);
+            Q.pop();
+        }
+
+        return res;
+    }
+};
+
+class Solution 
+{
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) 
+    {
+        std::unordered_map<int, int> freq;
+        for (const int& n : nums)
+        {
+            freq[n]++;
+        }
+        
+        auto comp = [](const std::pair<int, int>& a, const std::pair<int, int>& b) {
+            return a.second > b.second;
+        };
+        std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(comp)> pq(comp);
+        for (const std::pair<int, int>& p : freq)
+        {
+            pq.push(p);
+            while (pq.size() > k)
+                pq.pop();
+        }
+        
+        std::vector<int> res;
+        while (!pq.empty())
+        {
+            res.push_back(pq.top().first);
+            pq.pop();
+        }
+        return res;
+    }
+};

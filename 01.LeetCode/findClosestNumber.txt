@@ -1,0 +1,25 @@
+https://leetcode.com/problems/find-closest-number-to-zero/
+
+class Solution 
+{
+public:
+    int findClosestNumber(vector<int>& nums) 
+    {
+        int res = INT_MAX;
+        int cur_diff = res;
+        for (const int& n : nums)
+        {
+            if (cur_diff > std::abs(n))
+            {
+                res = n;
+                cur_diff = std::abs(n);
+            }
+            else if (cur_diff == std::abs(n))
+            {
+                res = std::max(res, n);
+            }
+        }
+        
+        return res;
+    }
+};

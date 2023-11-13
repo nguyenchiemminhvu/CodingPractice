@@ -1,0 +1,35 @@
+https://leetcode.com/problems/make-two-arrays-equal-by-reversing-sub-arrays/
+
+class Solution 
+{
+public:
+    bool canBeEqual(vector<int>& target, vector<int>& arr) 
+    {
+        std::sort(target.begin(), target.end());
+        std::sort(arr.begin(), arr.end());
+        
+        return target == arr;
+    }
+};
+
+class Solution 
+{
+public:
+    bool canBeEqual(vector<int>& target, vector<int>& arr) 
+    {
+        std::unordered_map<int, int> freq;
+        for (const int& n : target)
+            freq[n]++;
+        
+        for (const int& n : arr)
+            freq[n]--;
+        
+        for (const std::pair<int, int>& p : freq)
+        {
+            if (p.second)
+                return false;
+        }
+        
+        return true;
+    }
+};

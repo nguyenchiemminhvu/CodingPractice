@@ -1,0 +1,57 @@
+class Solution 
+{
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) 
+    {
+        std::vector<int> res;
+        
+        arr.insert(arr.begin(), INT_MIN);
+        auto found = std::lower_bound(arr.begin() + 1, arr.end(), x);
+        if (found == arr.end())
+        {
+            res.insert(res.begin(), arr.end() - k, arr.end());
+        }
+        else if (found == arr.begin())
+        {
+            res.insert(res.begin(), arr.begin(), arr.begin() + k);
+        }
+        else
+        {
+            auto left = found -1;
+            auto right = found;
+            
+            while (k && left != arr.begin() && right != arr.end())
+            {
+                if (k && std::abs(*left - x) <= std::abs(*right - x))
+                {
+                    res.push_back(*left);
+                    k--;
+                    left--;
+                }
+                else if (k && std::abs(*left - x) > std::abs(*right - x))
+                {
+                    res.push_back(*right);
+                    k--;
+                    right++;
+                }
+            }
+            
+            while (k && left != arr.begin())
+            {
+                res.push_back(*left);
+                k--;
+                left--;
+            }
+            
+            while (k && right != arr.end())
+            {
+                res.push_back(*right);
+                k--;
+                right++;
+            }
+        }
+        
+        std::sort(res.begin(), res.end());
+        return res;
+    }
+};

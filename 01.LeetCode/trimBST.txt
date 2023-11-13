@@ -1,0 +1,61 @@
+https://leetcode.com/problems/trim-a-binary-search-tree/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution 
+{
+public:
+    TreeNode* trimBST(TreeNode* root, int low, int high) 
+    {
+        return trimUtil(root, low, high);
+    }
+private:
+    TreeNode* trimUtil(TreeNode* root, int low, int high)
+    {
+        if (!root)
+            return nullptr;
+        
+        if (!root->left && !root->right)
+        {
+            if (root->val < low || root->val > high)
+                return nullptr;
+            return root;
+        }
+        
+        if (root->left && root->left->val < low)
+        {
+            root->left = root->left->right;
+        }
+        
+        if (root->right && root->right->val > high)
+        {
+            root->right = root->right->left;
+        }
+        
+        if (root && root->val < low)
+        {
+            root = root->right;
+            return trimUtil(root, low, high);
+        }
+        
+        if (root && root->val > high)
+        {
+            root = root->left;
+            return trimUtil(root, low, high);
+        }
+        
+        root->left = trimUtil(root->left, low, high);
+        root->right = trimUtil(root->right, low, high);
+        
+        return root;
+    }
+};

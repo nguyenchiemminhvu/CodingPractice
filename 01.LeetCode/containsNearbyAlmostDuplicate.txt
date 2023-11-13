@@ -1,0 +1,85 @@
+https://leetcode.com/problems/contains-duplicate-iii/
+
+class Solution 
+{
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) 
+    {
+        if (k == 0)
+            return false;
+        if (nums.size() < 2)
+            return false;
+        
+        std::vector<long long> sorted(nums.begin(), nums.begin() + std::min(k, (int)nums.size()));
+        std::sort(sorted.begin(), sorted.end());
+        
+        int ik = 0;
+        while (ik + k < nums.size())
+        {
+            int temp = nums[ik + k];
+            sorted.insert(std::upper_bound(sorted.begin(), sorted.end(), temp), temp);
+            
+            for (int i = 1; i < sorted.size(); i++)
+            {
+                if (sorted[i] - sorted[i - 1] <= t)
+                    return true;
+            }
+            
+            sorted.erase(std::lower_bound(sorted.begin(), sorted.end(), nums[ik]));
+            ik++;
+        }
+        
+        for (int i = 1; i < sorted.size(); i++)
+        {
+            if (sorted[i] - sorted[i - 1] <= t)
+                return true;
+        }
+        return false;
+    }
+};
+
+class Solution 
+{
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) 
+    {
+        if (k == 0)
+            return false;
+        if (nums.size() < 2)
+            return false;
+        
+        std::vector<std::pair<long long, long long>> v;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            v.push_back({nums[i], i});
+        }
+        
+        std::sort
+        (
+            v.begin(), 
+            v.end(), 
+            [](const std::pair<long long, long long>& a, const std::pair<long long, long long>& b)
+            {
+                return a.first <= b.first;
+            }
+        );
+        
+        for (int i = 0; i < nums.size(); i++)
+        {
+            for (int j = i + 1; j < nums.size(); j++)
+            {
+                if (v[j].first - v[i].first <= t)
+                {
+                    if (abs(v[i].second - v[j].second) <= k)
+                        return true;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        
+        return false;
+    }
+};

@@ -1,0 +1,47 @@
+https://leetcode.com/problems/wiggle-subsequence/
+
+class Solution 
+{
+public:
+    int wiggleMaxLength(vector<int>& nums) 
+    {
+        std::stack<int> st;
+        int last_diff = 0;
+        int cur_diff = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (st.empty())
+            {
+                st.push(nums[i]);
+            }
+            else
+            {
+                if (nums[i] == st.top())
+                {
+                    continue;
+                }
+                else if (last_diff == 0)
+                {
+                    last_diff = cur_diff = nums[i] - st.top();
+                    st.push(nums[i]);
+                }
+                else
+                {
+                    cur_diff = nums[i] - st.top();
+                    if ((cur_diff > 0 && last_diff > 0) || (cur_diff < 0 && last_diff < 0))
+                    {
+                        st.pop();
+                        st.push(nums[i]);
+                    }
+                    else if ((cur_diff > 0 && last_diff < 0) || (cur_diff < 0 && last_diff > 0))
+                    {
+                        st.push(nums[i]);
+                    }
+                    last_diff = cur_diff;
+                }
+            }
+        }
+        
+        return st.size();
+    }
+};

@@ -1,0 +1,49 @@
+https://leetcode.com/problems/two-out-of-three/
+
+class Solution 
+{
+public:
+    vector<int> twoOutOfThree(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3) 
+    {
+        std::unordered_map<int, std::vector<bool>> freq;
+        for (const int& n : nums1)
+        {
+            if (freq[n].size() == 0)
+            {
+                freq[n].resize(3);
+            }
+            
+            freq[n][0] = true;
+        }
+        
+        for (const int& n : nums2)
+        {
+            if (freq[n].size() == 0)
+            {
+                freq[n].resize(3);
+            }
+            
+            freq[n][1] = true;
+        }
+        
+        for (const int& n : nums3)
+        {
+            if (freq[n].size() == 0)
+            {
+                freq[n].resize(3);
+            }
+            
+            freq[n][2] = true;
+        }
+        
+        std::vector<int> res;
+        for (const auto& p : freq)
+        {
+            int count = p.second[0] + p.second[1] + p.second[2];
+            if (count >= 2)
+                res.push_back(p.first);
+        }
+        
+        return res;
+    }
+};

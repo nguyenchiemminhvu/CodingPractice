@@ -1,0 +1,19 @@
+https://www.hackerrank.com/challenges/cut-the-sticks/problem
+
+vector<int> cutTheSticks(vector<int> arr)
+{
+    std::vector<int> res;
+     
+    std::sort(arr.begin(), arr.end());
+     
+    res.push_back(arr.size());
+    for (int i = 1; i < arr.size(); i++)
+    {
+        if (arr[i - 1] != arr[i])
+        {
+            res.push_back(arr.size() - i);
+        }
+    }
+     
+    return res;
+}

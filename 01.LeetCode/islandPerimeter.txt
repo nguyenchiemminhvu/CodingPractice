@@ -1,0 +1,33 @@
+https://leetcode.com/problems/island-perimeter/
+
+class Solution 
+{
+public:
+    int islandPerimeter(const vector<vector<int>>& grid) 
+    {
+        int P = 0;
+        
+        for (int i = 0; i < grid.size(); i++)
+        {
+            for (int j = 0; j < grid[0].size(); j++)
+            {
+                if (grid[i][j] == 1)
+                {
+                    P += 4;
+                    
+                    P -= (inIsland(grid.size(), grid[0].size(), i, j - 1) && grid[i][j - 1]);
+                    P -= (inIsland(grid.size(), grid[0].size(), i - 1, j) && grid[i - 1][j]);
+                    P -= (inIsland(grid.size(), grid[0].size(), i, j + 1) && grid[i][j + 1]);
+                    P -= (inIsland(grid.size(), grid[0].size(), i + 1, j) && grid[i + 1][j]);
+                }
+            }
+        }
+        
+        return P;
+    }
+private:
+    bool inIsland(int num_row, int num_col, int r, int c)
+    {
+        return r >= 0 && r < num_row && c >= 0 && c < num_col;
+    }
+};

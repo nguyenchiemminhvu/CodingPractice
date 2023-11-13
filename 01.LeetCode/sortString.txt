@@ -1,0 +1,48 @@
+https://leetcode.com/problems/increasing-decreasing-string/
+
+class Solution 
+{
+public:
+    string sortString(const string& s) 
+    {
+        std::string res;
+        
+        int freq[26];
+        std::memset(freq, 0, 26 * sizeof(int));
+        
+        for (const char& c : s)
+        {
+            freq[c - 'a']++;
+        }
+        
+        while (true)
+        {
+            bool allDone = true;
+            
+            for (int i = 0; i < 26; i++)
+            {
+                if (freq[i])
+                {
+                    res += 'a' + i;
+                    freq[i]--;
+                    allDone = false;
+                }
+            }
+            
+            for (int i = 25; i >= 0; i--)
+            {
+                if (freq[i])
+                {
+                    res += 'a' + i;
+                    freq[i]--;
+                    allDone = false;
+                }
+            }
+            
+            if (allDone)
+                break;
+        }
+        
+        return res;
+    }
+};

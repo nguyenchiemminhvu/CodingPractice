@@ -1,0 +1,29 @@
+https://leetcode.com/problems/maximum-average-subarray-i/submissions/
+
+class Solution 
+{
+public:
+    double findMaxAverage(vector<int>& nums, int k) 
+    {
+        double res = INT_MIN;
+        
+        nums.insert(nums.begin(), 0);
+        for (int i = 1; i < nums.size(); i++)
+        {
+            nums[i] += nums[i - 1];
+        }
+        
+        for (int i = k + 1; i <= nums.size(); i++)
+        {     
+            int left = i - k;
+            int right = i - 1;
+            
+            double sum = nums[right] - nums[left - 1];
+            
+            if (res < sum / k)
+                res = sum / k;
+        }
+        
+        return res;
+    }
+};

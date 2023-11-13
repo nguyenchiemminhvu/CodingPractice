@@ -1,0 +1,71 @@
+https://leetcode.com/problems/numbers-with-same-consecutive-differences/
+
+class Solution 
+{
+public:
+    vector<int> numsSameConsecDiff(int n, int k) 
+    {
+        std::vector<int> res;
+        std::vector<int> temp;
+        generating(n, k, 0, temp, res);
+        return res;
+    }
+private:
+    void generating(int n, int k, int i, std::vector<int>& temp, std::vector<int>& res)
+    {
+        if (i > n)
+            return;
+        
+        if (i == n)
+        {
+            int value = arrayToInt(temp);
+            if (value != -1)
+                res.push_back(value);
+            
+            return;
+        }
+        
+        if (temp.empty())
+        {
+            for (int j = 1; j <= 9; j++)
+            {
+                temp.push_back(j);
+                generating(n, k, i + 1, temp, res);
+                temp.pop_back();
+            }
+        }
+        else
+        {
+            int left = temp.back() - k;
+            int right = temp.back() + k;
+            
+            if (left >= 0)
+            {
+                temp.push_back(left);
+                generating(n, k, i + 1, temp, res);
+                temp.pop_back();
+            }
+            
+            if (right != left && right <= 9)
+            {
+                temp.push_back(right);
+                generating(n, k, i + 1, temp, res);
+                temp.pop_back();
+            }
+        }
+    }
+    
+    int arrayToInt(const std::vector<int>& nums)
+    {
+        if (!nums.empty() && nums[0] == 0)
+            return -1;
+        
+        int res = 0;
+        for (const int& n : nums)
+        {
+            res = res * 10 + n;
+        }
+        
+        return res;
+    }
+};

@@ -1,0 +1,32 @@
+https://leetcode.com/problems/check-if-a-word-occurs-as-a-prefix-of-any-word-in-a-sentence/
+
+class Solution 
+{
+public:
+    int isPrefixOfWord(const string& s, const string& p) 
+    {
+        size_t found;
+        size_t is = 0;
+        while ((found = s.find(p, is)) != std::string::npos)
+        {
+            if (found == 0)
+                return 1;
+            
+            if (s[found - 1] == ' ')
+            {
+                int count_space = 0;
+                for (int i = found; i >= 0; i--)
+                {
+                    if (s[i] == ' ')
+                        count_space++;
+                }
+                
+                return count_space + 1;
+            }
+            
+            is = found + 1;
+        }
+        
+        return -1;
+    }
+};

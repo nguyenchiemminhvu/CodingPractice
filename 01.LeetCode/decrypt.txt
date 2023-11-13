@@ -1,0 +1,52 @@
+https://leetcode.com/problems/defuse-the-bomb/
+
+class Solution 
+{
+public:
+    vector<int> decrypt(vector<int>& code, int k) 
+    {
+        std::vector<int> res(code.size(), 0);
+        if (k == 0)
+            return res;
+        
+        for (int i = 0; i < code.size(); i++)
+        {
+            res[i] = k < 0 ? sumLeft(code, i, k) : sumRight(code, i, k);
+        }
+        
+        return res;
+    }
+private:
+    int sumLeft(std::vector<int>& arr, int start, int k)
+    {
+        int sum = 0;
+        while (k)
+        {
+            start = start - 1;
+            if (start < 0)
+                start = arr.size() - 1;
+            
+            sum += arr[start];
+            
+            k++;
+        }
+        
+        return sum;
+    }
+    
+    int sumRight(std::vector<int>& arr, int start, int k)
+    {
+        int sum = 0;
+        
+        while (k)
+        {
+            start = (start + 1) % arr.size();
+            
+            sum += arr[start];
+            
+            k--;
+        }
+        
+        return sum;
+    }
+};

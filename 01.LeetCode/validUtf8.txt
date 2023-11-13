@@ -1,0 +1,54 @@
+https://leetcode.com/problems/utf-8-validation/
+
+class Solution 
+{
+public:
+    bool validUtf8(vector<int>& data) 
+    {
+        int id = 0;
+        while (id < data.size())
+        {
+            int type = getPrefix(data[id]);
+            if (type == -1)
+                return false;
+            
+            if (type > 1 && id + type > data.size())
+                return false;
+            
+            for (int i = id + 1; i < id + type; i++)
+            {
+                int subType = getSubPrefix(data[i]);
+                if (subType == -1)
+                    return false;
+            }
+            
+            if (id + type > data.size())
+                return false;
+            id += type;
+        }
+        
+        return true;
+    }
+private:
+    int getPrefix(int n)
+    {
+        if ((n >> 7) == 0b0)
+            return 1;
+        if ((n >> 5) == 0b110)
+            return 2;
+        if ((n >> 4) == 0b1110)
+            return 3;
+        if ((n >> 3) == 0b11110)
+            return 4;
+        
+        return -1;
+    }
+    
+    int getSubPrefix(int n)
+    {
+        if ((n >> 6) == 0b10)
+            return 1;
+        
+        return -1;
+    }
+};

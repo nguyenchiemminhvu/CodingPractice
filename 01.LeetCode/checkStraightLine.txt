@@ -1,0 +1,29 @@
+https://leetcode.com/problems/check-if-it-is-a-straight-line/
+
+class Solution 
+{
+public:
+    bool checkStraightLine(vector<vector<int>>& pos) 
+    {
+        if (pos.size() == 2)
+            return true;
+        
+        for (int i = 2; i < pos.size(); i++)
+        {
+            if (!checking(pos[i - 2], pos[i - 1], pos[i]))
+                return false;
+        }
+        return true;
+    }
+private:
+    bool checking(std::vector<int> a, std::vector<int> b, std::vector<int> c)
+    {
+        // (y3 - y2)/(x3 - x2) = (y2 - y1)/(x2 - x1);
+        
+        int xab = b[0] - a[0];
+        int yab = b[1] - a[1];
+        int xac = c[0] - a[0];
+        int yac = c[1] - a[1];
+        return (yac) * (xab) == (yab) * (xac);
+    }
+};

@@ -1,0 +1,36 @@
+https://leetcode.com/problems/reverse-only-letters/
+
+class Solution 
+{
+public:
+    string reverseOnlyLetters(string& s) 
+    {
+        int left = 0, right = s.length() - 1;
+        
+        while (left <= right)
+        {
+            bool bleft = isLetter(s[left]);
+            bool bright = isLetter(s[right]);
+            if (bleft && bright)
+            {
+                std::swap(s[left], s[right]);
+                left++;
+                right--;
+            }
+            else
+            {
+                if (!bleft)
+                    left++;
+                if (!bright)
+                    right--;
+            }
+        }
+        
+        return s;
+    }
+private:
+    bool isLetter(const char& c)
+    {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    }
+};

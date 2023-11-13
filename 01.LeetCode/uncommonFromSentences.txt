@@ -1,0 +1,43 @@
+https://leetcode.com/problems/uncommon-words-from-two-sentences/
+
+class Solution 
+{
+public:
+    vector<string> uncommonFromSentences(const string& s1, const string& s2) 
+    {
+        std::unordered_map<std::string, int> freq; // hash map
+        freqUtil(s1, freq);
+        freqUtil(s2, freq);
+        
+        std::vector<std::string> uncommon;
+        for (const std::pair<std::string, int>& p : freq)
+        {
+            if (p.second == 1)
+            {
+                uncommon.push_back(p.first);
+            }
+        }
+        return uncommon;
+    }
+private:
+    void freqUtil(const std::string& s, std::unordered_map<std::string, int>& freq)
+    {
+        std::string temp;
+        for (const char& c : s)
+        {
+            if (c == ' ')
+            {
+                if (!temp.empty())
+                    freq[temp]++;
+                temp = "";
+            }
+            else
+            {
+                temp += c;
+            }
+        }
+        
+        if (!temp.empty())
+            freq[temp]++;
+    }
+};

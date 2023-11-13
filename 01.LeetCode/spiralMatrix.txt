@@ -1,0 +1,63 @@
+You are given two integers m and n, which represent the dimensions of a matrix.
+
+You are also given the head of a linked list of integers.
+
+Generate an m x n matrix that contains the integers in the linked list presented in spiral order (clockwise), starting from the top-left of the matrix. If there are remaining empty spaces, fill them with -1.
+
+Return the generated matrix.
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    vector<vector<int>> spiralMatrix(int m, int n, ListNode* head) 
+    {
+        std::vector<std::vector<int>> matrix(m, std::vector<int>(n, -1));
+        int left = 0, right = n - 1;
+        int up = 0, down = m - 1;
+        
+        while (head)
+        {
+            for (int i = left; i <= right && head; i++)
+            {
+                matrix[up][i] = head->val;
+                head = head->next;
+            }
+            
+            for (int i = up + 1; i <= down && head; i++)
+            {
+                matrix[i][right] = head->val;
+                head = head->next;
+            }
+            
+            for (int i = right - 1; i >= left && head; i--)
+            {
+                matrix[down][i] = head->val;
+                head = head->next;
+            }
+            
+            for (int i = down - 1; i >= up + 1 && head; i--)
+            {
+                matrix[i][left] = head->val;
+                head = head->next;
+            }
+            
+            left++;
+            right--;
+            up++;
+            down--;
+        }
+        
+        return matrix;
+    }
+};

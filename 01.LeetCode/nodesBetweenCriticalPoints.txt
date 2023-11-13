@@ -1,0 +1,47 @@
+https://leetcode.com/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    vector<int> nodesBetweenCriticalPoints(ListNode* head) 
+    {
+        std::vector<int> dist;
+        int ih = 0;
+        while (head && head->next && head->next->next)
+        {
+            if (head->next->val < head->val && head->next->val < head->next->next->val)
+            {
+                dist.push_back(ih + 1);
+            }
+            else if (head->next->val > head->val && head->next->val > head->next->next->val)
+            {
+                dist.push_back(ih + 1);
+            }
+            
+            ih++;
+            head = head->next;
+        }
+        
+        if (dist.size() <= 1)
+            return { -1, -1 };
+        
+        int max_dist = dist[dist.size() - 1] - dist[0];
+        int min_dist = INT_MAX;
+        for (int i = 1; i < dist.size(); i++)
+        {
+            min_dist = std::min(min_dist, dist[i] - dist[i - 1]);
+        }
+        
+        return { min_dist, max_dist };
+    }
+};

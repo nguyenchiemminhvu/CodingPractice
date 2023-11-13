@@ -1,0 +1,28 @@
+https://leetcode.com/problems/group-anagrams/
+
+class Solution 
+{
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) 
+    {
+        std::vector<std::vector<std::string>> res;
+        
+        std::map<std::vector<int>, std::vector<std::string>> hm;
+        std::vector<int> freq(26, 0);
+        for (const std::string& s : strs)
+        {
+            std::fill(freq.begin(), freq.end(), 0);
+            for (const char& c : s)
+                freq[c - 'a']++;
+            
+            hm[freq].push_back(s);
+        }
+        
+        for (const auto& p : hm)
+        {
+            res.push_back(p.second);
+        }
+        
+        return res;
+    }
+};

@@ -1,0 +1,43 @@
+https://leetcode.com/problems/day-of-the-year/
+
+class Solution 
+{
+public:
+    int dayOfYear(const std::string& date) 
+    {
+        int res = 0;
+        
+        int daysOfMonth[12] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
+        
+        int mm, dd, yyyy;
+        yyyy = std::stoi(date.substr(0, 4).c_str());
+        mm = std::stoi(date.substr(5, 2).c_str());
+        dd = std::stoi(date.substr(8, 2).c_str());
+        
+        res = daysOfMonth[mm - 1] + dd;
+        if (isLeapYear(yyyy) && mm > 2)
+            res++;
+        
+        return res;
+    }
+private:
+    bool isLeapYear(int y)
+    {
+        if (y % 4 == 0) 
+        {
+            if (y % 100 == 0) 
+            {
+                if (y % 400 == 0) 
+                {
+                    return true;
+                }
+            } 
+            else 
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+};

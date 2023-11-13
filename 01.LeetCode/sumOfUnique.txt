@@ -1,0 +1,23 @@
+https://leetcode.com/problems/sum-of-unique-elements/
+
+class Solution 
+{
+public:
+    int sumOfUnique(vector<int>& nums) 
+    {
+        std::unordered_map<int, int> freq;
+        for (const int& n : nums)
+            freq[n]++;
+        
+        int sum = 0;
+        for (const int& n : nums)
+        {
+            if (freq[n] == 1)
+            {
+                sum += n;
+            }
+        }
+        
+        return sum;
+    }
+};

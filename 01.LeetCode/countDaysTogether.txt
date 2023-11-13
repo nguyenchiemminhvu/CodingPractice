@@ -1,0 +1,35 @@
+https://leetcode.com/problems/count-days-spent-together/
+
+class Solution 
+{
+public:
+    int countDaysTogether(const string& a, const string& b, const string& c, const string& d) 
+    {
+        int da = convertToDay(a);
+        int db = convertToDay(b);
+        int dc = convertToDay(c);
+        int dd = convertToDay(d);
+        
+        if (dc > db || da > dd)
+            return 0;
+        
+        return std::min(db, dd) - std::max(da, dc) + 1;
+    }
+private:
+    int convertToDay(const std::string& s)
+    {
+        int dayOfMonths[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        
+        int mon = (s[0] - '0') * 10 + (s[1] - '0');
+        int day = (s[3] - '0') * 10 + (s[4] - '0');
+        
+        int total = 0;
+        for (int i = 0; i < mon - 1; i++)
+        {
+            total += dayOfMonths[i];
+        }
+        
+        total += day;
+        return total;
+    }
+};

@@ -1,0 +1,30 @@
+class Solution 
+{
+public:
+    int edgeScore(vector<int>& edges) 
+    {
+        std::unordered_map<int, long long int> checker;
+        
+        for (int i = 0; i < edges.size(); i++)
+        {
+            checker[edges[i]] += i;
+        }
+        
+        int max_score = 0;
+        int max_point = 0;
+        for (const std::pair<int, long long int>& p : checker)
+        {
+            if (max_score < p.second)
+            {
+                max_score = p.second;
+                max_point = p.first;
+            }
+            else if (max_score == p.second)
+            {
+                max_point = std::min(max_point, p.first);
+            }
+        }
+        
+        return max_point;
+    }
+};

@@ -1,0 +1,22 @@
+https://leetcode.com/problems/lexicographically-smallest-palindrome/description/
+
+class Solution 
+{
+public:
+    string makeSmallestPalindrome(string& s) 
+    {
+        int left = s.length() / 2 - !(s.length() & 1);
+        int right = s.length() - left - 1;
+
+        while (left >= 0 && right < s.length())
+        {
+            char common = std::min(s[left], s[right]);
+            s[left] = s[right] = common;
+
+            left--;
+            right++;
+        }
+
+        return s;
+    }
+};

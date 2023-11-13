@@ -1,0 +1,23 @@
+class Solution 
+{
+public:
+    bool checkDistances(const string& s, const vector<int>& distance) 
+    {
+        if (s == "")
+            return true;
+        
+        std::vector<std::vector<int>> pos(26, std::vector<int>());
+        for (int i = 0; i < s.length(); i++)
+        {
+            pos[s[i] - 'a'].push_back(i);
+        }
+        
+        for (int i = 0; i < 26; i++)
+        {
+            if (!pos[i].empty() && pos[i][1] - pos[i][0] - 1 != distance[i])
+                return false;
+        }
+        
+        return true;
+    }
+};

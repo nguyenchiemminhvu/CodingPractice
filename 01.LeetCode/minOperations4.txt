@@ -1,0 +1,25 @@
+https://leetcode.com/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/
+
+class Solution 
+{
+public:
+    vector<int> minOperations(const string& s) 
+    {
+        std::vector<int> res(s.length(), 0);
+        for (int i = 0; i < s.length(); i++)
+        {
+            int count = 0;
+            for (int j = 0; j < s.length(); j++)
+            {
+                if (s[j] == '1')
+                {
+                    count += std::abs(i - j);
+                }
+            }
+            
+            res[i] = count;
+        }
+        
+        return res;
+    }
+};

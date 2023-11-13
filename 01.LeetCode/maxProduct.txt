@@ -1,0 +1,43 @@
+https://leetcode.com/problems/maximum-product-of-two-elements-in-an-array/
+
+class Solution 
+{
+public:
+    int maxProduct(vector<int>& nums) 
+    {
+        std::sort(nums.begin(), nums.end(), std::greater<int>());
+        return (nums[0] - 1) * (nums[1] - 1);
+    }
+};
+
+class Solution 
+{
+public:
+    int maxProduct(vector<int>& nums) 
+    {
+        int first = 0;
+        int second = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[first] < nums[i])
+            {
+                first = i;
+            }
+        }
+        
+        if (second == first)
+            second++;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[second] < nums[i])
+            {
+                if (i == first)
+                    continue;
+                
+                second = i;
+            }
+        }
+        
+        return (nums[first] - 1) * (nums[second] - 1);
+    }
+};

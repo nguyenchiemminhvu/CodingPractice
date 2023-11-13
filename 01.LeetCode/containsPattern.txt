@@ -1,0 +1,37 @@
+https://leetcode.com/problems/detect-pattern-of-length-m-repeated-k-or-more-times/
+
+class Solution 
+{
+public:
+    bool containsPattern(vector<int>& arr, int m, int k) 
+    {
+        int sublen = m * k;
+        if (sublen > arr.size())
+            return false;
+        
+        for (int i = 0; i <= arr.size() - sublen; i++)
+        {
+            if (checking(arr, i, sublen, k))
+                return true;
+        }
+        
+        return false;
+    }
+private:
+    bool checking(const std::vector<int>& arr, int start, int len, int k)
+    {
+        int segment_len = len / k;
+        for (int i = start; i < start + segment_len; i++)
+        {
+            int check = arr[i];
+            for (int j = i; j < start + len; j += segment_len)
+            {
+                if (arr[j] != check)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};

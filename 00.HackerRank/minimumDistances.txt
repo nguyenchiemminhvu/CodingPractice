@@ -1,0 +1,26 @@
+https://www.hackerrank.com/challenges/minimum-distances/problem
+
+int minimumDistances(vector<int> a)
+{
+    int min_dist = 0x0FFFFFFF;
+     
+    std::map<int, std::vector<int>> M;
+    for (int i = 0; i < a.size(); i++)
+    {
+        M[a[i]].push_back(i);
+    }
+     
+    for (std::map<int, std::vector<int>>::iterator it = M.begin(); it != M.end(); it++)
+    {
+        std::vector<int> &v = it->second;
+        if (v.size() <= 1)
+            continue;
+         
+        for (int i = 1; i < v.size(); i++)
+        {
+            min_dist = std::min(min_dist, v[i] - v[i - 1]);
+        }
+    }
+     
+    return min_dist == 0x0FFFFFFF ? -1 : min_dist;
+}

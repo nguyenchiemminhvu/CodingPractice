@@ -1,0 +1,72 @@
+https://leetcode.com/problems/jump-game-vi/
+
+class Solution 
+{
+public:
+    int maxResult(vector<int>& nums, int k) 
+    {
+        // return maxJumpBT(nums, nums.size() - 1, k);
+        // return maxJumpDP(nums, k);
+        return maxJumpUtil(nums, k);
+    }
+private:
+    int maxJumpBT(const std::vector<int>& nums, int i, int k)
+    {
+        if (i < 0)
+            return -10e5;
+        
+        if (i == 0)
+            return nums[0];
+        
+        long long res = INT_MIN;
+        for (int j = i - k; j < i; j++)
+        {
+            res = std::max(res, nums[i] + (long long)maxJumpBT(nums, j, k));
+        }
+        return res;
+    }
+    
+    int maxJumpDP(const std::vector<int>& nums, int k)
+    {
+        std::vector<long long> dp(nums.size(), INT_MIN);
+        dp[0] = nums[0];
+        
+        for (int i = 1; i < nums.size(); i++)
+        {
+            for (int j = std::max(0, i - k); j < i; j++)
+            {
+                dp[i] = std::max(dp[i], nums[i] + dp[j]);
+            }
+        }
+        
+        return dp.back();
+    }
+    
+    int maxJumpUtil(const std::vector<int>& nums, int k)
+    {
+        if (nums.size() == 1)
+            return nums[0];
+        
+        auto comp = [](const std::pair<int, int>& a, const std::pair<int, int>& b)
+        {
+            return a.first < b.first;
+        };
+        
+        std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(comp)> pq(comp);
+        
+        int max_score = 0;
+        pq.push({nums[0], 0});
+        for (int i = 1; i < nums.size(); i++)
+        {
+            while (!pq.empty() && pq.top().second < (i - k))
+            {
+                pq.pop();
+            }
+            
+            max_score = pq.top().first + nums[i];
+            pq.push({max_score, i});
+        }
+        
+        return max_score;
+    }
+};

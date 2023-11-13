@@ -1,0 +1,45 @@
+https://leetcode.com/problems/smallest-range-i/
+
+class Solution 
+{
+public:
+    int smallestRangeI(vector<int>& nums, int k) 
+    {
+        int mi = INT_MAX;
+        int ma = INT_MIN;
+        findMinMax(nums, mi, ma);
+        int middle_line = mi + (ma - mi) / 2;
+        
+        mi = INT_MAX;
+        ma = INT_MIN;
+        for (int& n : nums)
+        {
+            if (n > middle_line)
+            {
+                n -= std::min(k, n - middle_line);
+            }
+            else if (n < middle_line)
+            {
+                n += std::min(k, middle_line - n);
+            }
+            
+            if (mi > n)
+                mi = n;
+            if (ma < n)
+                ma = n;
+        }
+        
+        return ma - mi;
+    }
+private:
+    void findMinMax(const std::vector<int>& nums, int& mi, int& ma)
+    {
+        for (const int& n : nums)
+        {
+            if (mi > n)
+                mi = n;
+            if (ma < n)
+                ma = n;
+        }
+    }
+};

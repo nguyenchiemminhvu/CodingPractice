@@ -1,0 +1,34 @@
+https://leetcode.com/problems/combinations/
+
+class Solution 
+{
+public:
+    vector<vector<int>> combine(int n, int k) 
+    {
+        std::vector<std::vector<int>> res;
+        std::vector<int> temp;
+        
+        generating(n, k, res, temp, 1, 0);
+        
+        return res;
+    }
+private:
+    void generating(int n, int k, std::vector<std::vector<int>>& res, std::vector<int>& temp, int it, int ik)
+    {
+        if (ik >= k)
+        {
+            res.push_back(temp);
+            return;
+        }
+        
+        if (it > n)
+            return;
+        
+        for (int i = it; i <= n; i++)
+        {
+            temp.push_back(i);
+            generating(n, k, res, temp, i + 1, ik + 1);
+            temp.pop_back();
+        }
+    }
+};

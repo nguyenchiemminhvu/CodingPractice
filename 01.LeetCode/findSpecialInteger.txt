@@ -1,0 +1,55 @@
+https://leetcode.com/problems/element-appearing-more-than-25-in-sorted-array/
+
+Runtime: 11 ms, faster than 92.25% of C++ online submissions for Element Appearing More Than 25% In Sorted Array.
+Memory Usage: 13.2 MB, less than 36.11% of C++ online submissions for Element Appearing More Than 25% In Sorted Array.
+
+class Solution 
+{
+public:
+    int findSpecialInteger(vector<int>& arr) 
+    {
+        int limit = arr.size() * 25 / 100;
+        
+        std::unordered_map<int, int> freq;
+        for (const int& n : arr)
+        {
+            freq[n]++;
+            if (freq[n] > limit)
+                return n;
+        }
+        
+        return -1;
+    }
+};
+Runtime: 11 ms, faster than 92.25% of C++ online submissions for Element Appearing More Than 25% In Sorted Array.
+Memory Usage: 12.5 MB, less than 40.79% of C++ online submissions for Element Appearing More Than 25% In Sorted Array.
+
+class Solution 
+{
+public:
+    int findSpecialInteger(vector<int>& arr) 
+    {
+        int limit = arr.size() * 25 / 100;
+        
+        for (int i = 0; i < arr.size(); i += limit)
+        {
+            int mid = i + limit / 2;
+            int count_mid = 1;
+            int left = mid - 1;
+            int right = mid + 1;
+            
+            while (left >= 0 && arr[left] == arr[mid])
+                left--;
+            while (right < arr.size() && arr[right] == arr[mid])
+                right++;
+            
+            count_mid += mid - left - 1;
+            count_mid += right - mid - 1;
+            
+            if (count_mid > limit)
+                return arr[mid];
+        }
+        
+        return -1;
+    }
+};

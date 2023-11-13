@@ -1,0 +1,30 @@
+https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+
+class Solution 
+{
+public:
+    vector<int> searchRange(vector<int>& nums, int target) 
+    {
+        int idx = binarySearch(nums, target);
+        if (idx == -1)
+            return { -1, -1 };
+        
+        int idx2 = binarySearch2(nums, target);
+        return { idx, idx2 - 1 };
+    }
+private:
+    int binarySearch(const std::vector<int>& sorted, int val)
+    {
+        auto it = std::lower_bound(sorted.begin(), sorted.end(), val);
+        if (it == sorted.end() || *it != val)
+            return -1;
+        
+        return std::distance(sorted.begin(), it);
+    }
+    
+    int binarySearch2(const std::vector<int>& sorted, int val)
+    {
+        auto it = std::upper_bound(sorted.begin(), sorted.end(), val);
+        return std::distance(sorted.begin(), it);
+    }
+};

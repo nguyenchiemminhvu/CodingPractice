@@ -1,0 +1,45 @@
+https://leetcode.com/problems/next-permutation/
+
+class Solution 
+{
+public:
+    void nextPermutation(vector<int>& s) 
+    {
+        // if (std::next_permutation(s.begin(), s.end()))
+        //     return;
+        
+        // std::sort(s.begin(), s.end());
+        // return;
+        
+        int not_lex_order_idx = 0;
+        for (not_lex_order_idx = s.size() - 1; not_lex_order_idx >= 1; not_lex_order_idx--)
+        {
+            if (s[not_lex_order_idx] > s[not_lex_order_idx - 1])
+            {
+                break;
+            }
+        }
+
+        if (not_lex_order_idx == 0)
+        {
+            std::reverse(s.begin(), s.end());
+            return;
+        }
+
+        not_lex_order_idx--;
+
+        int to_swap_idx = 0;
+        int temp = 10e8;
+        for (int i = not_lex_order_idx + 1; i < s.size(); i++)
+        {
+            if (s[i] - s[not_lex_order_idx] > 0 && s[i] - s[not_lex_order_idx] < temp)
+            {
+                temp = s[i] - s[not_lex_order_idx];
+                to_swap_idx = i;
+            }
+        }
+
+        std::swap(s[not_lex_order_idx], s[to_swap_idx]);
+        std::sort(s.begin() + not_lex_order_idx + 1, s.end());
+    }
+};

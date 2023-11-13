@@ -1,0 +1,28 @@
+https://leetcode.com/problems/search-suggestions-system/
+
+class Solution 
+{
+public:
+    vector<vector<string>> suggestedProducts(const vector<string>& products, const string& word) 
+    {
+        std::vector<std::vector<std::string>> res;
+        
+        for (int i = 0; i < word.length(); i++)
+        {
+            std::string sub = std::string(word.begin(), word.begin() + i + 1);
+            std::vector<std::string> v;
+            for (const std::string& product : products)
+            {
+                if (product.compare(0, sub.length(), sub) == 0)
+                {
+                    v.push_back(product);
+                }
+            }
+            
+            std::sort(v.begin(), v.end());
+            res.push_back({v.begin(), v.begin() + std::min(3, (int)v.size())});
+        }
+        
+        return res;
+    }
+};

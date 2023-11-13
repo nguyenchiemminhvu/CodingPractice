@@ -1,0 +1,48 @@
+https://leetcode.com/problems/reorder-list/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    void reorderList(ListNode* head) 
+    {
+        std::stack<ListNode*> st;
+        ListNode* p = head;
+        while (p)
+        {
+            st.push(p);
+            p = p->next;
+        }
+        
+        ListNode* left = head;
+        ListNode* right = st.top();
+        while (left != right)
+        {
+            if (left != right)
+            {
+                ListNode* temp = left->next;
+                left->next = right;
+                left = temp;
+            }
+            
+            if (left != right)
+            {
+                ListNode* temp = st.top();
+                st.pop();
+                temp->next = left;
+                right = st.top();
+            }
+        }
+        
+        left->next = nullptr;
+    }
+};

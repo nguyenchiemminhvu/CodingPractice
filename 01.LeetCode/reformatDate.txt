@@ -1,0 +1,40 @@
+https://leetcode.com/problems/reformat-date/
+
+class Solution 
+{
+public:
+    string reformatDate(const string& date) 
+    {
+        std::string setMon[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+        
+        size_t first = date.find_first_of(' ');
+        size_t second = date.find_last_of(' ');
+        std::string sd = date.substr(0, first);
+        std::string sm = date.substr(first + 1, 3);
+        std::string sy = date.substr(second + 1, 4);
+        
+        while (std::isalpha(sd.back()))
+            sd.pop_back();
+        
+        int id = std::stoi(sd.c_str());
+        
+        int im = 0;
+        for (int i = 0; i < 12; i++)
+        {
+            if (sm.compare(setMon[i]) == 0)
+            {
+                im = i + 1;
+                break;
+            }
+        }
+        
+        std::string res;
+        res += sy;
+        res += '-';
+        res += (im < 10 ? "0" : "") + std::to_string(im);
+        res += '-';
+        res += (id < 10 ? "0" : "") + sd;
+        
+        return res;
+    }
+};

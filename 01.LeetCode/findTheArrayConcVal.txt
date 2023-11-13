@@ -1,0 +1,45 @@
+https://leetcode.com/problems/find-the-array-concatenation-value/description/
+
+class Solution 
+{
+public:
+    long long findTheArrayConcVal(vector<int>& nums) 
+    {
+        long long res = 0;
+
+        int left = 0, right = nums.size() - 1;
+        while (left <= right)
+        {
+            if (left == right)
+            {
+                res += nums[left];
+                break;
+            }
+
+            int d = numDigit(nums[right]);
+            int val_left = nums[left];
+            while (d)
+            {
+                val_left *= 10;
+                d--;
+            }
+            res += (val_left + nums[right]);
+
+            left++;
+            right--;
+        }
+
+        return res;
+    }
+private:
+    int numDigit(int n)
+    {
+        int count = 0;
+        while (n)
+        {
+            count++;
+            n /= 10;
+        }
+        return count;
+    }
+};

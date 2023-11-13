@@ -1,0 +1,134 @@
+https://leetcode.com/problems/integer-to-roman/
+
+class Solution 
+{
+public:
+    string intToRoman(int num) 
+    {
+        std::string res;
+        
+        while (num)
+        {
+            if (num >= 1000)
+            {
+                res += "M";
+                num -= 1000;
+            }
+            else if (num >= 900)
+            {
+                res += "CM";
+                num -= 900;
+            }
+            else if (num >= 800)
+            {
+                res += "DCCC";
+                num -= 800;
+            }
+            else if (num >= 700)
+            {
+                res += "DCC";
+                num -= 700;
+            }
+            else if (num >= 600)
+            {
+                res += "DC";
+                num -= 600;
+            }
+            else if (num >= 500)
+            {
+                res += "D";
+                num -= 500;
+            }
+            else if (num >= 400)
+            {
+                res += "CD";
+                num -= 400;
+            }
+            else if (num >= 300)
+            {
+                res += "CCC";
+                num -= 300;
+            }
+            else if (num >= 200)
+            {
+                res += "CC";
+                num -= 200;
+            }
+            else if (num >= 100)
+            {
+                res += "C";
+                num -= 100;
+            }
+            else if (num >= 90)
+            {
+                res += "XC";
+                num -= 90;
+            }
+            else if (num >= 80)
+            {
+                res += "LXXX";
+                num -= 80;
+            }
+            else if (num >= 70)
+            {
+                res += "LXX";
+                num -= 70;
+            }
+            else if (num >= 60)
+            {
+                res += "LX";
+                num -= 60;
+            }
+            else if (num >= 50)
+            {
+                res += "L";
+                num -= 50;
+            }
+            else if (num >= 40)
+            {
+                res += "XL";
+                num -= 40;
+            }
+            else if (num >= 30)
+            {
+                res += "XXX";
+                num -= 30;
+            }
+            else if (num >= 20)
+            {
+                res += "XX";
+                num -= 20;
+            }
+            else if (num >= 10)
+            {
+                res += "X";
+                num -= 10;
+            }
+            else
+            {
+                if (num == 9)
+                {
+                    res += "IX";
+                    num -= 9;
+                }
+                else if (num >= 5)
+                {
+                    res += "V";
+                    num -= 5;
+                }
+                else if (num == 4)
+                {
+                    res += "IV";
+                    num -= 4;
+                }
+                else
+                {
+                    res += std::string(num, 'I');
+                    num -= num;
+                }
+            }
+        }
+        
+        return res;
+    }
+};

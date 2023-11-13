@@ -1,0 +1,20 @@
+https://leetcode.com/problems/mean-of-array-after-removing-some-elements/
+
+class Solution 
+{
+public:
+    double trimMean(vector<int>& arr) 
+    {
+        int to_remove = arr.size() * 5 / 100;
+        
+        std::sort(arr.begin(), arr.end());
+        
+        double s = 0;
+        for (int i = to_remove; i < arr.size() - to_remove; i++)
+        {
+            s += arr[i];
+        }
+        
+        return s / (arr.size() - to_remove * 2);
+    }
+};

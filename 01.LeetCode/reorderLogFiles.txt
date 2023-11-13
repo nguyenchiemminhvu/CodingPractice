@@ -1,0 +1,40 @@
+https://leetcode.com/problems/reorder-data-in-log-files/
+
+class Solution 
+{
+public:
+    vector<string> reorderLogFiles(vector<string>& logs) 
+    {
+        int pivot = logs.size() - 1;
+        for (int i = logs.size() - 1; i >= 0; i--)
+        {
+            if (std::isdigit(logs[i][logs[i].length() - 1]))
+            {
+                std::swap(logs[i], logs[pivot]);
+                pivot--;
+            }
+        }
+        
+        pivot++;
+        
+        std::sort
+        (
+            logs.begin(), 
+            logs.begin() + pivot, 
+            [](const std::string& s1, const std::string& s2)
+            {
+                size_t start1 = s1.find_first_of(' ');
+                size_t start2 = s2.find_first_of(' ');
+                
+                if (std::string(s1.begin() + start1 + 1, s1.end()) < std::string(s2.begin() + start2 + 1, s2.end()))
+                    return true;
+                if (std::string(s1.begin() + start1 + 1, s1.end()) > std::string(s2.begin() + start2 + 1, s2.end()))
+                    return false;
+                
+                return std::string(s1.begin(), s1.begin() + start1) < std::string(s2.begin(), s2.begin() + start2);
+            }
+        );
+        
+        return logs;
+    }
+};

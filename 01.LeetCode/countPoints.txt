@@ -1,0 +1,23 @@
+https://leetcode.com/problems/rings-and-rods/
+
+class Solution 
+{
+public:
+    int countPoints(const string& s) 
+    {
+        std::unordered_map<char, std::set<char>> checker;
+        for (int i = 0; i < s.length(); i += 2)
+        {
+            checker[s[i + 1]].insert(s[i]);
+        }
+        
+        int count = 0;
+        for (const auto& p : checker)
+        {
+            if (p.second.size() == 3)
+                count++;
+        }
+        
+        return count;
+    }
+};

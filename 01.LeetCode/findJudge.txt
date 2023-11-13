@@ -1,0 +1,38 @@
+https://leetcode.com/problems/find-the-town-judge/
+
+class Solution 
+{
+public:
+    int findJudge(int n, vector<vector<int>>& trust) 
+    {
+        if (n == 1)
+            return 1;
+        
+        std::unordered_map<int, std::vector<int>> in;
+        for (const std::vector<int>& t : trust)
+        {
+            in[t[1]].push_back(t[0]);
+        }
+        
+        for (const auto& p : in)
+        {
+            if (p.second.size() == n - 1)
+            {
+                bool found = true;
+                for (const std::vector<int>& t : trust)
+                {
+                    if (t[0] == p.first)
+                    {
+                        found = false;
+                        break;
+                    }
+                }
+                
+                if (found)
+                    return p.first;
+            }
+        }
+        
+        return -1;
+    }
+};

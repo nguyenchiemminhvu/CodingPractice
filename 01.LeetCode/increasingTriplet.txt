@@ -1,0 +1,53 @@
+https://leetcode.com/problems/increasing-triplet-subsequence/
+
+class Solution 
+{
+public:
+    bool increasingTriplet(vector<int>& nums) 
+    {
+        // int LIS = longestIncreaseSub(nums);
+        // if (LIS >= 3)
+        //     return true;
+        
+        std::vector<std::pair<int, int>> min_max(nums.size(), {INT_MAX, INT_MIN});
+        int cur_min = nums[0];
+        for (int i = 1; i < nums.size(); i++)
+        {
+            min_max[i].first = std::min(nums[i - 1], min_max[i - 1].first);
+        }
+        
+        int cur_max = nums.back();
+        for (int i = nums.size() - 2; i >= 0; i--)
+        {
+            min_max[i].second = std::max(nums[i + 1], min_max[i + 1].second);
+        }
+        
+        for (int i = 1; i < nums.size() - 1; i++)
+        {
+            if (nums[i] > min_max[i].first && nums[i] < min_max[i].second)
+                return true;
+        }
+        
+        return false;
+    }
+private:
+    int longestIncreaseSub(const std::vector<int>& nums)
+    {
+        std::vector<int> dp(nums.size(), 1);
+        for (int i = 1; i < nums.size(); i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (nums[j] < nums[i])
+                {
+                    dp[i] = std::max(dp[i], 1 + dp[j]);
+                }
+            }
+        }
+        
+        int longest = 0;
+        for (const int& n : dp)
+            longest = std::max(longest, n);
+        return longest;
+    }
+};

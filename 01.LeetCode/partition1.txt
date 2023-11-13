@@ -1,0 +1,129 @@
+https://leetcode.com/problems/palindrome-partitioning/
+
+class Solution 
+{
+public:
+    vector<vector<string>> partition(const std::string& s) 
+    {
+        std::vector<std::vector<std::string>> res;
+        
+        std::vector<std::string> temp;
+        generating(s, 0, temp, res);
+        
+        return res;
+    }
+private:
+    void generating(const std::string& s, int i, std::vector<std::string>& temp, std::vector<std::vector<std::string>>& res)
+    {
+        if (i >= s.length())
+        {
+            for (const std::string& t : temp)
+            {
+                if (!isPalindrome(t, 0, t.length() - 1))
+                {
+                    return;
+                }
+            }
+            res.push_back(temp);
+            return;
+        }
+        
+        int max_len = s.length() - i;
+        for (int sub_len = 1; sub_len <= max_len; sub_len++)
+        {
+            std::string sub(s.begin() + i, s.begin() + i + sub_len);
+            temp.push_back(sub);
+            generating(s, i + sub_len, temp, res);
+            temp.pop_back();
+        }
+    }
+    
+    bool isPalindrome(const std::string& s, int left, int right)
+    {
+        while (left < right)
+        {
+            if (s[left] != s[right])
+                return false;
+            
+            left++;
+            right--;
+        }
+        
+        return true;
+    }
+};
+
+
+==========================================
+
+class Solution 
+{
+public:
+    vector<vector<string>> partition(const std::string& s) 
+    {
+        std::vector<std::vector<std::string>> res;
+        
+        std::vector<std::vector<bool>> dp(s.length(), std::vector<bool>(s.length(), false));
+        buildDP(s, dp);
+        
+        std::vector<std::string> temp;
+        generating(s, 0, temp, res, dp);
+        
+        return res;
+    }
+private:
+    void generating(const std::string& s, int i, std::vector<std::string>& temp, std::vector<std::vector<std::string>>& res, std::vector<std::vector<bool>>& dp)
+    {
+        if (i >= s.length())
+        {
+            int left = 0;
+            for (const std::string& t : temp)
+            {
+                int right = left + t.length() - 1;
+                if (!dp[left][right])
+                    return;
+                left = right + 1;
+            }
+            res.push_back(temp);
+            return;
+        }
+        
+        int max_len = s.length() - i;
+        for (int sub_len = 1; sub_len <= max_len; sub_len++)
+        {
+            std::string sub(s.begin() + i, s.begin() + i + sub_len);
+            temp.push_back(sub);
+            generating(s, i + sub_len, temp, res, dp);
+            temp.pop_back();
+        }
+    }
+    
+    void buildDP(const std::string& s, std::vector<std::vector<bool>>& dp)
+    {
+        for (int i = 0; i < s.length(); i++)
+        {
+            dp[i][i] = true;
+        }
+        
+        for (int i = 0, j = 1; j < s.length(); i++, j++)
+        {
+            if (s[i] == s[j])
+            {
+                dp[i][j] = true;
+            }
+        }
+        
+        for (int sub_len = 3; sub_len <= s.length(); sub_len++)
+        {
+            for (int i = 0; i + sub_len <= s.length(); i++)
+            {
+                int j = i + sub_len - 1;
+                
+                if (dp[i + 1][j - 1] && s[i] == s[j])
+                {
+                    dp[i][j] = true;
+                }
+            }
+        }
+    }
+};

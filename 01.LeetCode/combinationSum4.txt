@@ -1,0 +1,31 @@
+https://leetcode.com/problems/combination-sum-iv/
+
+class Solution 
+{
+public:
+    int combinationSum4(vector<int>& nums, int target) 
+    {
+        std::unordered_map<int, int> mem;
+        return generating(nums, 0, target, mem);
+    }
+private:
+    int generating(const std::vector<int>& nums, int i, int target, std::unordered_map<int, int>& mem)
+    {
+        if (target < 0)
+            return 0;
+        
+        if (target == 0)
+            return 1;
+        
+        if (mem.find(target) != mem.end())
+            return mem[target];
+        
+        int res = 0;
+        for (int j = 0; j < nums.size(); j++)
+        {
+            res += generating(nums, j, target - nums[j], mem);
+        }
+        mem[target] = res;
+        return res;
+    }
+};

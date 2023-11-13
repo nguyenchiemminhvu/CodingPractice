@@ -1,0 +1,25 @@
+https://leetcode.com/problems/three-consecutive-odds/
+
+class Solution 
+{
+public:
+    bool threeConsecutiveOdds(vector<int>& arr) 
+    {
+        int cur = 0;
+        for (int i = 0; i < arr.size(); i++)
+        {
+            if (arr[i] & 1)
+            {
+                cur++;
+                if (cur >= 3)
+                    return true;
+            }
+            else
+            {
+                cur = 0;
+            }
+        }
+        
+        return false;
+    }
+};

@@ -1,0 +1,64 @@
+https://leetcode.com/problems/4sum/
+
+class Solution 
+{
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) 
+    {
+        std::set<std::vector<int>> res;
+        
+        std::sort(nums.begin(), nums.end());
+        for (int a = 0; a < nums.size(); a++)
+        {
+            for (int b = a + 1; b < nums.size(); b++)
+            {
+                for (int c = b + 1; c < nums.size(); c++)
+                {
+                    long long temp = (long long)target - nums[a] - nums[b] - nums[c];
+                    if (std::binary_search(nums.begin() + c + 1, nums.end(), temp))
+                        res.insert({nums[a], nums[b], nums[c], (int)temp});
+                }
+            }
+        }
+        
+        return {res.begin(), res.end()};
+    }
+};
+
+class Solution 
+{
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) 
+    {
+        std::set<std::vector<int>> res;
+        
+        std::sort(nums.begin(), nums.end());
+        for (int a = 0; a < nums.size(); a++)
+        {
+            for (int b = a + 1; b < nums.size(); b++)
+            {
+                long long temp = (long long)target - nums[a] - nums[b];
+                int slow = b + 1;
+                int fast = nums.size() - 1;
+                while (slow < fast)
+                {
+                    if (nums[slow] + nums[fast] == temp)
+                    {
+                        res.insert({nums[a], nums[b], nums[slow], nums[fast]});
+                    }
+                    
+                    if (nums[slow] + nums[fast] > temp)
+                    {
+                        fast--;
+                    }
+                    else
+                    {
+                        slow++;
+                    }
+                }
+            }
+        }
+        
+        return {res.begin(), res.end()};
+    }
+};

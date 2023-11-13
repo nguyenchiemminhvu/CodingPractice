@@ -1,0 +1,38 @@
+https://leetcode.com/problems/queries-on-number-of-points-inside-a-circle/
+
+class Solution 
+{
+public:
+    vector<int> countPoints(vector<vector<int>>& points, vector<vector<int>>& queries) 
+    {
+        std::vector<int> res;
+        
+        for (const std::vector<int>& circle : queries)
+        {
+            int count = 0;
+            
+            for (const std::vector<int>& p : points)
+            {
+                if (isInside(p, circle))
+                {
+                    count++;
+                }
+            }
+            res.push_back(count);
+        }
+        
+        return res;
+    }
+private:
+    double distance(const std::vector<int>& p1, const std::vector<int>& p2)
+    {
+        int delta_x = std::abs(p1[0] - p2[0]);
+        int delta_y = std::abs(p1[1] - p2[1]);
+        return std::sqrt(delta_x * delta_x + delta_y * delta_y);
+    }
+    
+    bool isInside(const std::vector<int>& p, const std::vector<int>& c)
+    {
+        return distance(p, c) <= c[2];
+    }
+};

@@ -1,0 +1,73 @@
+https://leetcode.com/problems/minimum-size-subarray-sum/
+
+class Solution 
+{
+public:
+    int minSubArrayLen(int target, vector<int>& nums) 
+    {
+        std::vector<int> sum(nums.begin(), nums.end());
+        for (int i = 1; i < sum.size(); i++)
+        {
+            sum[i] += sum[i - 1];
+        }
+        
+        std::map<std::pair<int, int>, int> checker;
+        int min_len = minUtil(nums, sum, 0, nums.size() - 1, target, checker);
+        return min_len == INT_MAX ? 0 : min_len;
+    }
+private:
+    int minUtil(const std::vector<int>& nums, const std::vector<int>& sum, int left, int right, int target, std::map<std::pair<int, int>, int>& checker)
+    {
+        if (left > right)
+            return INT_MAX;
+        
+        if (checker.find({left, right}) != checker.end())
+            return checker[{left, right}];
+        
+        int min_so_far = INT_MAX;
+        int temp = sum[right] - sum[left] + nums[left];
+        if (temp >= target)
+        {
+            min_so_far = right - left + 1;
+        }
+        
+        checker[{left, right}] = std::min(minUtil(nums, sum, left + 1, right, target, checker), minUtil(nums, sum, left, right - 1, target, checker));
+        
+        return std::min(min_so_far, checker[{left, right}]);
+    }
+};
+
+class Solution 
+{
+public:
+    int minSubArrayLen(int target, vector<int>& nums) 
+    {
+        int min_len = INT_MAX;
+        
+        std::vector<int> sum(nums.begin(), nums.end());
+        for (int i = 1; i < sum.size(); i++)
+        {
+            sum[i] += sum[i - 1];
+        }
+        
+        int left = 0, right = 0;
+        while (left <= right && right < nums.size())
+        {
+            int temp = sum[right] - sum[left] + nums[left];
+            if (temp >= target)
+            {
+                min_len = std::min(min_len, right - left + 1);
+                left++;
+            }
+            else
+            {
+                if (right < nums.size())
+                    right++;
+                else
+                    break;
+            }
+        }
+        
+        return min_len == INT_MAX ? 0 : min_len;
+    }
+};

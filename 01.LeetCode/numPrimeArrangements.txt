@@ -1,0 +1,25 @@
+https://leetcode.com/problems/prime-arrangements/
+
+class Solution 
+{
+    const int MOD = 1e9 + 7;
+    // Precompute the number of primes <= n for n <= 100.
+    const vector<int> numPrimes = {0, 0, 1, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 10, 10, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 13, 13, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 17, 17, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 20, 20, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 23, 23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 25, 25, 25, 25};
+public:
+    int numPrimeArrangements(int n) 
+    {      
+        long long ans = (factmod(n - numPrimes[n]) * factmod(numPrimes[n])) % MOD;
+        return (int)ans;
+    }
+private:
+    long long factmod(int n) 
+    {
+        long long res = 1;
+        while (n > 1) 
+        {
+            res = (res * n) % MOD;
+            n--;
+        }
+        return res;
+    }
+};

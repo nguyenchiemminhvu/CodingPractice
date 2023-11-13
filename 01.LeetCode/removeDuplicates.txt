@@ -1,0 +1,29 @@
+https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+
+class Solution 
+{
+public:
+    int removeDuplicates(vector<int>& nums) 
+    {
+        std::vector<bool> checker(nums.size(), true);
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (nums[i] == nums[i - 1])
+            {
+                checker[i - 1] = false;
+            }
+        }
+        
+        int k = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (checker[i])
+            {
+                nums[k] = nums[i];
+                k++;
+            }
+        }
+        
+        return k;
+    }
+};

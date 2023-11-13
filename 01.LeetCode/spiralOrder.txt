@@ -1,0 +1,49 @@
+https://leetcode.com/problems/spiral-matrix/
+
+class Solution 
+{
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) 
+    {
+        std::vector<int> res;
+        
+        int left = 0, right = matrix[0].size() - 1;
+        int up = 0, down = matrix.size() - 1;
+        
+        int in = 1;
+        int nn = matrix.size() * matrix[0].size();
+        while (in <= nn)
+        {
+            for (int i = left; i <= right && in <= nn; i++)
+            {
+                res.push_back(matrix[up][i]);
+                in++;
+            }
+            
+            for (int i = up + 1; i <= down && in <= nn; i++)
+            {
+                res.push_back(matrix[i][right]);
+                in++;
+            }
+            
+            for (int i = right - 1; i >= left && in <= nn; i--)
+            {
+                res.push_back(matrix[down][i]);
+                in++;
+            }
+            
+            for (int i = down - 1; i >= up + 1 && in <= nn; i--)
+            {
+                res.push_back(matrix[i][left]);
+                in++;
+            }
+            
+            left++;
+            right--;
+            up++;
+            down--;
+        }
+        
+        return res;
+    }
+};

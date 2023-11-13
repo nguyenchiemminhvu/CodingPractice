@@ -1,0 +1,98 @@
+https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/
+
+class Solution 
+{
+public:
+    int minOperations(vector<int>& nums, int x) 
+    {
+        // int res = minUtil(nums, x, 0, nums.size() - 1, 0);
+        // return res == INT_MAX ? -1 : res;
+        
+        ///////////////////////////////////////////////////////
+        
+//         std::vector<int> sum(nums.begin(), nums.end());
+//         for (int i = 1; i < sum.size(); i++)
+//             sum[i] += sum[i - 1];
+        
+//         int rest = sum.back() - x;
+//         if (rest == 0)
+//             return nums.size();
+        
+//         for (int n = nums.size() - 1; n >= 0; n--)
+//         {
+//             for (int i = 0; i < nums.size() - n; i++)
+//             {
+//                 if (sum[i + n] - sum[i] + nums[i] == rest)
+//                     return nums.size() - n - 1;
+//             }
+//         }
+        
+//         return -1;
+        
+        //////////////////////////////////////////////////////////
+        
+        int min_op = INT_MAX;
+        
+        std::vector<int> left_sum(nums.begin(), nums.end());
+        std::vector<int> right_sum(nums.begin(), nums.end());
+        std::reverse(right_sum.begin(), right_sum.end());
+        for (int i = 1; i < nums.size(); i++)
+        {
+            left_sum[i] += left_sum[i - 1];
+            right_sum[i] += right_sum[i - 1];
+        }
+        
+        if (left_sum.back() < x)
+            return -1;
+        
+        if (left_sum.back() == x)
+            return nums.size();
+        
+        int found = binarySearch(left_sum, x);
+        if (found != -1)
+        {
+            min_op = std::min(min_op, found + 1);
+        }
+        
+        found = binarySearch(right_sum, x);
+        if (found != -1)
+        {
+            min_op = std::min(min_op, found + 1);
+        }
+        
+        for (int i = 0; i < nums.size(); i++)
+        {
+            int rest = x - left_sum[i];
+            found = binarySearch(right_sum, rest);
+            if (found != -1)
+            {
+                min_op = std::min(min_op, i + found + 2);
+            }
+        }
+        
+        return min_op == INT_MAX ? -1 : min_op;
+    }
+private:
+    int binarySearch(const std::vector<int>& sorted, int val)
+    {
+        auto it = std::lower_bound(sorted.begin(), sorted.end(), val);
+        if (it == sorted.end() || *it != val)
+            return -1;
+        return std::distance(sorted.begin(), it);
+    }
+    
+    int minUtil(const std::vector<int>& nums, int x, int left, int right, int res)
+    {
+        if (x < 0)
+            return INT_MAX;
+        
+        if (x == 0)
+            return res;
+        
+        if (left > right)
+            return INT_MAX;
+        
+        return std::min(minUtil(nums, x - nums[left], left + 1, right, res + 1), 
+                        minUtil(nums, x - nums[right], left, right - 1, res + 1));
+    }
+};

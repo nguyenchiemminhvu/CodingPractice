@@ -1,0 +1,31 @@
+https://leetcode.com/problems/maximum-area-of-a-piece-of-cake-after-horizontal-and-vertical-cuts/
+
+class Solution 
+{
+    const int MOD = 1000000007;
+public:
+    int maxArea(int h, int w, vector<int>& h_cuts, vector<int>& w_cuts) 
+    {
+        std::sort(h_cuts.begin(), h_cuts.end());
+        std::sort(w_cuts.begin(), w_cuts.end());
+        
+        std::priority_queue<int> q_h;
+        std::priority_queue<int> q_w;
+        
+        q_h.push(h_cuts[0]);
+        q_h.push(h - h_cuts.back());
+        for (int i = 1; i < h_cuts.size(); i++)
+        {
+            q_h.push(h_cuts[i] - h_cuts[i - 1]);
+        }
+        
+        q_w.push(w_cuts[0]);
+        q_w.push(w - w_cuts.back());
+        for (int i = 1; i < w_cuts.size(); i++)
+        {
+            q_w.push(w_cuts[i] - w_cuts[i - 1]);
+        }
+        
+        return (unsigned long long)((unsigned long long)(q_h.top() % MOD) * ((unsigned long long)q_w.top() % MOD)) % MOD;
+    }
+};

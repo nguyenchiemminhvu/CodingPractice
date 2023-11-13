@@ -1,0 +1,70 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/
+
+class Solution 
+{
+public:
+    int maxProfit(vector<int>& prices, int fee) 
+    {
+        // return profitBT(prices, fee, prices.size() - 1);
+        // return profitDP(prices, fee);
+        return profitUtil(prices, fee);
+    }
+private:
+    int profitBT(const std::vector<int>& prices, int fee, int i)
+    {
+        if (i < 0)
+            return 0;
+        
+        int res = 0;
+        for (int j = 0; j < i; j++)
+        {
+            if (prices[j] + fee < prices[i])
+            {
+                res = std::max(res, prices[i] - prices[j] - fee + profitBT(prices, fee, j - 1));
+            }
+            else
+            {
+                res = std::max(res, profitBT(prices, fee, i - 1));
+            }
+        }
+        return res;
+    }
+    
+    int profitDP(const std::vector<int>& prices, int fee)
+    {
+        std::vector<int> dp(prices.size() + 1, 0);
+        
+        for (int i = 2; i <= prices.size(); i++)
+        {
+            for (int j = 1; j < i; j++)
+            {
+                if (prices[i - 1] - prices[j - 1] - fee > 0)
+                {
+                    dp[i] = std::max(dp[i], prices[i - 1] - prices[j - 1] - fee + dp[j - 1]);
+                }
+                else
+                {
+                    dp[i] = std::max(dp[i], dp[i - 1]);
+                }
+            }
+        }
+        
+        return dp.back();
+    }
+    
+    int profitUtil(const std::vector<int>& prices, int fee)
+    {
+        int total = 0;
+        int hold = -prices[0];
+        
+        for (int i = 1; i < prices.size(); i++)
+        {
+            total = std::max(total, hold + prices[i] - fee);
+            hold = std::max(hold, total - prices[i]);
+            
+            // cout << i << " " << hold << " " << total << endl;
+        }
+        
+        return total;
+    }
+};

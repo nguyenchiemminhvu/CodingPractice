@@ -1,0 +1,26 @@
+https://leetcode.com/problems/pascals-triangle/
+
+class Solution 
+{
+public:
+    vector<vector<int>> generate(int numRows) 
+    {
+        std::vector<std::vector<int>> res;
+        
+        for (int row = 1; row <= numRows; row++)
+        {
+            std::vector<int> line;
+            
+            int C = 1;
+            for (int col = 1; col <= row; col++)
+            {
+                line.push_back(C);
+                C = C * (row - col) / col;
+            }
+            
+            res.push_back(line);
+        }
+        
+        return res;
+    }
+};

@@ -1,0 +1,30 @@
+class Solution 
+{
+public:
+    vector<int> smallestTrimmedNumbers(vector<string>& nums, vector<vector<int>>& queries) 
+    {
+        std::vector<int> res;
+        
+        for (const std::vector<int>& query : queries)
+        {
+            std::vector<std::pair<std::string, int>> values(nums.size(), {"", -1});
+            for (int i = 0; i < nums.size(); i++)
+            {
+                values[i].first = trim(nums[i], query[1]);
+                values[i].second = i;
+            }
+            
+            std::sort(values.begin(), values.end(), [](std::pair<std::string, int>& a, std::pair<std::string, int>& b) { if (a.first < b.first) return true; if (a.first > b.first) return false; return a.second < b.second; });
+            
+            res.push_back(values[query[0] - 1].second);
+        }
+        
+        return res;
+    }
+private:
+    std::string trim(const std::string& s, int t)
+    {
+        std::string res(s.begin() + s.length() - t, s.end());
+        return res;
+    }
+};

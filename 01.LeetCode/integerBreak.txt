@@ -1,0 +1,75 @@
+https://leetcode.com/problems/integer-break/
+
+class Solution 
+{
+public:
+    int integerBreak(int n) 
+    {
+        // return breakBacktrack(n, false);
+        
+        // std::unordered_map<int, int> mem;
+        // return breakMem(n, false, mem);
+        
+        return breakTab(n);
+    }
+private:
+    int breakBacktrack(int n, bool checker)
+    {
+        if (n == 1)
+            return 1;
+        
+        int total = 0;
+        if (checker)
+            total = n;
+        
+        for (int i = 1; i <= n / 2; i++)
+        {
+            total = std::max(total, breakBacktrack(i, true) * breakBacktrack(n - i, true));
+        }
+        
+        return total;
+    }
+    
+    int breakMem(int n, bool checker, std::unordered_map<int, int>& mem)
+    {
+        if (n == 1)
+            return 1;
+        
+        if (mem.find(n) != mem.end())
+            return mem[n];
+        
+        int total = 0;
+        if (checker)
+            total = n;
+        
+        for (int i = 1; i <= n / 2; i++)
+        {
+            total = std::max(total, breakMem(i, true, mem) * breakMem(n - i, true, mem));
+        }
+        
+        mem[n] = total;
+        return total;
+    }
+    
+    int breakTab(int n)
+    {
+        if (n <= 2)
+            return 1;
+        if (n == 3)
+            return 2;
+        
+        std::vector<int> dp(n + 1, 0); 
+        dp[1] = 1;
+        dp[2] = 1;
+        dp[3] = 2;
+        for (int i = 2; i <= n; i++)
+        {
+            for (int j = 1; j <= i / 2; j++)
+            {
+                dp[i] = std::max({i, dp[i], dp[j] * dp[i - j]});
+            }
+        }
+        
+        return dp.back();
+    }
+};

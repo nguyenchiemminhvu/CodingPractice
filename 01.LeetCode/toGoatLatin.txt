@@ -1,0 +1,55 @@
+https://leetcode.com/problems/goat-latin/
+
+class Solution 
+{
+public:
+    string toGoatLatin(string& s) 
+    {
+        std::string res;
+        
+        int cur = 1;
+        s += ' ';
+        std::string temp;
+        for (const char& c : s)
+        {
+            if (c == ' ')
+            {
+                converting(temp, cur);
+                res += temp;
+                res += ' ';
+                cur++;
+                
+                temp.clear();
+            }
+            else
+            {
+                temp += c;
+            }
+        }
+        
+        res.pop_back();
+        return res;
+    }
+private:
+    void converting(std::string& s, int cur)
+    {
+        if (isVowel(s[0]))
+        {
+            s += "ma";
+        }
+        else
+        {
+            s += s[0];
+            s = std::string(s.begin() + 1, s.end());
+            s += "ma";
+        }
+        
+        s += std::string(cur, 'a');
+    }
+    
+    bool isVowel(char c)
+    {
+        return c == 'a' || c == 'e' || c == 'u' || c == 'i' || c == 'o'
+            || c == 'A' || c == 'E' || c == 'U' || c == 'I' || c == 'O'; 
+    }
+};

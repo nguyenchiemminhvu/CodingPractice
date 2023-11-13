@@ -1,0 +1,13 @@
+https://leetcode.com/problems/minimum-sum-of-four-digit-number-after-splitting-digits/
+
+class Solution 
+{
+public:
+    int minimumSum(int& num) 
+    {
+        std::vector<int> arr = { num % 10, (num / 10) % 10, (num / 100) % 10, num / 1000 };
+        std::sort(arr.begin(), arr.end());
+        
+        return arr[0] * 10 + arr[2] + arr[1] * 10 + arr[3];
+    }
+};

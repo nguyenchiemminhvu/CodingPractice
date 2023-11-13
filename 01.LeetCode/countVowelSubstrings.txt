@@ -1,0 +1,56 @@
+https://leetcode.com/problems/count-vowel-substrings-of-a-string/
+
+class Solution 
+{
+public:
+    int countVowelSubstrings(const string& s) 
+    {
+        int count = 0;
+        
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (isVowel(s[i]))
+            {
+                std::string temp;
+                int it = i;
+                bool foundGoodString = false;
+                while (it < s.length() && isVowel(s[it]))
+                {
+                    temp += s[it];
+                    if (!foundGoodString)
+                    {
+                        foundGoodString = isGoodString(temp);
+                        if (foundGoodString)
+                            count++;
+                    }
+                    else
+                    {
+                        count++;
+                    }
+                    
+                    it++;
+                }
+            }
+        }
+        
+        return count;
+    }
+private:
+    bool isVowel(char c)
+    {
+        return c == 'a' || c == 'e' || c == 'o' || c == 'i' || c == 'u';
+    }
+    
+    bool isGoodString(const std::string& s)
+    {
+        if (s.length() < 5)
+            return false;
+        
+        bool checker[26];
+        std::memset(checker, false, 26);
+        for (const char& c : s)
+            checker[c - 'a'] = true;
+        
+        return checker['a' - 'a'] && checker['e' - 'a'] && checker['o' - 'a'] && checker['i' - 'a'] && checker['u' - 'a'];
+    }
+};

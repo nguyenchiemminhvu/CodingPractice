@@ -1,0 +1,35 @@
+https://leetcode.com/problems/last-visited-integers/
+
+class Solution 
+{
+public:
+    vector<int> lastVisitedIntegers(vector<string>& words) 
+    {
+        std::vector<int> res;
+        std::vector<int> buffer;
+        int prevIDX = -1;
+
+        for (const std::string& word : words)
+        {
+            if (word == "prev")
+            {
+                if (prevIDX >= 0)
+                {
+                    res.push_back(buffer[prevIDX]);
+                    prevIDX--;
+                }
+                else
+                {
+                    res.push_back(-1);
+                }
+            }
+            else
+            {
+                buffer.push_back(std::stoi(word));
+                prevIDX = buffer.size() - 1;
+            }
+        }
+
+        return res;
+    }
+};

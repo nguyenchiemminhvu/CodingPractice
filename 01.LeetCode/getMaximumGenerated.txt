@@ -1,0 +1,32 @@
+https://leetcode.com/problems/get-maximum-in-generated-array/
+
+class Solution 
+{
+public:
+    int getMaximumGenerated(int n) 
+    {
+        if (n == 0)
+            return 0;
+        if (n == 1)
+            return 1;
+        
+        std::vector<int> res;
+        res.push_back(0);
+        res.push_back(1);
+        int cur_max = 0;
+        for (int i = 2; i <= n; i++)
+        {
+            if (i & 1)
+            {
+                res.push_back(res[i / 2] + res[i / 2 + 1]);
+            }
+            else
+            {
+                res.push_back(res[i / 2]);
+            }
+            
+            cur_max = std::max(cur_max, res[i]);
+        }
+        return cur_max;
+    }
+};

@@ -1,0 +1,22 @@
+https://leetcode.com/problems/number-of-senior-citizens/description/
+
+class Solution
+{
+public:
+    int countSeniors(vector<string>& details)
+    {
+        int count = 0;
+        for (const std::string& detail : details)
+        {
+            if (getAge(detail) > 60)
+                count++;
+        }
+
+        return count;
+    }
+private:
+    int getAge(const std::string& person)
+    {
+        return (person[11] - '0') * 10 + (person[12] - '0');
+    }
+};

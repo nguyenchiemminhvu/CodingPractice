@@ -1,0 +1,50 @@
+https://leetcode.com/problems/longest-arithmetic-subsequence/description/
+
+class Solution
+{
+public:
+    int longestArithSeqLength(vector<int>& nums)
+    {
+        if (nums.empty())
+            return 0;
+
+        int res = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            std::vector<int> temp;
+            temp.push_back(nums[i]);
+            res = std::max(res, longestBF(nums, i, temp));
+        }
+        return res;
+    }
+private:
+    int longestBF(const std::vector<int>& nums, int start, std::vector<int>& temp)
+    {
+        if (start >= nums.size())
+            return 0;
+
+        int longest = 1;
+        for (int i = start + 1; i < nums.size(); i++)
+        {
+            if (temp.size() < 2)
+            {
+                temp.push_back(nums[i]);
+                longest = std::max(longest, 1 + longestBF(nums, i, temp));
+                temp.pop_back();
+            }
+            else
+            {
+                int rule = temp[1] - temp[0];
+                int diff = nums[i] - temp.back();
+                if (diff == rule)
+                {
+                    temp.push_back(nums[i]);
+                    longest = std::max(longest, 1 + longestBF(nums, i, temp));
+                    temp.pop_back();
+                }
+            }
+        }
+
+        return longest;
+    }
+};

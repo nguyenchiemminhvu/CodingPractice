@@ -1,0 +1,28 @@
+https://leetcode.com/problems/calculate-money-in-leetcode-bank/
+
+class Solution 
+{
+public:
+    int totalMoney(int n) 
+    {
+        int res = 0;
+        
+        int lastMon = 0;
+        while (n)
+        {
+            lastMon++;
+            res += lastMon;
+            n--;
+            
+            int cur = lastMon;
+            for (int i = 3; i <= 8 && n; i++)
+            {
+                cur++;
+                res += cur;
+                n--;
+            }
+        }
+        
+        return res;
+    }
+};

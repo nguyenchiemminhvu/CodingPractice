@@ -1,0 +1,93 @@
+https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/
+
+class Solution 
+{
+public:
+    int minimumDeletions(const string& s) 
+    {
+        // std::string temp;
+        // return s.length() - longestBT(s, s.length() - 1);
+        
+        // return s.length() - longestDP(s);
+        
+        return s.length() - minDeleteUtil(s);
+    }
+private:
+    int longestBT(const std::string& s, int i)
+    {
+        if (i < 0)
+            return 0;
+        if (i == 0)
+            return 1;
+        
+        int longest = 1;
+        for (int j = 0; j < i; j++)
+        {
+            if (s[j] == 'a')
+            {
+                longest = std::max(longest, 1 + longestBT(s, j));
+            }
+            else // s[j] == 'b'
+            {
+                if (s[i] == 'b')
+                {
+                    longest = std::max(longest, 1 + longestBT(s, j));
+                }
+            }
+        }
+        return longest;
+    }
+    
+    int longestDP(const std::string& s)
+    {
+        int longest = 1;
+        
+        std::vector<int> dp(s.length(), 1);
+        for (int i = 1; i < s.length(); i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (s[j] == 'a')
+                {
+                    dp[i] = std::max(dp[i], 1 + dp[j]);
+                }
+                else // if (s[j] == 'b')
+                {
+                    if (s[i] == 'b')
+                    {
+                        dp[i] = std::max(dp[i], 1 + dp[j]);
+                    }
+                }
+            }
+            
+            longest = std::max(longest, dp[i]);
+        }
+        
+        return longest;
+    }
+    
+    int minDeleteUtil(const std::string& s)
+    {
+        std::vector<int> longest_a(s.length() + 1, 0);
+        std::vector<int> longest_b(s.length() + 1, 0);
+        
+        for (int i = 1; i <= s.length(); i++)
+        {
+            longest_a[i] = (int)(s[i - 1] == 'a') + longest_a[i - 1];
+        }
+        
+        for (int i = s.length() - 1; i >= 0; i--)
+        {
+            longest_b[i] = (int)(s[i] == 'b') + longest_b[i + 1];
+        }
+        
+        int longest = 1;
+        for (int i = 0; i <= s.length(); i++)
+        {
+            // cout << longest_a[i] << " " << longest_b[i] << endl;
+            longest = std::max(longest, longest_a[i] + longest_b[i]);
+        }
+        
+        return longest;
+    }
+};

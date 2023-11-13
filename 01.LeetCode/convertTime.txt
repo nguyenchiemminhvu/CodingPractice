@@ -1,0 +1,43 @@
+https://leetcode.com/problems/minimum-number-of-operations-to-convert-time/
+
+class Solution 
+{
+public:
+    int convertTime(const string& current, const string& correct) 
+    {
+        int min_step = 0;
+        
+        int hcur = std::stoi(current.substr(0, 2).c_str());
+        int mcur = std::stoi(current.substr(3, 2).c_str());
+        int hcor = std::stoi(correct.substr(0, 2).c_str());
+        int mcor = std::stoi(correct.substr(3, 2).c_str());
+        
+        min_step += hcor - hcur;
+        
+        if (min_step && mcur > mcor)
+        {
+            min_step--;
+            mcor += mcur + (60 - mcur);
+        }
+        
+        while (mcur + 15 <= mcor)
+        {
+            mcur += 15;
+            min_step++;
+        }
+        
+        while (mcur + 5 <= mcor)
+        {
+            mcur += 5;
+            min_step++;
+        }
+        
+        while (mcur + 1 <= mcor)
+        {
+            mcur++;
+            min_step++;
+        }
+        
+        return min_step;
+    }
+};

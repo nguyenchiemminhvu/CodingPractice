@@ -1,0 +1,40 @@
+https://leetcode.com/problems/greatest-common-divisor-of-strings/
+
+class Solution 
+{
+public:
+    string gcdOfStrings(string& s, string& t) 
+    {
+        if (s.length() < t.length())
+            s.swap(t);
+        
+        std::string longestGCD;
+        for (int i = 1; i <= s.length(); i++)
+        {
+            if (s.length() % i != 0 || t.length() % i != 0)
+                continue;
+            
+            std::string prefix(s.begin(), s.begin() + i);
+            std::string temp(prefix.begin(), prefix.end());
+            while (temp.length() + prefix.length() <= s.length())
+            {
+                temp += prefix;
+            }
+            
+            if (temp.compare(0, t.length(), t) != 0)
+            {
+                continue;
+            }
+            
+            if (s.compare(temp) != 0)
+            {
+                continue;
+            }
+            
+            if (longestGCD.length() < temp.length())
+                longestGCD = prefix;
+        }
+        
+        return longestGCD;
+    }
+};

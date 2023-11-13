@@ -1,0 +1,21 @@
+https://leetcode.com/problems/intersection-of-two-arrays/
+
+class Solution 
+{
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) 
+    {
+        std::set<int> res;
+        
+        std::sort(nums2.begin(), nums2.end());
+        for (int n : nums1)
+        {
+            if (std::binary_search(nums2.begin(), nums2.end(), n))
+            {
+                res.insert(n);
+            }
+        }
+        
+        return {res.begin(), res.end()};
+    }
+};

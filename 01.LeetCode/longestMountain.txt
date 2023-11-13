@@ -1,0 +1,61 @@
+https://leetcode.com/problems/longest-mountain-in-array/
+
+class Solution 
+{
+public:
+    int longestMountain(vector<int>& arr) 
+    {
+        std::vector<int> dp_left(arr.size(), 1);
+        std::vector<int> dp_right(arr.size(), 1);
+        
+        buildLongestLeft(arr, dp_left);
+        buildLongestRight(arr, dp_right);
+        
+        int res = 0;
+        for (int i = 1; i < arr.size() - 1; i++)
+        {
+            if (dp_left[i] >= 2 && dp_right[i] >= 2)
+            {
+                res = std::max(res, dp_left[i] + dp_right[i] - 1);
+            }
+        }
+        
+        return res < 3 ? 0 : res;
+    }
+private:
+    void buildLongestLeft(const std::vector<int>& arr, std::vector<int>& dp)
+    {
+        for (int i = 1; i < arr.size(); i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (arr[j] < arr[i])
+                {
+                    dp[i] = std::max(dp[i], 1 + dp[j]);
+                }
+                // else
+                // {
+                //     dp[i] = std::max(dp[i], dp[j]);
+                // }
+            }
+        }
+    }
+    
+    void buildLongestRight(const std::vector<int>& arr, std::vector<int>& dp)
+    {
+        for (int i = arr.size() - 2; i >= 0; i--)
+        {
+            for (int j = arr.size() - 1; j > i; j--)
+            {
+                if (arr[j] < arr[i])
+                {
+                    dp[i] = std::max(dp[i], 1 + dp[j]);
+                }
+                // else
+                // {
+                //     dp[i] = std::max(dp[i], dp[j]);
+                // }
+            }
+        }
+    }
+};

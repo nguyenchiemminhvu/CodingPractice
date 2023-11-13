@@ -1,0 +1,38 @@
+https://leetcode.com/problems/surface-area-of-3d-shapes/
+
+class Solution 
+{
+public:
+    int surfaceArea(vector<vector<int>>& grid) 
+    {
+        int res = 0;
+        
+        for (int i = 0; i < grid.size(); i++)
+        {
+            for (int j = 0; j < grid[0].size(); j++)
+            {
+                res += grid[i][j] * 6;
+                if (grid[i][j])
+                    res -= (grid[i][j] - 1) * 2;
+            }
+        }
+        
+        for (int i = 0; i < grid.size(); i++)
+        {
+            for (int j = 1; j < grid[0].size(); j++)
+            {
+                res -= std::min(grid[i][j], grid[i][j - 1]) * 2;
+            }
+        }
+        
+        for (int j = 0; j < grid[0].size(); j++)
+        {
+            for (int i = 1; i < grid.size(); i++)
+            {
+                res -= std::min(grid[i][j], grid[i - 1][j]) * 2;
+            }
+        }
+        
+        return res;
+    }
+};

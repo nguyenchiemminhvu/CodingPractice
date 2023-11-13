@@ -1,0 +1,27 @@
+https://leetcode.com/problems/check-whether-two-strings-are-almost-equivalent/
+
+class Solution 
+{
+public:
+    bool checkAlmostEquivalent(const string& s1, const string& s2) 
+    {
+        int f1[26];
+        int f2[26];
+        std::memset(f1, 0, 26 * sizeof(int));
+        std::memset(f2, 0, 26 * sizeof(int));
+        
+        for (const char& c : s1)
+            f1[c - 'a']++;
+        for (const char& c : s2)
+            f2[c - 'a']++;
+        
+        int diff = 0;
+        for (int i = 0; i < 26; i++)
+        {
+            diff = std::abs(f1[i] - f2[i]);
+            if (diff > 3)
+                return false;
+        }
+        return true;
+    }
+};

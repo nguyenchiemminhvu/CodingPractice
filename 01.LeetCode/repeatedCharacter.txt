@@ -1,0 +1,23 @@
+class Solution 
+{
+public:
+    char repeatedCharacter(const string& s) 
+    {
+        std::unordered_map<char, std::vector<int>> checker;
+        for (int i = 0; i < s.length(); i++)
+        {
+            checker[s[i]].push_back(i);
+        }
+        
+        int candidate = INT_MAX;
+        for (const std::pair<char, std::vector<int>>& p : checker)
+        {
+            if (p.second.size() < 2)
+                continue;
+            
+            if (candidate > p.second[1])
+                candidate = p.second[1];
+        }
+        return s[candidate];
+    }
+};

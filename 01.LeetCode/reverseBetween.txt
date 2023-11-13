@@ -1,0 +1,81 @@
+https://leetcode.com/problems/reverse-linked-list-ii/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) 
+    {
+        if (left >= right)
+        {
+            return head;
+        }
+        
+        ListNode* prevLeft = nullptr;
+        ListNode* nodeLeft = head;
+        left--;
+        while (left)
+        {
+            prevLeft = nodeLeft;
+            nodeLeft = nodeLeft->next;
+            left--;
+        }
+        
+        ListNode* afterRight = nullptr;
+        ListNode* nodeRight = head;
+        right--;
+        while (right)
+        {
+            nodeRight = nodeRight->next;
+            right--;
+        }
+        afterRight = nodeRight->next;
+        
+        if (prevLeft)
+        {
+            prevLeft->next = reverse(nodeLeft, nodeRight, afterRight);
+        }
+        else
+        {
+            head = reverse(nodeLeft, nodeRight, afterRight);
+        }
+        
+        return head;
+    }
+private:
+    ListNode* reverse(ListNode* left, ListNode* right, ListNode* afterRight)
+    {
+        ListNode* prev = nullptr;
+        ListNode* cur = left;
+        ListNode* next = nullptr;
+        
+        while (cur != afterRight)
+        {
+            next = cur->next;
+            cur->next = prev;
+            
+            if (prev == nullptr)
+            {
+                prev = cur;
+                prev->next = afterRight;
+            }
+            else
+            {
+                prev = cur;
+            }
+            
+            cur = next;
+        }
+        
+        return prev;
+    }
+};

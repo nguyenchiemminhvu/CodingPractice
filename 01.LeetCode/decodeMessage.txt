@@ -1,0 +1,34 @@
+
+
+class Solution 
+{
+public:
+    string decodeMessage(const string& key, const string& message) 
+    {
+        std::unordered_map<char, int> checker;
+        int ik = 0;
+        for (const char& c : key)
+        {
+            if (c != ' ' && checker.find(c) == checker.end())
+            {
+                checker[c] = ik;
+                ik++;
+            }
+        }
+        
+        std::string res;
+        for (const char& c : message)
+        {
+            if (c == ' ')
+            {
+                res.push_back(' ');
+                continue;
+            }
+            
+            char ch = 'a' + checker[c];
+            res.push_back(ch);
+        }
+        
+        return res;
+    }
+};

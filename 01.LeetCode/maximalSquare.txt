@@ -1,0 +1,131 @@
+https://leetcode.com/problems/maximal-square/
+
+class Solution 
+{
+public:
+    int maximalSquare(vector<vector<char>>& matrix) 
+    {
+        return maxUtil(matrix);
+    }
+private:
+    int maxUtil(const std::vector<std::vector<char>>& mat)
+    {
+        int res = 0;
+        for (int i = 0; i < mat.size(); i++)
+        {
+            for (int j = 0; j < mat[0].size(); j++)
+            {
+                if (mat[i][j] == '1')
+                {
+                    res = std::max(res, BFS(mat, i, j));
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    int BFS(const std::vector<std::vector<char>>& mat, int r, int c)
+    {
+        int res = 0;
+        
+        int i = r;
+        int j = c;
+        while (i < mat.size() && j < mat[0].size())
+        {
+            if (mat[i][j] == '0')
+                break;
+            
+            for (int up = i; up >= r; up--)
+            {
+                if (mat[up][j] == '0')
+                    return res * res;
+            }
+            
+            for (int left = j; left >= c; left--)
+            {
+                if (mat[i][left] == '0')
+                    return res * res;
+            }
+            
+            i++;
+            j++;
+            res++;
+        }
+        
+        return res * res;
+    }
+};
+
+class Solution 
+{
+public:
+    int maximalSquare(vector<vector<char>>& matrix) 
+    {
+        return maxSquareDP(matrix);
+    }
+private:
+    int maxSquareDP(const std::vector<std::vector<char>>& mat)
+    {
+        int res = 0;
+        
+        std::vector<std::vector<int>> dp(mat.size(), std::vector<int>(mat[0].size(), 0));
+        for (int i = 0; i < mat.size(); i++)
+        {
+            if (mat[i][mat[0].size() - 1] == '1')
+            {
+                dp[i][mat[0].size() - 1] = 1;
+                res = 1;
+            }
+        }
+        
+        for (int i = 0; i < mat[0].size(); i++)
+        {
+            if (mat[mat.size() - 1][i] == '1')
+            {
+                dp[mat.size() - 1][i] = 1;
+                res = 1;
+            }
+        }
+        
+        for (int i = mat.size() - 2; i >= 0; i--)
+        {
+            for (int j = mat[0].size() - 2; j >= 0; j--)
+            {
+                if (mat[i][j] == '0')
+                    continue;
+                
+                int cur_len = dp[i + 1][j + 1];
+                int possible = BFS(mat, i, j, cur_len);
+                dp[i][j] = possible;
+                
+                res = std::max(res, dp[i][j]);
+            }
+        }
+        
+        return res * res;
+    }
+    
+    int BFS(const std::vector<std::vector<char>>& mat, int r, int c, int len)
+    {
+        int dist_row = 0;
+        int dist_col = 0;
+        for (int i = r; i <= r + len; i++)
+        {
+            if (mat[i][c] == '0')
+                break;
+            
+            dist_row++;
+        }
+        
+        for (int i = c; i <= c + len; i++)
+        {
+            if (mat[r][i] == '0')
+                break;
+            
+            dist_col++;
+        }
+        
+        return std::min(dist_row, dist_col);
+    }
+};

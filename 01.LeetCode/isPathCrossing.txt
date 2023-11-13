@@ -1,0 +1,39 @@
+https://leetcode.com/problems/path-crossing/
+
+class Solution 
+{
+public:
+    bool isPathCrossing(const string& path) 
+    {
+        std::set<std::pair<int, int>> checker;
+        std::pair<int, int> cur_pos(0, 0);
+        checker.insert(cur_pos);
+        
+        for (const char& c : path)
+        {
+            if (c == 'N')
+            {
+                cur_pos.second++;
+            }
+            else if (c == 'S')
+            {
+                cur_pos.second--;
+            }
+            else if (c == 'E')
+            {
+                cur_pos.first--;
+            }
+            else // c == W
+            {
+                cur_pos.first++;
+            }
+            
+            if (checker.find(cur_pos) != checker.end())
+                return true;
+            
+            checker.insert(cur_pos);
+        }
+        
+        return false;
+    }
+};

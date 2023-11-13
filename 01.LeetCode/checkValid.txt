@@ -1,0 +1,39 @@
+https://leetcode.com/problems/check-if-every-row-and-column-contains-all-numbers/
+
+class Solution 
+{
+public:
+    bool checkValid(vector<vector<int>>& matrix) 
+    {
+        std::unordered_map<int, int> checker;
+        for (int i = 1; i <= matrix.size(); i++)
+            checker[i] = 1;
+        
+        std::unordered_map<int, int> temp;
+        for (const std::vector<int>& row : matrix)
+        {
+            temp.clear();
+            for (const int& n : row)
+            {
+                temp[n]++;
+            }
+            
+            if (temp != checker)
+                return false;
+        }
+        
+        for (int col = 0; col < matrix.size(); col++)
+        {
+            temp.clear();
+            for (const std::vector<int>& row : matrix)
+            {
+                temp[row[col]]++;
+            }
+            
+            if (temp != checker)
+                return false;
+        }
+        
+        return true;
+    }
+};

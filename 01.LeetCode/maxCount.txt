@@ -1,0 +1,16 @@
+https://leetcode.com/problems/range-addition-ii/submissions/
+
+class Solution 
+{
+public:
+    int maxCount(int m, int n, vector<vector<int>>& ops) 
+    {
+        for (const std::vector<int>& range : ops)
+        {
+            m = std::min(m, range[0]);
+            n = std::min(n, range[1]);
+        }
+        
+        return m * n;
+    }
+};

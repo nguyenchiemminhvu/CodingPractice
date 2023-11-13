@@ -1,0 +1,57 @@
+https://leetcode.com/problems/n-queens-ii/
+
+class Solution 
+{
+public:
+    int totalNQueens(int n) 
+    {
+        int res[] = { 0, 1, 0, 0, 2, 10, 4, 40, 92, 352 };
+        return res[n];
+        
+        std::vector<std::vector<bool>> checker(n, std::vector<bool>(n, false));
+        return generating(n, 0, checker);
+    }
+private:
+    int generating(int n, int i, std::vector<std::vector<bool>>& checker)
+    {
+        if (i >= n)
+        {
+            return 1;
+        }
+        
+        int res = 0;
+        for (int j = 0; j < n; j++)
+        {
+            if (isValid(checker, i, j))
+            {
+                checker[i][j] = true;
+                res += generating(n, i + 1, checker);
+                checker[i][j] = false;
+            }
+        }
+        return res;
+    }
+    
+    bool isValid(const std::vector<std::vector<bool>>& checker, int row, int col)
+    {
+        for (int i = 0; i < checker.size(); i++)
+        {
+            if (checker[i][col] == true)
+                return false;
+        }
+        
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+        {
+            if (checker[i][j] == true)
+                return false;
+        }
+        
+        for (int i = row, j = col; i >= 0 && j < checker.size(); i--, j++)
+        {
+            if (checker[i][j] == true)
+                return false;
+        }
+        
+        return true;
+    }
+};

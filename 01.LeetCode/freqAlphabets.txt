@@ -1,0 +1,40 @@
+https://leetcode.com/problems/decrypt-string-from-alphabet-to-integer-mapping/
+
+class Solution 
+{
+public:
+    string freqAlphabets(const string& s) 
+    {
+        std::string res;
+        
+        size_t is = 0;
+        while (is < s.length())
+        {
+            size_t found = s.find('#', is);
+            if (found != std::string::npos)
+            {
+                while (is < found - 2)
+                {
+                    res += ('a' + (s[is] - '0') - 1);
+                    is++;
+                }
+                
+                int temp = 0;
+                temp += (s[is++] - '0') * 10;
+                temp += (s[is++] - '0');
+                res += 'a' + temp - 1;
+                is = found + 1;
+            }
+            else
+            {
+                while (is < s.length())
+                {
+                    res += ('a' + (s[is] - '0') - 1);
+                    is++;
+                }
+            }
+        }
+        
+        return res;
+    }
+};

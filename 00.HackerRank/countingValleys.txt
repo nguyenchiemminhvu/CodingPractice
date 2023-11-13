@@ -1,0 +1,24 @@
+https://www.hackerrank.com/challenges/counting-valleys/problem
+
+int countingValleys(int steps, string path)
+{
+    int count_valleys = 0;
+     
+    int level = 0;
+    for (char c : path)
+    {
+        if (c == 'U')
+        {
+            level++;
+             
+            if (level == 0)
+                count_valleys++;
+        }
+        else // c == 'D'
+        {
+            level--;
+        }
+    }
+     
+    return count_valleys;
+}

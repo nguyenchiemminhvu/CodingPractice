@@ -1,0 +1,39 @@
+https://leetcode.com/problems/jump-game-iii/
+
+class Solution 
+{
+public:
+    bool canReach(vector<int>& arr, int start) 
+    {
+        std::queue<int> Q;
+        Q.push(start);
+        
+        std::vector<bool> visited(arr.size(), false);
+        visited[start] = true;
+        
+        while (!Q.empty())
+        {
+            int cur = Q.front();
+            Q.pop();
+            
+            if (arr[cur] == 0)
+                return true;
+            
+            int left = cur - arr[cur];
+            if (left >= 0 && !visited[left])
+            {
+                Q.push(left);
+                visited[left] = true;
+            }
+            
+            int right = cur + arr[cur];
+            if (right < arr.size() && !visited[right])
+            {
+                Q.push(right);
+                visited[right] = true;
+            }
+        }
+        
+        return false;
+    }
+};

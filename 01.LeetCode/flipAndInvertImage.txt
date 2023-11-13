@@ -1,0 +1,20 @@
+https://leetcode.com/problems/flipping-an-image/
+
+class Solution 
+{
+public:
+    vector<vector<int>> flipAndInvertImage(vector<vector<int>>& image) 
+    {
+        for (std::vector<int>& line : image)
+        {
+            std::reverse(line.begin(), line.end());
+            
+            for (int& n : line)
+            {
+                n = (n + 1) % 2;
+            }
+        }
+        
+        return image;
+    }
+};

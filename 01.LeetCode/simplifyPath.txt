@@ -1,0 +1,53 @@
+https://leetcode.com/problems/simplify-path/
+
+class Solution 
+{
+public:
+    string simplifyPath(string& s) 
+    {
+        std::vector<std::string> path;
+        
+        s.push_back('/');
+        std::string temp;
+        for (const char& c : s)
+        {
+            if (c == '/')
+            {
+                if (temp == "." || temp.empty())
+                {
+                    // do nothing
+                }
+                else if (temp == "..")
+                {
+                    if (!path.empty())
+                    {
+                        path.pop_back();
+                    }
+                }
+                else
+                {
+                    path.push_back(temp);
+                }
+                
+                temp.clear();
+            }
+            else
+            {
+                temp += c;
+            }
+        }
+        
+        if (path.empty())
+            return "/";
+        
+        s = "/";
+        for (const std::string& folder : path)
+        {
+            s += folder;
+            s += '/';
+        }
+        
+        s.pop_back();
+        return s;
+    }
+};

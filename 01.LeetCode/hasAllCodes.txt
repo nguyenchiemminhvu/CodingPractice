@@ -1,0 +1,19 @@
+https://leetcode.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/
+
+class Solution 
+{
+public:
+    bool hasAllCodes(const string& s, int k) 
+    {
+        if (s.length() < k)
+            return false;
+        
+        std::set<std::string> se;
+        for (int i = 0; i <= s.length() - k; i++)
+        {
+            se.insert(std::string(s.begin() + i, s.begin() + i + k));
+        }
+        
+        return se.size() == (1 << k);
+    }
+};

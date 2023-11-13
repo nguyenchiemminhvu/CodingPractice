@@ -1,0 +1,52 @@
+https://leetcode.com/problems/replace-all-s-to-avoid-consecutive-repeating-characters/
+
+class Solution 
+{
+public:
+    string modifyString(string& s) 
+    {
+        if (s.length() == 1)
+        {
+            if (s[0] == '?')
+                return "a";
+            return s;
+        }
+        
+        int j = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s[i] == '?')
+            {
+                if (i == 0)
+                {
+                    j = 0;
+                    while ('a' + j == s[i + 1])
+                    {
+                        j++;
+                    }
+                    s[i] = ('a' + j);
+                }
+                else if (i == s.length() - 1)
+                {
+                    j = 0;
+                    while ('a' + j == s[i - 1])
+                    {
+                        j++;
+                    }
+                    s[i] = ('a' + j);
+                }
+                else
+                {
+                    j = 0;
+                    while ('a' + j == s[i - 1] || 'a' + j == s[i + 1])
+                    {
+                        j++;
+                    }
+                    s[i] = ('a' + j);
+                }
+            }
+        }
+        
+        return s;
+    }
+};

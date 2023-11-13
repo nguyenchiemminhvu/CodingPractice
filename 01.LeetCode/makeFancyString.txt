@@ -1,0 +1,28 @@
+https://leetcode.com/problems/delete-characters-to-make-fancy-string/
+
+class Solution 
+{
+public:
+    string makeFancyString(string& s) 
+    {
+        int is = 1;
+        int count = 1;
+        for (int i = 1; i < s.length(); i++)
+        {
+            if (s[i] == s[is - 1])
+            {
+                count++;
+                if (count >= 3)
+                    continue;
+            }
+            else
+            {
+                count = 1;
+            }
+            
+            s[is++] = s[i];
+        }
+        
+        return std::string(s.begin(), s.begin() + is);
+    }
+};

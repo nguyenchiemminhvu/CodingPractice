@@ -1,0 +1,155 @@
+struct TrieNode
+{
+    char ch;
+    bool completed = false;
+    std::unordered_map<char, TrieNode*> nodes;
+};
+
+class Trie
+{
+public:
+    Trie()
+    {
+        root = new TrieNode();
+    }
+    
+    ~Trie()
+    {
+        delete root;
+    }
+    
+    void insert(const std::string& key)
+    {
+        TrieNode* p = root;
+        for (size_t i = 0; i < key.length(); i++)
+        {
+            if (p->nodes[key[i]] == nullptr)
+            {
+                p->nodes[key[i]] = createNode(key[i]);
+            }
+            
+            p = p->nodes[key[i]];
+            if (i == key.length() - 1)
+            {
+                p->completed = true;
+            }
+        }
+    }
+    
+    std::string getPrefix(const std::string& word)
+    {
+        TrieNode* p = root;
+        std::string prefix = "";
+        for (size_t i = 0; i < word.length(); i++)
+        {
+            if (p->nodes[word[i]] == nullptr)
+            {
+                break;
+            }
+            
+            prefix += word[i];
+            if (p->nodes[word[i]]->completed == true)
+            {
+                return prefix;
+            }
+            p = p->nodes[word[i]];
+        }
+        
+        if (p->completed == true)
+        {
+            return prefix;
+        }
+        return "";
+    }
+    
+    void debug()
+    {
+        std::string temp;
+        for (std::pair<char, TrieNode*> p : root->nodes)
+        {
+            debug(p.second, temp);
+        }
+    }
+    
+private:
+    TrieNode* root;
+    
+    TrieNode* createNode(char c, bool com = false)
+    {
+        TrieNode* node = new TrieNode();
+        node->ch = c;
+        node->completed = com;
+        return node;
+    }
+    
+    void debug(TrieNode* root, std::string& temp)
+    {
+        if (!root)
+            return;
+        
+        temp += root->ch;
+        if (root->completed)
+        {
+            cout << temp << endl;
+        }
+        
+        for (std::pair<char, TrieNode*> p : root->nodes)
+        {
+            debug(p.second, temp);
+        }
+        temp.pop_back();
+    }
+};
+
+class Solution 
+{
+public:
+    string replaceWords(vector<string>& dict, const string& s) 
+    {
+        Trie trie;
+        for (const std::string& d : dict)
+        {
+            trie.insert(d);
+        }
+        // trie.debug();
+        
+        std::string res = "";
+        std::string temp = "";
+        for (const char& c : s)
+        {
+            if (c == ' ')
+            {
+                std::string prefix = trie.getPrefix(temp);
+                if (prefix == "")
+                {
+                    res += temp;
+                }
+                else
+                {
+                    res += prefix;
+                }
+                res += ' ';
+                temp = "";
+            }
+            else
+            {
+                temp += c;
+            }
+        }
+        
+        if (!temp.empty())
+        {
+            std::string prefix = trie.getPrefix(temp);
+            if (prefix == "")
+            {
+                res += temp;
+            }
+            else
+            {
+                res += prefix;
+            }
+        }
+        
+        return res;
+    }
+};

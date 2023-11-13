@@ -1,0 +1,26 @@
+https://leetcode.com/problems/orderly-queue/description/
+
+class Solution 
+{
+public:
+    string orderlyQueue(string& s, int k) 
+    {
+        if (k > 1)
+        {
+            std::sort(s.begin(), s.end());
+            return s;
+        }
+
+        std::string min_s(s.begin(), s.end());
+        for (int i = 0; i < s.length(); i++)
+        {
+            char temp = s[0];
+            s.erase(s.begin());
+            s += temp;
+
+            if (min_s > s)
+                min_s = s;
+        }
+        return min_s;
+    }
+};

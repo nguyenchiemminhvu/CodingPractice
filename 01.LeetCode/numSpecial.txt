@@ -1,0 +1,41 @@
+https://leetcode.com/problems/special-positions-in-a-binary-matrix/
+
+class Solution 
+{
+public:
+    int numSpecial(vector<vector<int>>& mat) 
+    {
+        int count = 0;
+        for (int i = 0; i < mat.size(); i++)
+        {
+            for (int j = 0; j < mat[0].size(); j++)
+            {
+                if (mat[i][j] == 0)
+                    continue;
+                
+                int sum = sumRowCol(mat, i, j);
+                if (sum == 1)
+                {
+                    //cout << i << " " << j << endl;
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+private:
+    int sumRowCol(const std::vector<std::vector<int>>& mat, int r, int c)
+    {
+        int s = 0;
+        for (const int& n : mat[r])
+            s += n;
+        
+        for (int i = 0; i < mat.size(); i++)
+        {
+            s += mat[i][c];
+        }
+        
+        return s - 1;
+    }
+};

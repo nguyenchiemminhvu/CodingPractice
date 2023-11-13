@@ -1,0 +1,36 @@
+https://leetcode.com/problems/largest-number/description/
+
+class Solution 
+{
+public:
+    string largestNumber(vector<int>& nums)
+    {
+        std::sort
+        (
+            nums.begin(), 
+            nums.end(), 
+            [](const int& a, const int& b)
+            {
+                std::string sa = std::to_string(a);
+                std::string sb = std::to_string(b);
+                if (sa + sb > sb + sa)
+                    return true;
+                return false;
+            }
+        );
+        
+        std::string res;
+        for (const int& n : nums)
+        {
+            res += std::to_string(n);
+        }
+
+        // remove leading zero
+        std::reverse(res.begin(), res.end());
+        while (res.length() > 1 && res.back() == '0')
+            res.pop_back();
+        std::reverse(res.begin(), res.end());
+
+        return res;
+    }
+};

@@ -1,0 +1,16 @@
+https://leetcode.com/problems/count-prefixes-of-a-given-string/
+
+class Solution 
+{
+public:
+    int countPrefixes(vector<string>& words, const string& s) 
+    {
+        int count = 0;
+        for (const std::string& word : words)
+        {
+            if (s.compare(0, word.length(), word) == 0)
+                count++;
+        }
+        return count;
+    }
+};

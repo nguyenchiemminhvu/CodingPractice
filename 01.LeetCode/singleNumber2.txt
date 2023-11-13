@@ -1,0 +1,32 @@
+https://leetcode.com/problems/single-number-iii/
+
+class Solution 
+{
+public:
+    vector<int> singleNumber(vector<int>& nums) 
+    {
+        int a = 0, b = 0;
+        
+        int X = 0;
+        for (const int& n : nums)
+        {
+            X ^= n;
+        }
+        
+        int first_set_bit = X & (~((unsigned long long)X - 1));
+        
+        for (const int& n : nums)
+        {
+            if (n & first_set_bit)
+            {
+                b ^= n;
+            }
+            else
+            {
+                a ^= n;
+            }
+        }
+        
+        return { a , b };
+    }
+};

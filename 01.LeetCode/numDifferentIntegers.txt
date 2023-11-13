@@ -1,0 +1,28 @@
+https://leetcode.com/problems/number-of-different-integers-in-a-string/
+
+class Solution 
+{
+public:
+    int numDifferentIntegers(std::string& s) 
+    {
+        std::set<std::string> se;
+        
+        for (char& c : s)
+            if (!std::isdigit(c))
+                c = ' ';
+        
+        std::stringstream ss(s);
+        std::string num;
+        while (ss >> num)
+        {
+            int in;
+            for (in = 0; in < num.length(); in++)
+                if (num[in] != '0')
+                    break;
+            
+            se.insert(std::string(num.begin() + in, num.end()));
+        }
+        
+        return se.size();
+    }
+};

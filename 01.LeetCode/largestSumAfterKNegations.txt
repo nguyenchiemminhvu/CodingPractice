@@ -1,0 +1,38 @@
+https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/
+
+class Solution 
+{
+public:
+    int largestSumAfterKNegations(vector<int>& nums, int k) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        int count_neg = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[i] < 0)
+                count_neg++;
+        }
+        
+        // turn all negative numbers to positive numbers if possible
+        for (int i = 0; i < count_neg && k > 0; i++)
+        {
+            nums[i] = -nums[i];
+            k--;
+        }
+        
+        int sum = 0;
+        int mi = INT_MAX;
+        for (const int& n : nums)
+        {
+            if (mi > n)
+                mi = n;
+            sum += n;
+        }
+        
+        if (k & 1)
+            sum -= mi * 2;
+        
+        return sum;
+    }
+};

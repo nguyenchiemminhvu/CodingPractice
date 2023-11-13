@@ -1,0 +1,41 @@
+https://leetcode.com/problems/minimum-average-difference/description/
+
+class Solution 
+{
+public:
+    int minimumAverageDifference(vector<int>& nums) 
+    {
+        long long int sum = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            sum += nums[i];
+        }
+
+        int min_idx = 0;
+        int min_diff = INT_MAX;
+
+        long long int sum_left = 0;
+        long long int sum_right = sum;
+        for (int i = 0; i < nums.size() - 1; i++)
+        {
+            sum_left += nums[i];
+            sum_right = sum - sum_left;
+            int average_left = sum_left / (i + 1);
+            int average_right = sum_right / (nums.size() - i - 1);
+            if (min_diff > std::abs(average_left - average_right))
+            {
+                min_diff = std::abs(average_left - average_right);
+                min_idx = i;
+            }
+        }
+
+        sum_left += nums.back();
+        sum_right = 0;
+        if (min_diff > sum_left / nums.size())
+        {
+            min_idx = nums.size() - 1;
+        }
+
+        return min_idx;
+    }
+};

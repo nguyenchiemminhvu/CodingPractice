@@ -1,0 +1,33 @@
+https://leetcode.com/problems/custom-sort-string/
+
+class Solution 
+{
+public:
+    string customSortString(string& order, string& s) 
+    {
+        std::vector<int> freq(26, 0);
+        
+        int is = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (order.find_first_of(s[i]) != std::string::npos)
+            {
+                freq[s[i] - 'a']++;
+                std::swap(s[is], s[i]);
+                is++;
+            }
+        }
+        
+        std::string res;
+        for (const char& c : order)
+        {
+            if (freq[c - 'a'])
+            {
+                res += std::string(freq[c - 'a'], c);
+            }
+        }
+        
+        res += std::string(s.begin() + is, s.end());
+        return res;
+    }
+};

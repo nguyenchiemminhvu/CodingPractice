@@ -1,0 +1,30 @@
+https://leetcode.com/problems/min-max-game/
+
+class Solution 
+{
+public:
+    int minMaxGame(vector<int>& nums) 
+    {
+        int n = nums.size();
+        
+        while (n > 1)
+        {
+            int in = 0;
+            bool use_min = true;
+            int half = n / 2;
+            for (int i = 0; i < half; i++)
+            {
+                if (use_min)
+                    nums[in] = std::min(nums[i * 2], nums[i * 2 + 1]);
+                else
+                    nums[in] = std::max(nums[i * 2], nums[i * 2 + 1]);
+                in++;
+                use_min = !use_min;
+            }
+            in++;
+            n >>= 1;
+        }
+        
+        return nums[0];
+    }
+};

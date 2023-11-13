@@ -1,0 +1,55 @@
+https://leetcode.com/problems/find-and-replace-pattern/
+
+class Solution 
+{
+public:
+    vector<string> findAndReplacePattern(vector<string>& words, const string& pattern) 
+    {
+        std::vector<std::string> res;
+        for (const std::string& word : words)
+        {
+            if (checking(word, pattern))
+            {
+                res.push_back(word);
+            }
+        }
+        
+        return res;
+    }
+private:
+    bool checking(const std::string& s, const std::string& p)
+    {
+        if (s.length() != p.length())
+            return false;
+        
+        std::unordered_map<char, char> checker;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (checker.find(s[i]) == checker.end())
+            {
+                checker[s[i]] = p[i];
+            }
+            else
+            {
+                if (checker[s[i]] != p[i])
+                    return false;
+            }
+        }
+        
+        checker.clear();
+        for (int i = 0; i < p.length(); i++)
+        {
+            if (checker.find(p[i]) == checker.end())
+            {
+                checker[p[i]] = s[i];
+            }
+            else
+            {
+                if (checker[p[i]] != s[i])
+                    return false;
+            }
+        }
+        
+        return true;
+    }
+};

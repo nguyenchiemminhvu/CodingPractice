@@ -1,0 +1,22 @@
+class Solution 
+{
+public:
+    vector<int> leftRigthDifference(vector<int>& nums) 
+    {
+        std::vector<int> sum(nums.begin(), nums.end());
+        for (int i = 1; i < nums.size(); i++)
+        {
+            sum[i] += sum[i - 1];
+        }
+        
+        std::vector<int> res(nums.size());
+        for (int i = 0; i < nums.size(); i++)
+        {
+            int left_sum = sum[i] - nums[i];
+            int right_sum = sum.back() - sum[i];
+            
+            res[i] = std::abs(left_sum - right_sum);
+        }
+        return res;
+    }
+};

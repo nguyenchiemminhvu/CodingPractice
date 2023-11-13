@@ -1,0 +1,29 @@
+https://leetcode.com/problems/reverse-vowels-of-a-string/
+
+class Solution 
+{
+public:
+    string reverseVowels(string s) 
+    {
+        int left = 0, right = s.length() - 1;
+        while (left < right)
+        {
+            while (left < right && !isVowel(s[left] | 32))
+                left++;
+            while (right > left && !isVowel(s[right] | 32))
+                right--;
+            
+            std::swap(s[left], s[right]);
+            
+            left++;
+            right--;
+        }
+        
+        return s;
+    }
+private:
+    bool isVowel(const char& c)
+    {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'u' || c == 'o';
+    }
+};

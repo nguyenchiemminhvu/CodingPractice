@@ -1,0 +1,66 @@
+https://leetcode.com/problems/lemonade-change/
+
+class Solution 
+{
+public:
+    bool lemonadeChange(vector<int>& bills) 
+    {
+        std::vector<int> freq(2, 0);
+        for (int bill : bills)
+        {
+            if (bill == 5 || bill == 10)
+                freq[bill / 5 - 1]++;
+            
+            int change_to_return = bill - 5;
+            if (change_to_return > 0 && !canReturnTheChange(freq, change_to_return))
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+private:
+    bool canReturnTheChange(std::vector<int>& freq, int change)
+    {
+        if (change == 5)
+        {
+            if (freq[0] >= 1)
+            {
+                freq[0]--;
+                return true;
+            }
+        }
+        else if (change == 10)
+        {
+            if (freq[1] >= 1)
+            {
+                freq[1]--;
+                return true;
+            }
+            
+            if (freq[0] >= 2)
+            {
+                freq[0] -= 2;
+                return true;
+            }
+        }
+        else if (change == 15)
+        {
+            if (freq[1] >= 1 && freq[0] >= 1)
+            {
+                freq[1]--;
+                freq[0]--;
+                return true;
+            }
+            
+            if (freq[0] >= 3)
+            {
+                freq[0] -= 3;
+                return true;
+            }
+        }
+        
+        return false;
+    }
+};

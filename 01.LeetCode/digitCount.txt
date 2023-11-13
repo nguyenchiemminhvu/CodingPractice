@@ -1,0 +1,20 @@
+https://leetcode.com/problems/check-if-number-has-equal-digit-count-and-digit-value/
+
+class Solution 
+{
+public:
+    bool digitCount(const std::string& s) 
+    {
+        std::vector<int> freq(10, 0);
+        for (const char& c : s)
+            freq[c - '0']++;
+        
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (freq[i] != s[i] - '0')
+                return false;
+        }
+        
+        return true;
+    }
+};

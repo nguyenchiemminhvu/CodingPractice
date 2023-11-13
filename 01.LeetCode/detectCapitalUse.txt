@@ -1,0 +1,19 @@
+https://leetcode.com/problems/detect-capital/
+
+class Solution 
+{
+public:
+    bool detectCapitalUse(string word) 
+    {
+        int freq[26] = { 0 };
+        for (const char& c : word)
+            if (std::isupper(c))
+                freq[c - 'A']++;
+        
+        int count_capital = 0;
+        for (char c = 0; c < 26; c++)
+            count_capital += freq[c];
+        
+        return count_capital == 0 || count_capital == word.length() || (count_capital == 1 && std::isupper(word[0]));
+    }
+};

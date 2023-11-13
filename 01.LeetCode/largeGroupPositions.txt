@@ -1,0 +1,36 @@
+https://leetcode.com/problems/positions-of-large-groups/
+
+class Solution 
+{
+public:
+    vector<vector<int>> largeGroupPositions(const string& s) 
+    {
+        vector<vector<int>> res;
+        largeGroupUtil(s, 0, 1, res);
+        return res;
+    }
+private:
+    bool largeGroupUtil(const std::string& s, int left, int right, vector<vector<int>>& res)
+    {
+        if (right >= s.length())
+        {
+            if (right - left >= 3)
+            {
+                res.push_back({left, right - 1});
+            }
+            return true;
+        }
+        
+        if (s[left] != s[right])
+        {
+            if (right - left >= 3)
+            {
+                res.push_back({left, right - 1});
+            }
+            
+            return largeGroupUtil(s, right, right + 1, res);
+        }
+        
+        return largeGroupUtil(s, left, right + 1, res);
+    }
+};

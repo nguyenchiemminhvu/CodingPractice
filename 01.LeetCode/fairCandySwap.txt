@@ -1,0 +1,38 @@
+https://leetcode.com/problems/fair-candy-swap/
+
+class Solution 
+{
+public:
+    vector<int> fairCandySwap(vector<int>& a, vector<int>& b) 
+    {
+        int suma = 0;
+        for (const int& n : a)
+            suma += n;
+        
+        int sumb = 0;
+        for (const int& n : b)
+            sumb += n;
+        
+        int diff = (sumb - suma) / 2;
+        std::sort(b.begin(), b.end());
+        
+        for (int ia = 0; ia < a.size(); ia++)
+        {
+            int ib = binarySearch(b, a[ia] + diff);
+            //cout << a[ia] + diff << " " << ib << endl;
+            if (ib != -1)
+                return { a[ia], b[ib] };
+        }
+        
+        return {};
+    }
+private:
+    int binarySearch(const std::vector<int>& sorted, int value)
+    {
+        auto it = std::lower_bound(sorted.begin(), sorted.end(), value);
+        if (it != sorted.end() && *it == value)
+            return std::distance(sorted.begin(), it);
+        
+        return -1;
+    }
+};

@@ -1,0 +1,53 @@
+https://leetcode.com/problems/shortest-completing-word/
+
+class Solution
+{
+public:
+    string shortestCompletingWord(const string& licensePlate, vector<string>& words) 
+    {
+        std::vector<int> freqL(26, 0);
+        for (const char& c : licensePlate)
+        {
+            if (std::isalpha(c) && c != ' ')
+                freqL[(c | 32) - 'a']++;
+        }
+        
+        int candidate = -1;
+        std::vector<int> freqW(std::vector<int>(26, 0));
+        for (int i = 0; i < words.size(); i++)
+        {
+            std::fill(freqW.begin(), freqW.end(), 0);
+            for (const char& c : words[i])
+            {
+                freqW[(c | 32) - 'a']++;
+            }
+            
+            bool found = true;
+            for (char c = 0; c < 26; c++)
+            {
+                if (freqW[c] < freqL[c])
+                {
+                    found = false;
+                    break;
+                }
+            }
+            
+            if (found)
+            {
+                if (candidate == -1)
+                {
+                    candidate = i;
+                }
+                else
+                {
+                    if (words[candidate].length() > words[i].length())
+                    {
+                        candidate = i;
+                    }
+                }
+            }
+        }
+        
+        return words[candidate];
+    }
+};

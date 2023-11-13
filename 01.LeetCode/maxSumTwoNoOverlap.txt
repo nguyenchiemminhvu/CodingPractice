@@ -1,0 +1,47 @@
+https://leetcode.com/problems/maximum-sum-of-two-non-overlapping-subarrays/
+
+class Solution 
+{
+public:
+    int maxSumTwoNoOverlap(vector<int>& nums, int firstLen, int secondLen) 
+    {
+        std::vector<int> sum(nums.begin(), nums.end());
+        for (int i = 1; i < sum.size(); i++)
+        {
+            sum[i] += sum[i - 1];
+        }
+        
+        if (firstLen + secondLen == nums.size())
+            return sum.back();
+        
+        int res = 0;
+        
+        for (int i = 0; i <= nums.size() - firstLen - secondLen; i++)
+        {
+            for (int j = i + firstLen; j <= nums.size() - secondLen; j++)
+            {
+                res = std::max(
+                    res, 
+                    (sum[i + firstLen - 1] - sum[i] + nums[i]) + (sum[j + secondLen - 1] - sum[j] + nums[j])
+                );
+            }
+        }
+        
+        if (firstLen == secondLen)
+            return res;
+        
+        std::swap(firstLen, secondLen);
+        for (int i = 0; i <= nums.size() - firstLen - secondLen; i++)
+        {
+            for (int j = i + firstLen; j <= nums.size() - secondLen; j++)
+            {
+                res = std::max(
+                    res, 
+                    (sum[i + firstLen - 1] - sum[i] + nums[i]) + (sum[j + secondLen - 1] - sum[j] + nums[j])
+                );
+            }
+        }
+        
+        return res;
+    }
+};

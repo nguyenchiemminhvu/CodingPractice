@@ -1,0 +1,39 @@
+https://leetcode.com/problems/find-original-array-from-doubled-array/
+
+class Solution 
+{
+public:
+    vector<int> findOriginalArray(vector<int>& changed) 
+    {
+        if (changed.empty() || changed.size() & 1)
+            return {};
+        
+        std::unordered_map<int, int> freq;
+        for (const int& n : changed)
+        {
+            freq[n]++;
+        }
+        
+        std::sort(changed.begin(), changed.end());
+        
+        std::vector<int> res;
+        for (const int& n : changed)
+        {
+            if (freq[n] > 0)
+            {
+                freq[n]--;
+                int doubled = n * 2;
+                if (freq[doubled] > 0)
+                {
+                    res.push_back(n);
+                    freq[doubled]--;
+                }
+            }
+        }
+        
+        if (res.size() != changed.size() / 2)
+            return {};
+        
+        return res;
+    }
+};

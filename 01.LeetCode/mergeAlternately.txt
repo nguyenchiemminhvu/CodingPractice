@@ -1,0 +1,21 @@
+https://leetcode.com/problems/merge-strings-alternately/
+
+class Solution 
+{
+public:
+    string mergeAlternately(const string& s1, const string& s2) 
+    {
+        std::string res;
+        int i;
+        for (i = 0; i < s1.length() && i < s2.length(); i++)
+        {
+            res += s1[i];
+            res += s2[i];
+        }
+        
+        res += std::string(s1.begin() + i, s1.end());
+        res += std::string(s2.begin() + i, s2.end());
+        
+        return res;
+    }
+};

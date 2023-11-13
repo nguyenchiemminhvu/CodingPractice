@@ -1,0 +1,26 @@
+https://leetcode.com/problems/student-attendance-record-i/
+
+class Solution 
+{
+public:
+    bool checkRecord(const string& s) 
+    {
+        int count_absent = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s[i] == 'A')
+                count_absent++;
+            
+            if (i <= s.length() + 3)
+            {
+                if (s.compare(i, 3, "LLL") == 0)
+                    return false;
+            }
+        }
+        
+        if (count_absent >= 2)
+            return false;
+        
+        return true;
+    }
+};

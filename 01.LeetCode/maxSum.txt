@@ -1,0 +1,38 @@
+https://leetcode.com/problems/max-pair-sum-in-an-array/description/
+
+class Solution 
+{
+public:
+    int maxSum(vector<int>& nums) 
+    {
+        std::vector<std::vector<int>> pairs(10);
+        for (int n : nums)
+        {
+            pairs[maxDigit(n)].push_back(n);
+        }
+
+        int res = -1;
+        for (int i = 0; i < pairs.size(); i++)
+        {
+            if (pairs[i].size() < 2)
+            {
+                continue;
+            }
+
+            std::sort(pairs[i].begin(), pairs[i].end(), std::greater<int>());
+            res = std::max(res, pairs[i][0] + pairs[i][1]);
+        }
+        return res;
+    }
+private:
+    int maxDigit(int n)
+    {
+        int m = 0;
+        while (n)
+        {
+            m = std::max(m, n % 10);
+            n /= 10;
+        }
+        return m;
+    }
+};

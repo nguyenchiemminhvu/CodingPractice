@@ -1,0 +1,14 @@
+https://leetcode.com/problems/largest-odd-number-in-string/
+
+class Solution 
+{
+public:
+    string largestOddNumber(const string& num) 
+    {
+        size_t in = num.find_last_of("13579", in);
+        if (in == std::string::npos)
+            return "";
+        
+        return std::string(num.begin(), num.begin() + in + 1);
+    }
+};

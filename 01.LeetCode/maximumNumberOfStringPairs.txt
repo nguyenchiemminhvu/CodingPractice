@@ -1,0 +1,39 @@
+https://leetcode.com/problems/find-maximum-number-of-string-pairs/description/
+
+class Solution 
+{
+public:
+    int maximumNumberOfStringPairs(vector<string>& words) 
+    {
+        int count = 0;
+        for (int i = 0; i < words.size(); i++)
+        {
+            for (int j = i + 1; j < words.size(); j++)
+            {
+                if (isPair(words[i], words[j]))
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+private:
+    bool isPair(const std::string& s, const std::string& t)
+    {
+        if (s.length() != t.length())
+            return false;
+        
+        int left = 0, right = s.length() - 1;
+        while (left < s.length())
+        {
+            if (s[left] != t[right])
+                return false;
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+};

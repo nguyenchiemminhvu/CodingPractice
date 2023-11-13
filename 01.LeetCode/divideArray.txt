@@ -1,0 +1,22 @@
+https://leetcode.com/problems/divide-array-into-equal-pairs/
+
+class Solution 
+{
+public:
+    bool divideArray(vector<int>& nums) 
+    {
+        std::unordered_map<int, int> freq;
+        for (const int& n : nums)
+        {
+            freq[n]++;
+        }
+        
+        for (const auto& p : freq)
+        {
+            if (p.second & 1)
+                return false;
+        }
+        
+        return true;
+    }
+};

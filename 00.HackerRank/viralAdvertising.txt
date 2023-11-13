@@ -1,0 +1,16 @@
+https://www.hackerrank.com/challenges/strange-advertising/problem
+
+int viralAdvertising(int n)
+{
+    int res = 0;
+    int liked = 0;
+    int shared = 5;
+    for (int i = 1; i <= n; i++)
+    {
+        liked += (shared >> 1);
+        res += liked;
+        shared = liked;
+        liked *= 3 / 2;
+    }
+    return res;
+}

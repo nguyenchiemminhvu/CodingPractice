@@ -1,0 +1,32 @@
+https://leetcode.com/problems/rank-transform-of-an-array/
+
+class Solution 
+{
+public:
+    vector<int> arrayRankTransform(vector<int>& arr) 
+    {
+        if (arr.size() == 0)
+            return {};
+        
+        std::vector<int> sorted(arr.begin(), arr.end());
+        std::sort(sorted.begin(), sorted.end());
+        
+        std::unordered_map<int, int> checker;
+        checker[sorted[0]] = 0;
+        for (int i = 1; i < sorted.size(); i++)
+        {
+            if (sorted[i] != sorted[i - 1])
+            {
+                checker[sorted[i]] = checker[sorted[i - 1]] + 1;
+            }
+        }
+        
+        std::vector<int> res;
+        for (const int& n : arr)
+        {
+            res.push_back(checker[n] + 1);
+        }
+        
+        return res;
+    }
+};

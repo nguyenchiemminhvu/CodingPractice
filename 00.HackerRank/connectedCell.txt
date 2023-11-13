@@ -1,0 +1,62 @@
+https://www.hackerrank.com/challenges/connected-cell-in-a-grid/problem
+
+bool isInTheArea(const std::vector<std::vector<int>> &matrix, int i, int j)
+{
+    return i >= 0 && i < matrix.size() && j >= 0 && j < matrix[0].size();
+}
+ 
+int BFS(const std::vector<std::vector<int>> &matrix, std::vector<std::vector<bool>> &checker, int r, int c)
+{
+    int count = 0;
+     
+    int dirX[] = { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
+    int dirY[] = { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+     
+    std::queue<std::pair<int, int>> Q;
+    Q.push(std::pair<int, int>(r, c));
+     
+    while (!Q.empty())
+    {
+        std::pair<int, int> cur_pos = Q.front();
+        Q.pop();
+         
+        checker[cur_pos.first][cur_pos.second] = true;
+        count++;
+         
+        for (int i = 0; i < 9; i++)
+        {
+            int nextRow = cur_pos.first + dirY[i];
+            int nextCol = cur_pos.second + dirX[i];
+             
+            if (isInTheArea(matrix, nextRow, nextCol) && !checker[nextRow][nextCol] && matrix[nextRow][nextCol])
+            {
+                Q.push(std::pair<int, int>(nextRow, nextCol));
+                checker[nextRow][nextCol] = true;
+            }
+        }
+    }
+     
+    return count;
+}
+ 
+int connectedCell(vector<vector<int>> matrix)
+{
+    int max_area = 0;
+     
+    std::vector<std::vector<bool>> checker(matrix.size(), std::vector<bool>(matrix[0].size(), false));
+     
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        for (int j = 0; j < matrix[i].size(); j++)
+        {
+            if (!checker[i][j] && matrix[i][j])
+            {
+                int cur_area = BFS(matrix, checker, i, j);
+                if (cur_area > max_area)
+                    max_area = cur_area;
+            }
+        }
+    }
+     
+    return max_area;
+}

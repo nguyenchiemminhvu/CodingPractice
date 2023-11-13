@@ -1,0 +1,59 @@
+https://www.hackerrank.com/challenges/fraudulent-activity-notifications/problem
+
+int median(int arr[], int d)
+{
+    int med;
+ 
+    int sum = 0;
+    for (int i = 0; i <= 200; i++)
+    {
+        sum = sum + arr[i];
+        if (sum >= d)
+        {
+            med = i;
+            break;
+        }
+    }
+    return med;
+}
+ 
+int activityNotifications(vector < int > expenditure, int d)
+{
+    int count = 0;
+    int n = expenditure.size();
+    if (n == d)
+    {
+        return 0;
+    }
+     
+    int freq[201] = { 0 };
+    for (int i = 0; i < d; i++)
+    {
+        freq[expenditure[i]]++;
+    }
+ 
+    int med = median(freq, d / 2 + d % 2);
+    for (int i = d; i < n; i++)
+    {
+        if (d % 2 == 0)
+        {
+            int temp_med = median(freq, d / 2 + 1);
+            if (expenditure[i] >= med + temp_med)
+            {
+                count++;
+            }
+        }
+        else
+        {
+            if (expenditure[i] >= med * 2)
+            {
+                count++;
+            }
+        }
+ 
+        freq[expenditure[i - d]]--;
+        freq[expenditure[i]]++;
+        med = median(freq, d / 2 + d % 2);
+    }
+    return count;
+}

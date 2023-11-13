@@ -1,0 +1,40 @@
+https://leetcode.com/problems/backspace-string-compare/
+
+class Solution 
+{
+public:
+    bool backspaceCompare(string s, string t) 
+    {
+        s = backspaceUtil(s);
+        t = backspaceUtil(t);
+        
+        return s == t;
+    }
+private:
+    std::string backspaceUtil(const std::string& s)
+    {
+        std::string res;
+        
+        std::stack<char> st;
+        for (const char& c : s)
+        {
+            if (c == '#')
+            {
+                if (!st.empty())
+                    st.pop();
+            }
+            else
+            {
+                st.push(c);
+            }
+        }
+        
+        while (!st.empty())
+        {
+            res.push_back(st.top());
+            st.pop();
+        }
+        
+        return res;
+    }
+};

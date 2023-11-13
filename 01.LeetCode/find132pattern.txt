@@ -1,0 +1,30 @@
+https://leetcode.com/problems/132-pattern/
+
+class Solution 
+{
+public:
+    bool find132pattern(vector<int>& nums) 
+    {
+        std::vector<int> minVals(nums.begin(), nums.end());
+        for (int i = 1; i < nums.size(); i++)
+        {
+            minVals[i] = std::min(minVals[i - 1], nums[i]);
+        }
+        
+        std::stack<int> st;
+        for (int i = nums.size() - 1; i >= 0; i--)
+        {
+            while (!st.empty() && st.top() <= minVals[i])
+            {
+                st.pop();
+            }
+            
+            if (!st.empty() && nums[i] > st.top())
+                return true;
+
+            st.push(nums[i]);
+        }
+        
+        return false;
+    }
+};

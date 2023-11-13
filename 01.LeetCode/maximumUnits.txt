@@ -1,0 +1,28 @@
+https://leetcode.com/problems/maximum-units-on-a-truck/
+
+class Solution 
+{
+public:
+    int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) 
+    {
+        std::sort
+        (
+            boxTypes.begin(), 
+            boxTypes.end(), 
+            [](const vector<int>& b1, const std::vector<int>& b2)
+            {
+                return b1[1] > b2[1];
+            }
+        );
+        
+        int cur = 0;
+        for (int i = 0; i < boxTypes.size() && truckSize; i++)
+        {
+            int mi = std::min(truckSize, boxTypes[i][0]);
+            cur += (boxTypes[i][1] * mi);
+            truckSize -= mi;
+        }
+        
+        return cur;
+    }
+};

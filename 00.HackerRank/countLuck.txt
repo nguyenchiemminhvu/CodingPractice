@@ -1,0 +1,86 @@
+https://www.hackerrank.com/challenges/count-luck/problem
+
+int dirX[] = { -1, 0, 1, 0 };
+int dirY[] = { 0, -1, 0, 1 };
+ 
+bool isInTheMatrix(const std::vector<std::string>& matrix, std::pair<int, int> pos)
+{
+    return pos.first >= 0 && pos.first < matrix.size() && pos.second >= 0 && pos.second < matrix[0].length();
+}
+ 
+bool isMoreThanOneChoice(const std::vector<std::string>& matrix, std::pair<int, int> pos, int start = 0)
+{
+    int count = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        std::pair<int, int> nextPos = std::pair<int, int>(pos.first + dirY[i], pos.second + dirX[i]);
+        if (isInTheMatrix(matrix, nextPos) && matrix[nextPos.first][nextPos.second] != 'X')
+            count++;
+    }
+    return count > (2 - start);
+}
+ 
+void DFS(const std::vector<std::string>& matrix, std::pair<int, int> cur, std::pair<int, int> end, std::vector<std::pair<int, int>> &temp, std::vector<std::pair<int, int>> &path, std::vector<std::vector<bool>>& check)
+{
+    if (cur == end)
+    {
+        path = temp;
+        return;
+    }
+     
+    check[cur.first][cur.second] = true;
+     
+    for (int i = 0; i < 4; i++)
+    {
+        std::pair<int, int> nextPos(cur.first + dirY[i], cur.second + dirX[i]);
+        if (isInTheMatrix(matrix, nextPos) && !check[nextPos.first][nextPos.second] && matrix[nextPos.first][nextPos.second] != 'X')
+        {
+            temp.push_back(nextPos);
+            DFS(matrix, nextPos, end, temp, path, check);
+            temp.pop_back();
+        }
+    }
+}
+ 
+void findPath(const std::vector<std::string>& matrix, std::pair<int, int> start, std::pair<int, int> end, std::vector<std::pair<int, int>> &path)
+{
+    std::vector<std::vector<bool>> check(matrix.size(), std::vector<bool>(matrix[0].length(), false));
+    std::vector<std::pair<int, int>> temp;
+    temp.push_back(start);
+    DFS(matrix, start, end, temp, path, check);
+}
+ 
+string countLuck(vector<string> matrix, int k)
+{
+    std::pair<int, int> start, end;
+    for (int i = 0; i < matrix.size(); i++)
+    {
+        for (int j = 0; j < matrix[i].length(); j++)
+        {
+            if (matrix[i][j] == 'M')
+            {
+                start = std::pair<int, int>(i, j);
+            }
+            else if (matrix[i][j] == '*')
+            {
+                end = std::pair<int, int>(i, j);
+            }
+        }
+    }
+     
+    std::vector<std::pair<int, int>> path;
+    findPath(matrix, start, end, path);
+    path.pop_back();
+     
+    int count = 0;
+    count += isMoreThanOneChoice(matrix, path[0], 1);
+    for (int i = 1; i < path.size(); i++)
+    {
+        count += (int)isMoreThanOneChoice(matrix, path[i]);
+    }
+     
+    if (k == count)
+        return "Impressed";
+     
+    return "Oops!";
+}

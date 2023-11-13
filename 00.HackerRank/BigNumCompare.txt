@@ -1,0 +1,30 @@
+https://www.hackerrank.com/challenges/big-sorting/problem
+
+struct BigNumCompare
+{
+    bool operator() (const std::string &a, const std::string &b)
+    {
+        if (a.length() < b.length())
+            return true;
+         
+        if (a.length() > b.length())
+            return false;
+         
+        for (int i = 0; i < a.length(); i++)
+        {
+            if (a[i] < b[i])
+                return true;
+            else if (a[i] > b[i])
+                return false;
+        }
+         
+        return false;
+    } 
+};
+ 
+vector<string> bigSorting(vector<string> unsorted)
+{
+    std::sort(unsorted.begin(), unsorted.end(), BigNumCompare());
+     
+    return unsorted;
+}

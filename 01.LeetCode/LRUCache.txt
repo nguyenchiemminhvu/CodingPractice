@@ -1,0 +1,54 @@
+https://leetcode.com/problems/lru-cache/
+
+class LRUCache 
+{
+public:
+    LRUCache(int capacity) 
+    {
+        csize = capacity;
+    }
+    
+    int get(int key) 
+    {
+        auto pos = keyValuesMap.find(key);
+        if (pos == keyValuesMap.end())
+            return -1;
+        
+        items.erase(pos->second.second);
+        items.push_front(key);
+        keyValuesMap[key] = { pos->second.first, items.begin() };
+        return pos->second.first;
+    }
+    
+    void put(int key, int value) 
+    {
+        auto pos = keyValuesMap.find(key);
+        if (pos == keyValuesMap.end()) 
+        {
+            items.push_front(key);
+            keyValuesMap[key] = { value, items.begin() };
+            if (keyValuesMap.size() > csize) 
+            {
+                keyValuesMap.erase(items.back());
+                items.pop_back();
+            }
+        }
+        else 
+        {
+            items.erase(pos->second.second);
+            items.push_front(key);
+            keyValuesMap[key] = { value, items.begin() };
+        }
+    }
+private:
+    list<int> items;
+    std::unordered_map<int, pair<int, list<int>::iterator>> keyValuesMap;
+    int csize;
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */

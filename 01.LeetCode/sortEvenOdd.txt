@@ -1,0 +1,43 @@
+https://leetcode.com/problems/sort-even-and-odd-indices-independently/
+
+class Solution
+{
+public:
+    vector<int> sortEvenOdd(vector<int>& nums) 
+    {
+        std::vector<int> odd;
+        std::vector<int> even;
+        
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (i & 1)
+            {
+                odd.push_back(nums[i]);
+            }
+            else
+            {
+                even.push_back(nums[i]);
+            }
+        }
+        
+        std::sort(odd.begin(), odd.end(), std::greater<int>());
+        std::sort(even.begin(), even.end());
+        
+        int io = 0;
+        int ie = 0;
+        int in;
+        for (in = 0; in < nums.size(); in++)
+        {
+            if (in & 1)
+            {
+                nums[in] = odd[io++];
+            }
+            else
+            {
+                nums[in] = even[ie++];
+            }
+        }
+        
+        return nums;
+    }
+};

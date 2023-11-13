@@ -1,0 +1,30 @@
+https://leetcode.com/problems/crawler-log-folder/
+
+class Solution 
+{
+public:
+    int minOperations(vector<string>& logs) 
+    {
+        int level = 0;
+        
+        for (const std::string& op : logs)
+        {
+            if (op.compare("./") == 0)
+            {
+                // do nothing
+            }
+            else if (op.compare("../") == 0)
+            {
+                level--;
+                if (level < 0)
+                    level = 0;
+            }
+            else
+            {
+                level++;
+            }
+        }
+        
+        return level;
+    }
+};

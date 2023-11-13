@@ -1,0 +1,32 @@
+https://leetcode.com/problems/sort-the-people/
+
+class Solution 
+{
+public:
+    vector<string> sortPeople(vector<string>& names, vector<int>& heights) 
+    {
+        std::vector<std::pair<std::string, int>> people;
+        for (int i = 0; i < names.size(); i++)
+        {
+            people.push_back({names[i], heights[i]});
+        }
+        
+        std::sort
+        (
+            people.begin(), 
+            people.end(), 
+            [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) 
+            {
+                return a.second > b.second;
+            }
+        );
+        
+        std::vector<std::string> res;
+        for (int i = 0; i < people.size(); i++)
+        {
+            res.push_back(people[i].first);
+        }
+        
+        return res;
+    }
+};

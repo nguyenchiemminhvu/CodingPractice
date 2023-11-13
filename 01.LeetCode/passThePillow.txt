@@ -1,0 +1,26 @@
+https://leetcode.com/problems/pass-the-pillow/description/
+
+class Solution 
+{
+public:
+    int passThePillow(int n, int time) 
+    {
+        int idx = 1;
+        while (time)
+        {
+            while (time && idx < n)
+            {
+                idx++;
+                time--;
+            }
+
+            while (time && idx > 1)
+            {
+                idx--;
+                time--;
+            }
+        }
+
+        return idx;
+    }
+};

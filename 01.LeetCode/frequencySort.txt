@@ -1,0 +1,29 @@
+https://leetcode.com/problems/sort-array-by-increasing-frequency/
+
+class Solution 
+{
+public:
+    vector<int> frequencySort(vector<int>& nums) 
+    {
+        std::unordered_map<int, int> freq;
+        for (const int& n : nums)
+            freq[n]++;
+        
+        std::sort
+        (
+            nums.begin(),
+            nums.end(),
+            [&](const int& a, const int& b)
+            {
+                if (freq[a] < freq[b])
+                    return true;
+                if (freq[a] > freq[b])
+                    return false;
+                
+                return a > b;
+            }
+        );
+        
+        return nums;
+    }
+};

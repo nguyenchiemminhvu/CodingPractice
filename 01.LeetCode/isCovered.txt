@@ -1,0 +1,27 @@
+https://leetcode.com/problems/check-if-all-the-integers-in-a-range-are-covered/
+
+class Solution 
+{
+public:
+    bool isCovered(vector<vector<int>>& ranges, int left, int right) 
+    {
+        for (int i = left; i <= right; i++)
+        {
+            if (!checkUtil(ranges, i))
+                return false;
+        }
+        
+        return true;
+    }
+private:
+    bool checkUtil(const vector<vector<int>>& ranges, int n)
+    {
+        for (const std::vector<int>& range : ranges)
+        {
+            if (n >= range[0] && n <= range[1])
+                return true;
+        }
+        
+        return false;
+    }
+};

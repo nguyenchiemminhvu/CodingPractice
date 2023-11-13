@@ -1,0 +1,40 @@
+https://leetcode.com/problems/sort-integers-by-the-power-value/
+
+class Solution 
+{
+public:
+    int getKth(int lo, int hi, int k) 
+    {
+        std::vector<pair<int, int>> nums;
+        for (int i = lo; i <= hi; i++)
+        {
+            nums.push_back({i, findPower(i)});
+        }
+        
+        std::sort(
+            nums.begin(), 
+            nums.end(),
+            [](const std::pair<int, int>& a, const std::pair<int, int>& b)
+            {
+                if (a.second < b.second)
+                    return true;
+                if (a.second > b.second)
+                    return false;
+                return a.first < b.first;
+            }
+        );
+        
+        return nums[k - 1].first;
+    }
+private:
+    int findPower(int n)
+    {
+        if (n == 1)
+            return 0;
+        
+        if (n & 1)
+            return 1 + findPower((n << 1) + n + 1);
+        
+        return 1 + findPower((n >> 1));
+    }
+};

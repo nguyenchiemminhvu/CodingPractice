@@ -1,0 +1,45 @@
+https://leetcode.com/problems/keyboard-row/
+
+class Solution 
+{
+public:
+    vector<string> findWords(vector<string>& words) 
+    {
+        std::vector<std::string> rows = {"qwertyuiopQWERTYUIOP", "asdfghjklASDFGHJKL", "zxcvbnmZXCVBNM"};
+        
+        std::vector<std::string> res;
+        for (const std::string& word : words)
+        {
+            int row = getKeyboardRow(rows, word[0]);
+            bool good_candidate = true;
+            for (char c : word)
+            {
+                if (getKeyboardRow(rows, c) != row)
+                {
+                    good_candidate = false;
+                    break;
+                }
+            }
+            if (good_candidate)
+            {
+                res.push_back(word);
+            }
+        }
+        return res;
+    }
+    
+private:
+    int getKeyboardRow(const std::vector<std::string>& rows, char k)
+    {
+        int row = 0;
+        
+        if (rows[0].find_first_of(k) != std::string::npos)
+            row = 1;
+        else if (rows[1].find_first_of(k) != std::string::npos)
+            row = 2;
+        else if (rows[2].find_first_of(k) != std::string::npos)
+            row = 3;
+        
+        return row;
+    }
+};

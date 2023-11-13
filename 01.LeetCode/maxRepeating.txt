@@ -1,0 +1,36 @@
+https://leetcode.com/problems/maximum-repeating-substring/
+
+class Solution 
+{
+public:
+    int maxRepeating(const string& s, const string& p) 
+    {
+        int res = 0;
+        
+        size_t found = 0;
+        while (true)
+        {
+            found = s.find(p, found);
+            if (found != std::string::npos)
+            {
+                std::string temp(p.begin(), p.end());
+                
+                int k = 0;
+                while (s.compare(found, temp.length(), temp) == 0)
+                {
+                    k++;    
+                    temp.insert(temp.end(), p.begin(), p.end());
+                }
+                res = std::max(res, k);
+                
+                found++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        
+        return res;
+    }
+};

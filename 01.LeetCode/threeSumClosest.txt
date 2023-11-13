@@ -1,0 +1,33 @@
+https://leetcode.com/problems/3sum-closest/
+
+class Solution 
+{
+public:
+    int threeSumClosest(vector<int>& nums, int target) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        int res = nums[0] + nums[1] + nums[2];
+        for (int i = 0; i < nums.size(); i++)
+        {
+            int slow = i + 1;
+            int fast = nums.size() - 1;
+            while (slow < fast)
+            {
+                int cur = nums[i] + nums[slow] + nums[fast];
+                if (cur == target)
+                    return cur;
+                
+                if (abs(res - target) > abs(cur - target))
+                    res = cur;
+                
+                if (cur > target)
+                    fast--;
+                else
+                    slow++;
+            }
+        }
+        
+        return res;
+    }
+};

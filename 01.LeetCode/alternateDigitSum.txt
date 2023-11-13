@@ -1,0 +1,24 @@
+https://leetcode.com/problems/alternating-digit-sum/description/
+
+class Solution 
+{
+public:
+    int alternateDigitSum(int n) 
+    {
+        std::vector<int> temp;
+        while (n)
+        {
+            int d = (n % 10);
+            temp.push_back(d);
+            n /= 10;
+        }
+        std::reverse(temp.begin(), temp.end());
+        int res = 0;
+        for (int i = 0, checker = false; i < temp.size(); i++, checker = !checker)
+        {
+            res += temp[i] * (checker ? -1 : 1);
+        }
+
+        return res;
+    }
+};

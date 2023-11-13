@@ -1,0 +1,20 @@
+https://leetcode.com/problems/pascals-triangle-ii/
+
+class Solution 
+{
+public:
+    vector<int> getRow(int rowIndex) 
+    {
+        std::vector<int> res;
+        
+        rowIndex++;
+        long long C = 1;
+        for (int col = 1; col <= rowIndex; col++)
+        {
+            res.push_back(C);
+            C = C * (rowIndex - col) / col;
+        }
+        
+        return res;
+    }
+};

@@ -1,0 +1,35 @@
+https://leetcode.com/problems/1-bit-and-2-bit-characters/
+
+class Solution 
+{
+public:
+    bool isOneBitCharacter(vector<int>& bits) 
+    {
+        if (bits.size() == 1)
+            return true;
+        
+        return checking(bits, 0, true);
+    }
+private:
+    bool checking(const std::vector<int>& bits, int i, bool start)
+    {
+        if (i == bits.size() - 1)
+        {
+            return start;
+        }
+        
+        if (start)
+        {
+            if (bits[i] == 0)
+                return checking(bits, i + 1, true);
+            else
+                return checking(bits, i + 1, false);
+        }
+        else
+        {
+            return checking(bits, i + 1, true);
+        }
+        
+        return false;
+    }
+};

@@ -1,0 +1,38 @@
+https://leetcode.com/problems/remove-outermost-parentheses/
+
+class Solution 
+{
+public:
+    string removeOuterParentheses(string& s) 
+    {
+        std::string res;
+        
+        int level = 0;
+        int prev = -1;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (level == 0 && s[i] == '(')
+            {
+                prev = i;
+                level++;
+                continue;
+            }
+            
+            if (s[i] == '(')
+            {
+                level++;
+            }
+            else
+            {
+                level--;
+                if (level == 0)
+                {
+                    res.insert(res.end(), s.begin() + prev + 1, s.begin() + i);
+                    prev = -1;
+                }
+            }
+        }
+        
+        return res;
+    }
+};

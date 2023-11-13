@@ -1,0 +1,83 @@
+https://leetcode.com/problems/letter-case-permutation/
+
+class Solution 
+{
+public:
+    vector<string> letterCasePermutation(string& s) 
+    {
+        std::vector<std::string> res;
+        std::unordered_map<std::string, bool> checker;
+        
+        res.push_back(s);
+        checker[s] = true;
+        generating(s, s.length() - 1, res, checker);
+        return res;
+    }
+private:
+    void generating(std::string& s, int i, std::vector<std::string>& res, std::unordered_map<std::string, bool>& checker)
+    {
+        if (i < 0)
+            return;
+        
+        if (std::isdigit(s[i]))
+        {
+            return generating(s, i - 1, res, checker);
+        }
+        else
+        {
+            s[i] |= 32;
+            if (!checker[s])
+            {
+                res.push_back(s);
+                checker[s] = true;
+            }
+            generating(s, i - 1, res, checker);
+            
+            s[i] &= ~32;
+            if (!checker[s])
+            {
+                res.push_back(s);
+                checker[s] = true;
+            }
+            generating(s, i - 1, res, checker);
+        }
+    }
+};
+
+class Solution 
+{
+public:
+    vector<string> letterCasePermutation(string& s) 
+    {
+        std::vector<std::string> res;
+        
+        std::vector<int> lPos;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (!std::isdigit(s[i]))
+            {
+                s[i] &= ~32;
+                lPos.push_back(i);
+            }
+        }
+        
+        int n = lPos.size();
+        int nMask = (1 << n);
+        
+        for (long long mask = 0; mask < nMask; mask++)
+        {
+            std::string temp = s;
+            for (long long i = 0; i < n; i++)
+            {
+                if (mask & (1 << i))
+                {
+                    temp[lPos[i]] |= 32;
+                }
+            }
+            
+            res.push_back(temp);
+        }
+        
+        return res;
+    }
+};

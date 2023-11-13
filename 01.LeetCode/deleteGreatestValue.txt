@@ -1,0 +1,26 @@
+class Solution 
+{
+public:
+    int deleteGreatestValue(vector<vector<int>>& grid) 
+    {
+        for (int i = 0; i < grid.size(); i++)
+        {
+            std::sort(grid[i].begin(), grid[i].end());
+        }
+        
+        int res = 0;
+        int right = grid[0].size() - 1;
+        while (right >= 0)
+        {
+            int cur_max = INT_MIN;
+            for (int i = 0; i < grid.size(); i++)
+            {
+                cur_max = std::max(cur_max, grid[i][right]);
+            }
+            res += cur_max;
+            right--;
+        }
+        
+        return res;
+    }
+};

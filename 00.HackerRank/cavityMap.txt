@@ -1,0 +1,28 @@
+https://www.hackerrank.com/challenges/cavity-map/problem
+
+int MAX_OF_FOUR(int a, int b, int c, int d)
+{
+    return max(max(a, b), max(c, d));
+}
+ 
+vector<string> cavityMap(vector<string> G)
+{
+    std::vector<std::pair<int, int>> cavity_list;
+    for (int i = 1; i < G.size() - 1; i++)
+    {
+        for (int j = 1; j < G[i].length() - 1; j++)
+        {
+            int max_of_boundary = MAX_OF_FOUR(G[i - 1][j], G[i + 1][j], G[i][j - 1], G[i][j + 1]);
+            if (G[i][j] > max_of_boundary)
+            {
+                cavity_list.push_back(std::pair<int, int>(i, j));
+            }
+        }
+    }
+     
+    for (std::pair<int, int> p : cavity_list)
+    {
+        G[p.first][p.second] = 'X';
+    }
+    return G;
+}

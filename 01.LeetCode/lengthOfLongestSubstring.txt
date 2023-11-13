@@ -1,0 +1,73 @@
+https://leetcode.com/problems/longest-substring-without-repeating-characters/
+
+class Solution 
+{
+public:
+    int lengthOfLongestSubstring(const string& s) 
+    {
+        int res = 0;
+        
+        std::vector<int> checker(128, false);
+        std::queue<char> Q;
+        
+        for (const char& c : s)
+        {
+            if (!checker[c])
+            {
+                Q.push(c);
+                checker[c] = true;
+            }
+            else
+            {
+                while (checker[c])
+                {
+                    char temp = Q.front();
+                    Q.pop();
+                    checker[temp] = false;
+                }
+                
+                Q.push(c);
+                checker[c] = true;
+            }
+            
+            res = std::max(res, (int)Q.size());
+        }
+        
+        return res;
+    }
+};
+
+class Solution 
+{
+public:
+    int lengthOfLongestSubstring(const string& s) 
+    {
+        int res = 0;
+        
+        std::vector<int> checker(128, false);
+        int left = 0, right = 0;
+        
+        while (right < s.length())
+        {
+            if (!checker[s[right]])
+            {
+                checker[s[right]] = true;
+            }
+            else
+            {
+                while (left < right && checker[s[right]])
+                {
+                    checker[s[left]] = false;
+                    left++;
+                }
+                
+                checker[s[right]] = true;
+            }
+            
+            res = std::max(res, right - left + 1);
+            right++;
+        }
+        
+        return res;
+    }
+};

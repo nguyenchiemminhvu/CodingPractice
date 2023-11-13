@@ -1,0 +1,44 @@
+https://leetcode.com/problems/most-visited-sector-in-a-circular-track/
+
+class Solution 
+{
+public:
+    vector<int> mostVisited(int n, vector<int>& rounds) 
+    {
+        std::vector<int> freq(n + 1, 0);
+        
+        freq[rounds[0]]++;
+        for (int i = 1; i < rounds.size(); i++)
+        {
+            int cur = rounds[i - 1];
+            while (cur != rounds[i])
+            {
+                cur++;
+                if (cur > n)
+                {
+                    cur = 1;
+                }
+                
+                freq[cur]++;
+            }
+        }
+        
+        int max_freq = 0;
+        std::vector<int> res;
+        for (int i = 0; i < freq.size(); i++)
+        {
+            if (freq[i] > max_freq)
+            {
+                max_freq = freq[i];
+                res.clear();
+                res.push_back(i);
+            }
+            else if (freq[i] == max_freq)
+            {
+                res.push_back(i);
+            }
+        }
+        
+        return res;
+    }
+};

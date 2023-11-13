@@ -1,0 +1,22 @@
+https://leetcode.com/problems/truncate-sentence/
+
+class Solution 
+{
+public:
+    string truncateSentence(string& s, int k) 
+    {
+        std::stringstream ss(s);
+        s.clear();
+        
+        std::string temp;
+        while (k)
+        {
+            ss >> temp;
+            s += temp;
+            if (k > 1)
+                s += ' ';
+            k--;
+        }
+        return s;
+    }
+};

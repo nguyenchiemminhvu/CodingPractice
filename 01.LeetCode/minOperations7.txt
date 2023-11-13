@@ -1,0 +1,34 @@
+https://leetcode.com/problems/minimum-operations-to-collect-elements/description/
+
+class Solution
+{
+public:
+    int minOperations(vector<int>& nums, int k)
+    {
+        std::set<int> target;
+        for (int i = 1; i <= k; i++)
+        {
+            target.insert(i);
+        }
+
+        std::set<int> temp;
+        int count = 0;
+        for (int i = nums.size() - 1; i >= 0; i--)
+        {
+            if (target == temp)
+            {
+                break;
+            }
+
+            count++;
+            if (nums[i] <= 0 || nums[i] > k)
+            {
+                continue;
+            }
+
+            temp.insert(nums[i]);
+        }
+
+        return count;
+    }
+};

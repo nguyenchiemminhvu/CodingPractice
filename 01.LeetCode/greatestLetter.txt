@@ -1,0 +1,22 @@
+https://leetcode.com/problems/greatest-english-letter-in-upper-and-lower-case/
+
+class Solution 
+{
+public:
+    string greatestLetter(const string& s) 
+    {
+        std::vector<int> freq(128, 0);
+        for (const char& c : s)
+        {
+            freq[c]++;
+        }
+        
+        for (char c = 'Z'; c >= 'A'; c--)
+        {
+            if (freq[c] && freq[(c | 32)])
+                return std::string(1, c);
+        }
+        
+        return "";
+    }
+};

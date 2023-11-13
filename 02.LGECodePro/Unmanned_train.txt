@@ -1,0 +1,109 @@
+https://codepro.lge.com/exam/19/overseas-questions-for-previous-test/quiz/10
+
+#include <iostream>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <cmath>
+#include <queue>
+using namespace std;
+
+int min(int a, int b)
+{
+	return a < b ? a : b;
+}
+
+bool isValid(int m, int n, int r, int c)
+{
+	return r >= 0 && r < m && c >= 0 && c < n;
+}
+
+void BFS(const std::vector<std::vector<int>>& grid, std::vector<std::vector<std::pair<int, int>>>& areas, int id, int r, int c, std::vector<std::vector<bool>>& visited)
+{
+	int dir_r[] = { 0, -1, 0, 1 };
+	int dir_c[] = { -1, 0, 1, 0 };
+	std::queue<std::pair<int, int>> Q;
+	Q.push({r, c});
+	visited[r][c] = true;
+	
+	while (!Q.empty())
+	{
+		std::pair<int, int> cur = Q.front();
+		Q.pop();
+		
+		areas[id].push_back({cur.first, cur.second});
+		
+		for (int i = 0; i < 4; i++)
+		{
+			int next_r = cur.first + dir_r[i];
+			int next_c = cur.second + dir_c[i];
+			
+			if (isValid(grid.size(), grid[0].size(), next_r, next_c)
+			 && !visited[next_r][next_c]
+			 && grid[next_r][next_c] == 1)
+			{
+				visited[next_r][next_c] = true;
+				Q.push({next_r, next_c});
+			}
+		}
+	}
+}
+
+void buildAreas(const std::vector<std::vector<int>>& grid, std::vector<std::vector<std::pair<int, int>>>& areas)
+{
+	int id = 0;
+	std::vector<std::vector<bool>> visited(grid.size(), std::vector<bool>(grid[0].size(), false));
+	
+	for (size_t i = 0; i < grid.size(); i++)
+	{
+		for (size_t j = 0; j < grid[0].size(); j++)
+		{
+			if (!visited[i][j] && grid[i][j] == 1)
+			{
+				BFS(grid, areas, id, i, j, visited);
+				id++;
+			}
+		}
+	}
+}
+
+int main() 
+{
+	int m, n;
+	cin >> m >> n;
+	std::vector<std::vector<int>> grid(m, std::vector<int>(n, 0));
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			int temp;
+			cin >> temp;
+			grid[i][j] = temp;
+		}
+	}
+	
+	std::vector<std::vector<std::pair<int, int>>> areas(2);
+	buildAreas(grid, areas);
+	
+	int res = 10000;
+	for (size_t i = 0; i < areas[0].size(); i++)
+	{
+		for (size_t j = 0; j < areas[1].size(); j++)
+		{
+			int r1 = areas[0][i].first;
+			int c1 = areas[0][i].second;
+			int r2 = areas[1][j].first;
+			int c2 = areas[1][j].second;
+			
+			int dist = 0;
+			dist += std::abs(r1 - r2);
+			dist += std::abs(c1 - c2);
+			res = min(res, dist);
+		}
+	}
+	
+	cout << res - 1 << endl;
+	
+	return 0;
+}

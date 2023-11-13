@@ -1,0 +1,23 @@
+https://leetcode.com/problems/maximum-value-of-a-string-in-an-array/description/
+
+class Solution 
+{
+public:
+    int maximumValue(vector<string>& strs) 
+    {
+        int cur_max = INT_MIN;
+        for (const std::string& str : strs)
+        {
+            if (str.find_first_of("qwertyuiopasdfghjklzxcvbnm") != std::string::npos)
+            {
+                cur_max = std::max(cur_max, (int)str.length());
+            }
+            else
+            {
+                cur_max = std::max(cur_max, (int)std::stoll(str));
+            }
+        }
+
+        return cur_max;
+    }
+};

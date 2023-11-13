@@ -1,0 +1,30 @@
+https://leetcode.com/problems/rotate-string/
+
+class Solution 
+{
+public:
+    bool rotateString(string s, string g) 
+    {
+        if (s.length() != g.length())
+            return false;
+        
+        int is = 0, ig = 0;
+        while (is < s.length() && ig < g.length() && s.compare(0, g.length() - ig, &g[ig]))
+        {
+            ig++;
+        }
+        if (ig >= g.length())
+            return false;
+        
+        while (is < s.length())
+        {
+            if (s[is] != g[ig])
+                return false;
+            
+            is++;
+            ig = (ig + 1) % g.length();
+        }
+        
+        return true;
+    }
+};

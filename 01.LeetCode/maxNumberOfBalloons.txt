@@ -1,0 +1,32 @@
+https://leetcode.com/problems/maximum-number-of-balloons/
+
+class Solution 
+{
+public:
+    int maxNumberOfBalloons(const string& text) 
+    {
+        int baseFreq[26] = { 0 };
+        std::string base = "balloon";
+        for (const char& c : base)
+        {
+            baseFreq[c - 'a']++;
+        }
+        
+        int textFreq[26] = { 0 };
+        for (const char& c : text)
+        {
+            textFreq[c - 'a']++;
+        }
+        
+        int num = INT_MAX;
+        for (int i = 0; i < 26; i++)
+        {
+            if (baseFreq[i])
+            {
+                num = std::min(num, textFreq[i] / baseFreq[i]);
+            }
+        }
+        
+        return num;
+    }
+};

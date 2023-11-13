@@ -1,0 +1,22 @@
+https://leetcode.com/problems/valid-anagram/
+
+class Solution 
+{
+public:
+    bool isAnagram(string s, string t) 
+    {
+        std::vector<int> freqS(26, 0);
+        std::vector<int> freqT(26, 0);
+        
+        for (const char& c : s)
+        {
+            freqS[c - 'a']++;
+        }
+        for (const char& c : t)
+        {
+            freqT[c - 'a']++;
+        }
+        
+        return freqS == freqT;
+    }
+};

@@ -1,0 +1,55 @@
+https://leetcode.com/problems/longest-palindromic-subsequence/
+
+class Solution 
+{
+public:
+    int longestPalindromeSubseq(const std::string& s) 
+    {
+        // return longestBT(s, 0, s.length() - 1);
+        return longestDP(s);
+    }
+private:
+    int longestBT(const std::string& s, int left, int right)
+    {
+        if (left > right)
+            return 0;
+        
+        if (left == right)
+            return 1;
+        
+        if (s[left] == s[right])
+            return 2 + longestBT(s, left + 1, right - 1);
+        
+        return std::max(longestBT(s, left + 1, right), longestBT(s, left, right - 1));
+    }
+    
+    int longestDP(const std::string& s)
+    {
+        int longest = 1;
+        
+        std::vector<std::vector<int>> dp(s.length() + 1, std::vector<int>(s.length() + 1, 0));
+        for (int i = 1; i <= s.length(); i++)
+        {
+            dp[i][i] = 1;
+        }
+        
+        for (int i = 1; i <= s.length(); i++)
+        {
+            for (int j = i - 1; j >= 1; j--)
+            {
+                if (s[i - 1] == s[j - 1])
+                {
+                    dp[i][j] = 2 + dp[i - 1][j + 1];
+                }
+                else
+                {
+                    dp[i][j] = std::max(dp[i - 1][j], dp[i][j + 1]);
+                }
+                
+                longest = std::max(longest, dp[i][j]);
+            }
+        }
+        
+        return longest;
+    }
+};

@@ -1,0 +1,46 @@
+https://leetcode.com/problems/jump-game-ii/
+
+class Solution 
+{
+public:
+    int jump(vector<int>& nums) 
+    {
+        // return minJumpUtil(nums, 0, 0);
+        
+        std::vector<int> dp(nums.size(), INT_MAX);
+        dp[0] = 0;
+        
+        for (int i = 0; i < nums.size() - 1; i++)
+        {
+            for (int j = 1; j <= nums[i]; j++)
+            {
+                if (i + j >= nums.size() - 1)
+                    return dp[i] + 1;
+                
+                if (i + j < nums.size())
+                    dp[i + j] = std::min(dp[i + j], dp[i] + 1);
+            }
+        }
+        
+        return dp.back();
+    }
+private:
+    int minJumpUtil(const std::vector<int>& nums, int i, int step)
+    {
+        if (i >= nums.size() - 1)
+        {
+            return step;
+        }
+        
+        if (nums[i] == 0)
+            return INT_MAX;
+        
+        int res = INT_MAX;
+        for (int j = 1; j <= nums[i]; j++)
+        {
+            res = std::min(res, minJumpUtil(nums, i + j, step + 1));
+        }
+        
+        return res;
+    }
+};

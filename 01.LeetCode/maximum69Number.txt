@@ -1,0 +1,27 @@
+https://leetcode.com/problems/maximum-69-number/
+
+class Solution 
+{
+public:
+    int maximum69Number (int num) 
+    {
+        std::string s;
+        while (num)
+        {
+            s += ('0' + (num % 10));
+            num /= 10;
+        }
+        
+        std::reverse(s.begin(), s.end());
+        for (char& c : s)
+        {
+            if (c == '6')
+            {
+                c = '9';
+                break;
+            }
+        }
+        
+        return std::stoi(s.c_str());
+    }
+};

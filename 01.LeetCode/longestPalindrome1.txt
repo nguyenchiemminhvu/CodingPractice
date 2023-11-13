@@ -1,0 +1,78 @@
+https://leetcode.com/problems/longest-palindromic-substring/
+
+class Solution 
+{
+public:
+    string longestPalindrome(const std::string& s) 
+    {
+        if (s.empty())
+            return 0;
+        
+        // std::string res;
+        // for (int left = 0; left < s.length(); left++)
+        // {
+        //     for (int right = left; right < s.length(); right++)
+        //     {
+        //         int pal_len = isPalindrome(s, left, right);
+        //         if (pal_len != -1 && pal_len > res.length())
+        //         {
+        //             res = std::string(s.begin() + left, s.begin() + right + 1);
+        //         }
+        //     }
+        // }
+        // return res;
+        
+        int start = 0;
+        int max_len = 1;
+        std::vector<std::vector<bool>> dp(s.length(), std::vector<bool>(s.length(), false));
+        for (int i = 0; i < s.length(); i++)
+        {
+            dp[i][i] = true;
+        }
+        
+        for (int i = 0, j = 1; j < s.length(); i++, j++)
+        {
+            if (s[i] == s[j])
+            {
+                dp[i][j] = true;
+                
+                start = i;
+                max_len = 2;
+            }
+        }
+        
+        for (int sub_len = 3; sub_len <= s.length(); sub_len++)
+        {
+            for (int i = 0; i <= s.length() - sub_len; i++)
+            {
+                int j = i + sub_len - 1;
+                if (dp[i + 1][j - 1] && s[i] == s[j])
+                {
+                    dp[i][j] = true;
+                    
+                    start = i;
+                    max_len = sub_len;
+                }
+            }
+        }
+        
+        return std::string(s.begin() + start, s.begin() + start + max_len);
+    }
+private:
+    int isPalindrome(const std::string& s, int left, int right)
+    {
+        int pal_len = right - left + 1;
+        while (left <= right)
+        {
+            if (s[left] != s[right])
+            {
+                return -1;
+            }
+            
+            left++;
+            right--;
+        }
+        
+        return pal_len;
+    }
+};

@@ -1,0 +1,33 @@
+https://leetcode.com/problems/partition-array-into-three-parts-with-equal-sum/
+
+class Solution 
+{
+public:
+    bool canThreePartsEqualSum(vector<int>& arr) 
+    {
+        //std::vector<int> sum(arr.begin(), arr.end());
+        arr.insert(arr.begin(), 0);
+        for (int i = 1; i < arr.size(); i++)
+        {
+            arr[i] += arr[i - 1];
+        }
+        
+        for (int i = 1; i <= arr.size() - 3; i++)
+        {
+            int s1 = arr[i] - arr[0];
+            if (arr[arr.size() - 1] - arr[i] != s1 * 2)
+                continue;
+            
+            for (int j = i + 1; j <= arr.size() - 2; j++)
+            {
+                int s2 = arr[j] - arr[i];
+                int s3 = arr[arr.size() - 1] - arr[j];
+                
+                if (s1 == s2 && s1 == s3)
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+};

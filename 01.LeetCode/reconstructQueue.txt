@@ -1,0 +1,80 @@
+https://leetcode.com/problems/queue-reconstruction-by-height/
+
+class Solution 
+{
+public:
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) 
+    {
+        std::sort(
+            people.begin(),
+            people.end(),
+            [](const std::vector<int>& a, const std::vector<int>& b)
+            {
+                if (a[1] < b[1])
+                    return true;
+                if (a[1] > b[1])
+                    return false;
+                
+                return a[0] < b[0];
+            }
+        );
+        
+        for (int i = people.size() - 1; i >= 0; i--)
+        {
+            int height = people[i][0];
+            int count = people[i][1];
+            
+            int j = 0;
+            int pivot = -1;
+            for (int j = 0; j < i; j++)
+            {
+                if (people[j][0] >= height)
+                {
+                    count--;
+                    if (count == 0)
+                    {
+                        pivot = j;
+                    }
+                }
+            }
+            
+            if (count < 0)
+            {
+                std::vector<int> temp = people[i];
+                people.erase(people.begin() + i);
+                people.insert(people.begin() + pivot + 1, temp);
+                i = people.size();
+            }
+        }
+        
+        return people;
+    }
+};
+
+class Solution 
+{
+public:
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) 
+    {
+        std::sort(
+            people.begin(),
+            people.end(),
+            [](const std::vector<int>& a, const std::vector<int>& b)
+            {
+                if (a[0] > b[0])
+                    return true;
+                if (a[0] < b[0])
+                    return false;
+                
+                return a[1] < b[1];
+            }
+        );
+        
+        std::vector<std::vector<int>> res;
+        for (const std::vector<int>& v : people)
+        {
+            res.insert(res.begin() + v[1], v);
+        }
+        return res;
+    }
+};

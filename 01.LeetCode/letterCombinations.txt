@@ -1,0 +1,34 @@
+https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+class Solution 
+{
+public:
+    vector<string> letterCombinations(string& digits) 
+    {
+        if (digits.empty())
+            return {};
+        
+        std::vector<std::string> res;
+        std::string lookup[10] = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+        std::string temp;
+        generating(digits, 0, lookup, res, temp);
+        return res;
+    }
+private:
+    void generating(const std::string& digits, int i, std::string* lookup, std::vector<std::string>& res, std::string& temp)
+    {
+        if (i >= digits.size())
+        {
+            res.push_back(temp);
+            return;
+        }
+        
+        int cur = digits[i] - '0';
+        for (int j = 0; j < lookup[cur].size(); j++)
+        {
+            temp.push_back(lookup[cur][j]);
+            generating(digits, i + 1, lookup, res, temp);
+            temp.pop_back();
+        }
+    }
+};

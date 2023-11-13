@@ -1,0 +1,37 @@
+https://leetcode.com/problems/capitalize-the-title/
+
+class Solution 
+{
+public:
+    string capitalizeTitle(string& title) 
+    {
+        std::stringstream ss(title);
+        title.clear();
+        
+        std::string temp;
+        while (ss >> temp)
+        {
+            if (temp.length() <= 2)
+            {
+                for (char& c : temp)
+                {
+                    c |= 32;
+                }
+            }
+            else
+            {
+                temp[0] &= ~32;
+                for (int i = 1; i < temp.length(); i++)
+                {
+                    temp[i] |= 32;
+                }
+            }
+            
+            title += temp;
+            title += ' ';
+        }
+        
+        title.pop_back();
+        return title;
+    }
+};

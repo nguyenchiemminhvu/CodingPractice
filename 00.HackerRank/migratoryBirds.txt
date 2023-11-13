@@ -1,0 +1,14 @@
+https://www.hackerrank.com/challenges/migratory-birds/problem
+
+int migratoryBirds(std::vector<int> arr)
+{
+    std::map<int, int> freq;
+    for (int n : arr)
+    {
+        freq[n]++;
+    }
+     
+    auto max_freq = std::max_element(freq.begin(), freq.end(), [](std::pair<int, int> a, std::pair<int, int> b) { return a.second < b.second; });
+     
+    return max_freq->first;
+}

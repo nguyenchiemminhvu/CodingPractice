@@ -1,0 +1,27 @@
+https://leetcode.com/problems/distribute-candies/submissions/
+
+class Solution 
+{
+public:
+    int distributeCandies(vector<int>& candyType) 
+    {
+        int count_type = 0;
+        std::sort(candyType.begin(), candyType.end());
+        int cur = -1, i = 0;
+        while (i < candyType.size())
+        {
+            if (candyType[i] != cur)
+            {
+                count_type++;
+                cur = candyType[i];
+            }
+            i++;
+        }
+        
+        
+        if (candyType.size() / 2 >= count_type)
+            return count_type;
+        
+        return candyType.size() / 2;
+    }
+};

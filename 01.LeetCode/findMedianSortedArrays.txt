@@ -1,0 +1,54 @@
+https://leetcode.com/problems/median-of-two-sorted-arrays/description/
+
+class Solution 
+{
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) 
+    {
+        int i1 = 0;
+        int i2 = 0;
+        int count = nums1.size() + nums2.size();
+        
+        int left = 0, right = 0;
+        
+        int it = 0;
+        while (i1 < nums1.size() && i2 < nums2.size() && it <= ((nums1.size() + nums2.size()) / 2))
+        {
+            left = right;
+            
+            if (nums1[i1] < nums2[i2])
+            {
+                right = nums1[i1];
+                i1++;
+                it++;
+            }
+            else
+            {
+                right = nums2[i2];
+                i2++;
+                it++;
+            }
+        }
+        
+        while (i1 < nums1.size() && it <= ((nums1.size() + nums2.size()) / 2))
+        {
+            left = right;
+            right = nums1[i1];
+            i1++;
+            it++;
+        }
+        
+        while (i2 < nums2.size() && it <= ((nums1.size() + nums2.size()) / 2))
+        {
+            left = right;
+            right = nums2[i2];
+            i2++;
+            it++;
+        }
+        
+        if (count & 1)
+            return right;
+        
+        return (double)(left + right) / 2;
+    }
+};

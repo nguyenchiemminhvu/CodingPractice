@@ -1,0 +1,26 @@
+https://www.hackerrank.com/challenges/game-of-thrones/problem
+
+string gameOfThrones(string s)
+{
+    int freq[26] = { 0 };
+    for (char c : s)
+        freq[c - 'a']++;
+     
+    bool corner_case = s.length() & 1;
+    for (int i = 0; i < 26; i++)
+    {
+        if (freq[i] & 1)
+        {
+            if (corner_case)
+            {
+                corner_case = false;
+            }
+            else
+            {
+                return "NO";
+            }
+        }
+    }
+     
+    return "YES";
+}

@@ -1,0 +1,51 @@
+https://leetcode.com/problems/find-subsequence-of-length-k-with-the-largest-sum/
+
+class Solution 
+{
+public:
+    vector<int> maxSubsequence(vector<int>& nums, int k) 
+    {
+        std::vector<std::pair<int, int>> sorted;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            sorted.push_back( { nums[i], i } );
+        }
+        
+        std::sort
+        (
+            sorted.begin(), 
+            sorted.end(),
+            [](const std::pair<int, int>& p1, const std::pair<int, int>& p2)
+            {
+                return p1.first < p2.first;
+            }
+        );
+        
+        std::vector<std::pair<int, int>> selected;
+        for (int i = sorted.size() - 1; i >= 0 && k; i--, k--)
+        {
+            selected.push_back(sorted[i]);
+        }
+        for (int i = 0; i < sorted.size() && k; i++, k--)
+        {
+            selected.push_back(sorted[i]);
+        }
+        
+        std::sort
+        (
+            selected.begin(),
+            selected.end(),
+            [](const std::pair<int, int>& p1, const std::pair<int, int>& p2)
+            {
+                return p1.second < p2.second;
+            }
+        );
+        
+        std::vector<int> res;
+        for (const auto& p : selected)
+        {
+            res.push_back(p.first);
+        }
+        return res;
+    }
+};

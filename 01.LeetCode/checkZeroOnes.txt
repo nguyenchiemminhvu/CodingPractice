@@ -1,0 +1,37 @@
+https://leetcode.com/problems/longer-contiguous-segments-of-ones-than-zeros/
+
+class Solution 
+{
+public:
+    bool checkZeroOnes(const string& s) 
+    {
+        int len[2] = { 0, 0 };
+        
+        size_t cur = 0;
+        while (true)
+        {
+            size_t next;
+            if (s[cur] == '0')
+            {
+                next = s.find_first_of('1', cur);
+            }
+            else
+            {
+                next = s.find_first_of('0', cur);
+            }
+            
+            if (next != std::string::npos)
+            {
+                len[(s[cur] == '1')] = std::max((int)len[(s[cur] == '1')], (int)(next - cur));
+                cur = next;
+            }
+            else
+            {
+                len[(s[cur] == '1')] = std::max((int)len[(s[cur] == '1')], (int)(s.length() - cur));
+                break;
+            }
+        }
+        
+        return len[1] > len[0];
+    }
+};

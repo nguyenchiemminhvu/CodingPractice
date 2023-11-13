@@ -1,0 +1,38 @@
+https://leetcode.com/problems/find-common-characters/
+
+class Solution 
+{
+public:
+    vector<string> commonChars(vector<string>& words) 
+    {
+        std::vector<std::string> res;
+        
+        int freq[26] = { 0 };
+        //std::memset(freq, 0, 104); // 26 * sizeof(int)
+        
+        for (const char& c : words[0])
+            freq[c - 'a']++;
+        
+        int freq_temp[26];
+        for (int i = 1; i < words.size(); i++)
+        {
+            std::memset(freq_temp, 0, 104); // 26 * sizeof(int)
+            for (const char& c : words[i])
+                freq_temp[c - 'a']++;
+            
+            for (int i = 0; i < 26; i++)
+                freq[i] = std::min(freq[i], freq_temp[i]);
+        }
+        
+        for (int i = 0; i < 26; i++)
+        {
+            while (freq[i] > 0)
+            {
+                res.push_back(std::string(1, 'a' + i));
+                freq[i]--;
+            }
+        }
+        
+        return res;
+    }
+};

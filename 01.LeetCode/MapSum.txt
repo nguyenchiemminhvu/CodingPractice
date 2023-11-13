@@ -1,0 +1,88 @@
+struct TrieNode
+{
+    int val = 0;
+    std::unordered_map<char, TrieNode*> nodes;
+};
+
+class MapSum 
+{
+public:
+    MapSum() 
+    {
+        root = new TrieNode();
+    }
+    
+    void insert(const string& key, int val) 
+    {
+        TrieNode* p = root;
+        
+        for (size_t i = 0; i < key.length(); i++)
+        {
+            if (p->nodes[key[i]] == nullptr)
+            {
+                p->nodes[key[i]] = createNode(0);
+            }
+
+            if (i == key.length() - 1)
+            {
+                p->nodes[key[i]]->val = val;
+            }
+            p = p->nodes[key[i]];
+        }
+    }
+    
+    int sum(const string& prefix) 
+    {
+        TrieNode* p = root;
+        
+        for (size_t i = 0; i < prefix.length(); i++)
+        {
+            if (p->nodes[prefix[i]] == nullptr)
+            {
+                return 0;
+            }
+
+            p = p->nodes[prefix[i]];
+        }
+        
+        int res = p->val;
+        if (p != nullptr)
+        {
+            for (std::pair<char, TrieNode*> p : p->nodes)
+            {
+                res += traversalSum(p.second);
+            }
+        }
+
+        return res;
+    }
+private:
+    TrieNode* root;
+    
+    TrieNode* createNode(int val)
+    {
+        TrieNode* node = new TrieNode();
+        node->val = val;
+        return node;
+    }
+    
+    int traversalSum(TrieNode* root)
+    {
+        if (!root)
+            return 0;
+        
+        int sum = root->val;
+        for (std::pair<char, TrieNode*> p : root->nodes)
+        {
+            sum += traversalSum(p.second);
+        }
+        return sum;
+    }
+};
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * MapSum* obj = new MapSum();
+ * obj->insert(key,val);
+ * int param_2 = obj->sum(prefix);
+ */

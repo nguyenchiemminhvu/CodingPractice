@@ -1,0 +1,31 @@
+https://leetcode.com/problems/minimum-subsequence-in-non-increasing-order/
+
+class Solution 
+{
+public:
+    vector<int> minSubsequence(vector<int>& nums) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        int sumLeft = 0;
+        int sumRight = 0;
+        
+        for (const int& n : nums)
+            sumLeft += n;
+        
+        std::vector<int> res;
+        int ir = nums.size() - 1;
+        while (ir >= 0)
+        {
+            sumRight += nums[ir];
+            sumLeft -= nums[ir];
+            res.push_back(nums[ir]);
+            ir--;
+            
+            if (sumRight > sumLeft)
+                break;
+        }
+        
+        return res;
+    }
+};

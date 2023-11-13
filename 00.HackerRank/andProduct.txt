@@ -1,0 +1,22 @@
+https://www.hackerrank.com/challenges/and-product/problem
+
+void MakeNextPowerOfTwo(long &n)
+{
+    n--;
+    n |= n >> 1;
+    n |= n >> 2;
+    n |= n >> 4;
+    n |= n >> 8;
+    n |= n >> 16;
+    n |= n >> 32;
+    n++;
+}
+ 
+long andProduct(long a, long b)
+{
+    long temp = a ^ b;
+    MakeNextPowerOfTwo(temp);
+    temp--;
+    temp = ~temp;
+    return temp & a;
+}

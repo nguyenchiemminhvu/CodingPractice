@@ -1,0 +1,37 @@
+https://leetcode.com/problems/delete-columns-to-make-sorted/
+
+class Solution 
+{
+public:
+    int minDeletionSize(vector<string>& strs) 
+    {
+        char cur[1000];
+        std::memset(cur, 'a', 1000);
+        
+        bool mark[1000];
+        std::memset(mark, 1, 1000);
+        
+        for (const std::string& s : strs)
+        {
+            for (int i = 0; i < s.length(); i++)
+            {
+                if (!mark[i])
+                    continue;
+                
+                if (s[i] < cur[i])
+                {
+                    mark[i] = false;
+                    continue;
+                }
+                
+                cur[i] = s[i];
+            }
+        }
+        
+        int count = 0;
+        for (int i = 0; i < 1000; i++)
+            count += (!mark[i]);
+        
+        return count;
+    }
+};

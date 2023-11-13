@@ -1,0 +1,25 @@
+https://leetcode.com/problems/unique-number-of-occurrences/
+
+class Solution 
+{
+public:
+    bool uniqueOccurrences(vector<int>& arr) 
+    {
+        std::unordered_map<int, int> freq;
+        for (const int& n : arr)
+        {
+            freq[n]++;
+        }
+        
+        std::set<int> checkFreq;
+        for (const std::pair<int, int>& p : freq)
+        {
+            if (checkFreq.count(p.second))
+                return false;
+            
+            checkFreq.insert(p.second);
+        }
+        
+        return true;
+    }
+};

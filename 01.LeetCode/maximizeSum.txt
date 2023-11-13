@@ -1,0 +1,20 @@
+https://leetcode.com/problems/maximum-sum-with-exactly-k-elements/description/
+
+class Solution
+{
+public:
+    int maximizeSum(vector<int>& nums, int k)
+    {
+        int score = 0;
+        std::sort(nums.begin(), nums.end(), std::greater<int>());
+
+        int cur = nums[0];
+        while (k)
+        {
+            score += cur++;
+            k--;
+        }
+
+        return score;
+    }
+};

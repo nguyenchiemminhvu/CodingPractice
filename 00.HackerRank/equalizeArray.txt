@@ -1,0 +1,13 @@
+https://www.hackerrank.com/challenges/equality-in-a-array/problem
+
+int equalizeArray(vector<int> arr)
+{
+    std::vector<int> freq(255, 0);
+    for (int n : arr)
+    {
+        freq[n]++;
+    }
+      
+    std::sort(freq.begin(), freq.end(), std::greater<int>());
+    return arr.size() - freq[0];
+}

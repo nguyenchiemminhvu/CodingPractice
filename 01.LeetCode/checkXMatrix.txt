@@ -1,0 +1,39 @@
+https://leetcode.com/problems/check-if-matrix-is-x-matrix/
+
+class Solution 
+{
+public:
+    bool checkXMatrix(vector<vector<int>>& grid) 
+    {
+        std::unordered_map<int, bool> checker;
+        for (int i = 0, j = 0; i < grid.size(); i++, j++)
+        {
+            if (grid[i][j] == 0)
+                return false;
+            
+            checker[((i << 16) | j)] = true;
+        }
+        
+        for (int i = 0, j = grid.size() - 1; i < grid.size(); i++, j--)
+        {
+            if (grid[i][j] == 0)
+                return false;
+            
+            checker[((i << 16) | j)] = true;
+        }
+        
+        for (int i = 0; i < grid.size(); i++)
+        {
+            for (int j = 0; j < grid.size(); j++)
+            {
+                if (checker[((i << 16) | j)])
+                    continue;
+                
+                if (grid[i][j] > 0)
+                    return false;
+            }
+        }
+        
+        return true;
+    }
+};

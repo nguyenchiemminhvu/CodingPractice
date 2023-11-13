@@ -1,0 +1,27 @@
+https://leetcode.com/problems/slowest-key/
+
+class Solution 
+{
+public:
+    char slowestKey(vector<int>& times, const string& keys) 
+    {
+        char can = keys[0];
+        int ld = times[0];
+        
+        for (int i = 1; i < keys.size(); i++)
+        {
+            int diff = times[i] - times[i - 1];
+            if (diff > ld)
+            {
+                ld = diff;
+                can = keys[i];
+            }
+            else if (diff == ld)
+            {
+                can = std::max(can, keys[i]);
+            }
+        }
+        
+        return can;
+    }
+};

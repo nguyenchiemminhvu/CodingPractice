@@ -1,0 +1,34 @@
+https://www.hackerrank.com/challenges/bigger-is-greater/problem
+
+string biggerIsGreater(string s)
+{
+    int lex_order_idx = 0;
+    for (lex_order_idx = s.length() - 1; lex_order_idx >= 1; lex_order_idx--)
+    {
+        if (s[lex_order_idx] > s[lex_order_idx - 1])
+        {
+            break;
+        }
+    }
+      
+    if (lex_order_idx == 0)
+        return "no answer";
+      
+    lex_order_idx--;
+      
+    int to_swap_idx = 0;
+    int temp = 10e8;
+    for (int i = lex_order_idx + 1; i < s.length(); i++)
+    {
+        if (s[i] - s[lex_order_idx] > 0 && s[i] - s[lex_order_idx] < temp)
+        {
+            temp = s[i] - s[lex_order_idx];
+            to_swap_idx = i;
+        }
+    }
+      
+    std::swap(s[lex_order_idx], s[to_swap_idx]);
+    std::sort(s.begin() + lex_order_idx + 1, s.end());
+      
+    return s;
+}

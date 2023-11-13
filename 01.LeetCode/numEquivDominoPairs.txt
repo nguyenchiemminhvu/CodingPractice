@@ -1,0 +1,21 @@
+https://leetcode.com/problems/number-of-equivalent-domino-pairs/
+
+class Solution 
+{
+public:
+    int numEquivDominoPairs(vector<vector<int>>& dom) 
+    {
+        int count = 0;
+        int mi, ma;
+        std::map<std::pair<int, int>, int> freq;
+        for (std::vector<int>& d : dom)
+        {
+            mi = std::min(d[0], d[1]);
+            ma = std::max(d[0], d[1]);
+            count += freq[{mi, ma}];
+            freq[{mi, ma}]++;
+        }
+        
+        return count;
+    }
+};

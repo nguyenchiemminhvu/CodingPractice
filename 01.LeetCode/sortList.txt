@@ -1,0 +1,175 @@
+https://leetcode.com/problems/sort-list/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution 
+{
+public:
+    ListNode* sortList(ListNode* head) 
+    {
+        if (!head || !head->next)
+            return head;
+        
+        // ListNode* tail = head;
+        // while (tail->next)
+        // {
+        //     tail = tail->next;
+        // }
+        // return quickSort(head, tail);
+        
+        mergeSort(head);
+        return head;
+    }
+private:
+    void mergeSort(ListNode*& L)
+    {
+        if (!L || !L->next)
+        {
+            return;
+        }
+        
+        ListNode* L1 = nullptr;
+        ListNode* L2 = nullptr;
+        splitList(L, L1, L2);
+        
+        mergeSort(L1);
+        mergeSort(L2);
+        L = mergeSorted(L1, L2);
+    }
+    
+    void splitList(ListNode* L, ListNode*& L1, ListNode*& L2)
+    {
+        ListNode* slow = L;
+        ListNode* fast = L->next;
+        while (fast && fast->next)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        L1 = L;
+        L2 = slow->next;
+        slow->next = nullptr;
+    }
+    
+    ListNode* mergeSorted(ListNode* L1, ListNode* L2)
+    {
+        ListNode* L = new ListNode();
+        ListNode* temp = L;
+ 
+        while (L1 && L2)
+        {
+            if (L1->val < L2->val)
+            {
+                temp->next = L1;
+                L1 = L1->next;
+            }
+            else
+            {
+                temp->next = L2;
+                L2 = L2->next;
+            }
+            temp = temp->next;
+        }
+        
+        while (L1)
+        {
+            temp->next = L1;
+            L1 = L1->next;
+            temp = temp->next;
+        }
+        
+        while (L2)
+        {
+            temp->next = L2;
+            L2 = L2->next;
+            temp = temp->next;
+        }
+        
+        return L->next;
+    }
+    
+    ListNode* quickSort(ListNode*& left, ListNode*& right)
+    {
+        if (!left || left == right)
+        {
+            return left;
+        }
+        
+        ListNode* endLeft = nullptr;
+        ListNode* pivot = partition(left, right, endLeft);
+        
+        if (left == pivot)
+        {
+            left->next = quickSort(left->next, right);
+        }
+        else if (right == pivot)
+        {
+            left = quickSort(left, endLeft);
+            endLeft->next = pivot;
+        }
+        else
+        {
+            left = quickSort(left, pivot);
+            pivot->next = quickSort(pivot->next, right);
+        }
+        
+        return left;
+    }
+    
+    ListNode* partition(ListNode*& left, ListNode*& right, ListNode*& endLeft)
+    {
+        ListNode* pivot = right;
+        
+        ListNode* prev = nullptr;
+        ListNode* cur = left;
+        while (cur != pivot)
+        {
+            if (cur->val > pivot->val)
+            {
+                if (!prev)
+                {
+                    left = cur->next;
+                    cur->next = nullptr;
+                    right->next = cur;
+                    cur = left;
+                    right = right->next;
+                }
+                else
+                {
+                    prev->next = cur->next;
+                    cur->next = nullptr;
+                    right->next = cur;
+                    cur = prev->next;
+                    right = right->next;
+                }
+            }
+            else
+            {
+                prev = cur;
+                cur = cur->next;
+            }
+        }
+        
+        endLeft = prev;
+        return pivot;
+    }
+    
+    void printList(ListNode* head)
+    {
+        while (head)
+        {
+            cout << head->val << " ";
+            head = head->next;
+        }
+        cout << endl;
+    }
+};

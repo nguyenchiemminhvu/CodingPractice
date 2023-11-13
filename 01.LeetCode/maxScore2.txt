@@ -1,0 +1,23 @@
+class Solution 
+{
+public:
+    int maxScore(vector<int>& nums) 
+    {
+        sort(nums.begin(), nums.end(), greater<int>());
+        vector<long long> prefix(nums.size(), 0);
+        prefix[0] = nums[0];
+        for (int i = 1; i < nums.size(); i++) 
+        {
+            prefix[i] = prefix[i-1] + nums[i];
+        }
+        int count = 0;
+        for (int p : prefix) 
+        {
+            if (p > 0) 
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+};

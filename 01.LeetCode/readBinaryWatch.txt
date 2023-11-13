@@ -1,0 +1,55 @@
+https://leetcode.com/problems/binary-watch/
+
+class Solution 
+{
+public:
+    vector<string> readBinaryWatch(int turnedOn) 
+    {
+        std::unordered_map<int, std::vector<int>> mh;
+        std::unordered_map<int, std::vector<int>> mm;
+        
+        for (int i = 0; i < 12; i++)
+        {
+            int setbit = countSetBit(i);
+            mh[setbit].push_back(i);
+        }
+        
+        for (int i = 0; i < 60; i++)
+        {
+            int setbit = countSetBit(i);
+            mm[setbit].push_back(i);
+        }
+        
+        std::vector<std::string> res;
+        std::string temp;
+        for (int ih = 0; ih <= 4; ih++)
+        {
+            std::vector<int>& vh = mh[ih];
+            std::vector<int>& vm = mm[turnedOn - ih];
+            if (vh.empty() || vm.empty())
+                continue;
+            
+            for (const int& h : vh)
+            {
+                for (const int& m : vm)
+                {
+                    temp = std::to_string(h) + ":" + (m < 10 ? "0" : "") + std::to_string(m);
+                    res.push_back(temp);
+                }
+            }
+        }
+        
+        return res;
+    }
+private:
+    int countSetBit(int n)
+    {
+        int count = 0;
+        while (n)
+        {
+            n &= (n - 1);
+            count++;
+        }
+        return count;
+    }
+};

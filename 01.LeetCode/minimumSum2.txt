@@ -1,0 +1,48 @@
+https://leetcode.com/problems/minimum-sum-of-mountain-triplets-i/description/
+
+class Solution 
+{
+public:
+    int minimumSum(vector<int>& nums) 
+    {
+        int res = INT_MAX;
+        std::vector<int> min_left(nums.begin(), nums.end());
+        std::vector<int> min_right(nums.begin(), nums.end());
+
+        int cur_min = min_left[0];
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (cur_min < nums[i])
+            {
+                min_left[i] = cur_min;
+            }
+            else
+            {
+                cur_min = nums[i];
+            }
+        }
+
+        cur_min = nums.back();
+        for (int i = nums.size() - 2; i >= 0; i--)
+        {
+            if (cur_min < nums[i])
+            {
+                min_right[i] = cur_min;
+            }
+            else
+            {
+                cur_min = nums[i];
+            }
+        }
+
+        for (int i = 1; i < nums.size() - 1; i++)
+        {
+            if (min_left[i - 1] < nums[i] && nums[i] > min_right[i + 1])
+            {
+                res = std::min(res, min_left[i - 1] + nums[i] + min_right[i + 1]);
+            }
+        }
+
+        return res == INT_MAX ? -1 : res;    
+    }
+};

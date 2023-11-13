@@ -1,0 +1,24 @@
+https://leetcode.com/problems/count-common-words-with-one-occurrence/
+
+class Solution 
+{
+public:
+    int countWords(vector<string>& words1, vector<string>& words2) 
+    {
+        std::unordered_map<std::string, int> hm1;
+        std::unordered_map<std::string, int> hm2;
+        
+        for (const std::string& word : words1)
+            hm1[word]++;
+        for (const std::string& word : words2)
+            hm2[word]++;
+        
+        int count = 0;
+        for (const std::string& word : words1)
+        {
+            if (hm1[word] == 1 && hm2[word] == 1)
+                count++;
+        }
+        return count;
+    }
+};

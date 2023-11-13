@@ -1,0 +1,19 @@
+https://www.hackerrank.com/challenges/sherlock-and-array/problem
+
+string balancedSums(vector<int> arr)
+{
+    std::vector<int> sum_arr(arr.begin(), arr.end());
+    sum_arr.insert(sum_arr.begin(), 0);
+    for (int i = 1; i < sum_arr.size(); i++)
+    {
+        sum_arr[i] += sum_arr[i - 1];
+    }
+     
+    for (int i = 0; i < arr.size(); i++)
+    {
+        if (sum_arr[i] - sum_arr[0] == sum_arr[sum_arr.size() - 1] - sum_arr[i + 1])
+            return "YES";
+    }
+     
+    return "NO";
+}

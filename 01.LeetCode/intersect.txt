@@ -1,0 +1,36 @@
+https://leetcode.com/problems/intersection-of-two-arrays-ii/submissions/
+
+class Solution 
+{
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) 
+    {
+        if (nums1.size() > nums2.size())
+            nums1.swap(nums2);
+        
+        std::sort(nums2.begin(), nums2.end());
+        
+        std::vector<int> res;
+        for (int n : nums1)
+        {
+            int foundIdx = binary_search(nums2, n);
+            if (foundIdx != -1)
+            {
+                res.push_back(n);
+                nums2.erase(nums2.begin() + foundIdx);
+            }
+        }
+        
+        return res;
+    }
+    
+private:
+    int binary_search(const std::vector<int>& nums, int value)
+    {
+        auto it = std::lower_bound(nums.begin(), nums.end(), value);
+        if (it == nums.end() || *it != value)
+            return -1;
+        
+        return std::distance(nums.begin(), it);
+    }
+};

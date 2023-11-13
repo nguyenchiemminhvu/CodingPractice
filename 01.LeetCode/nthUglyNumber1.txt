@@ -1,0 +1,45 @@
+https://leetcode.com/problems/ugly-number-iii/
+
+class Solution 
+{
+public:
+    int nthUglyNumber(int n, int a, int b, int c) 
+    {
+        std::vector<int> nums;
+        std::vector<int> primes = { a, b, c };
+        std::sort(primes.begin(), primes.end());
+        generating(primes, nums, n);
+
+        return nums.back();
+    }
+private:
+    void generating(const std::vector<int>& primes, std::vector<int>& nums, int n)
+    {
+        nums.push_back(1);
+        
+        std::vector<int> times(primes.size(), 0);
+        std::vector<int> candidates(primes.begin(), primes.end());
+        while (n)
+        {
+            int ic = 0;
+            int candidate = candidates[0];
+            for (int i = 1; i < primes.size(); i++)
+            {
+                if (candidate > candidates[i])
+                {
+                    candidate = candidates[i];
+                    ic = i;
+                }
+            }
+            
+            if (candidate > nums.back())
+            {
+                nums.push_back(candidate);
+                n--;
+            }
+            
+            times[ic]++;
+            candidates[ic] = primes[ic] * times[ic];
+        }
+    }
+};

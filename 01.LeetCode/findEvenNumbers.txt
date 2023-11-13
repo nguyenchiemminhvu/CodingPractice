@@ -1,0 +1,36 @@
+https://leetcode.com/problems/finding-3-digit-even-numbers/
+
+class Solution 
+{
+public:
+    vector<int> findEvenNumbers(vector<int>& digits) 
+    {
+        std::vector<int> res;
+        
+        std::unordered_map<int, int> freq;
+        for (const int& d : digits)
+        {
+            freq[d]++;
+        }
+        
+        std::unordered_map<int, int> temp;
+        for (int i = 1; i <= 9; i++)
+        {
+            for (int j = 0; j <= 9; j++)
+            {
+                for (int k = 0; k <= 9; k += 2)
+                {
+                    temp.clear();
+                    temp[i]++;
+                    temp[j]++;
+                    temp[k]++;
+                    
+                    if (temp[i] <= freq[i] && temp[j] <= freq[j] && temp[k] <= freq[k])
+                        res.push_back(100 * i + 10 * j + k);
+                }
+            }
+        }
+        
+        return res;
+    }
+};

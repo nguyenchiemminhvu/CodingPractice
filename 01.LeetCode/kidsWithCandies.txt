@@ -1,0 +1,25 @@
+https://leetcode.com/problems/kids-with-the-greatest-number-of-candies/
+
+class Solution 
+{
+public:
+    vector<bool> kidsWithCandies(vector<int>& candies, int extra) 
+    {
+        int cur_max = 0;
+        for (const int& can : candies)
+        {
+            if (cur_max < can)
+                cur_max = can;
+        }
+        
+        std::vector<bool> res(candies.size(), false);
+        for (int i = 0; i < candies.size(); i++)
+        {
+            if (candies[i] + extra >= cur_max)
+            {
+                res[i] = true;
+            }
+        }
+        return res;
+    }
+};

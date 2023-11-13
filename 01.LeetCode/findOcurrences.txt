@@ -1,0 +1,39 @@
+https://leetcode.com/problems/occurrences-after-bigram/
+
+class Solution 
+{
+public:
+    vector<string> findOcurrences(const string& text, const string& first, const string& second) 
+    {
+        std::vector<std::string> res;
+        
+        bool match_first = false;
+        bool match_second = false;
+        bool same_pattern = (first.compare(second) == 0);
+        
+        std::stringstream ss(text);
+        std::string temp;
+        while (ss >> temp)
+        {
+            if (match_first && match_second)
+            {
+                res.push_back(temp);
+                match_second = false;
+                match_first = same_pattern;
+            }
+            
+            if (!match_first)
+            {
+                match_first = (first.compare(temp) == 0);
+            }
+            else if (match_first)
+            {
+                match_second = (second.compare(temp) == 0);
+                if (!match_second)
+                    match_first = (first.compare(temp) == 0);
+            }
+        }
+        
+        return res;
+    }
+};

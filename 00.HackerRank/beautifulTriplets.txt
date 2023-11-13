@@ -1,0 +1,19 @@
+https://www.hackerrank.com/challenges/beautiful-triplets/problem
+
+int beautifulTriplets(int d, std::vector<int> arr)
+{
+    int count = 0;
+      
+    for (int i = 1; i < arr.size(); i++)
+    {
+        int leftValue = arr[i] - d;
+        int rightValue = arr[i] + d;
+          
+        int count_left = std::count_if(arr.begin(), arr.begin() + i, [=](const int& n){ return n == leftValue; } );
+        int count_right = std::count_if(arr.begin() + i, arr.end(), [=](const int& n){ return n == rightValue; } );
+          
+        count += count_left * count_right;
+    }
+      
+    return count;
+}

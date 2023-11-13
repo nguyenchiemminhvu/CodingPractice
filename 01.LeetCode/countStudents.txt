@@ -1,0 +1,56 @@
+https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/
+
+class Solution 
+{
+public:
+    int countStudents(vector<int>& students, vector<int>& sandwiches) 
+    {
+        std::vector<int> temp;
+        int last_temp_size = 0;
+        int ist = 0;
+        int isa = 0;
+        while (true)
+        {
+            if (ist >= students.size() && isa >= sandwiches.size())
+            {
+                return 0;
+            }
+            
+            if (ist >= students.size())
+            {
+                students = temp;
+                last_temp_size = temp.size();
+                temp.clear();
+                ist = 0;
+            }
+            
+            if (ist >= students.size() && isa >= sandwiches.size())
+            {
+                return 0;
+            }
+            
+            if (students[ist] == sandwiches[isa])
+            {
+                cout << ist << " " << isa << endl;
+                ist++;
+                isa++;
+                
+                if (ist >= students.size() && isa >= sandwiches.size())
+                {
+                    return 0;
+                }
+            }
+            
+            while (ist < students.size() && students[ist] != sandwiches[isa])
+            {
+                temp.push_back(students[ist]);
+                ist++;
+            }
+            
+            if (last_temp_size && last_temp_size == temp.size())
+                return last_temp_size;
+        }
+        
+        return 0;
+    }
+};

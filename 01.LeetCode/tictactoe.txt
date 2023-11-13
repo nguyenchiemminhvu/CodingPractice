@@ -1,0 +1,84 @@
+https://leetcode.com/problems/find-winner-on-a-tic-tac-toe-game/
+
+class Solution 
+{
+public:
+    string tictactoe(vector<vector<int>>& moves) 
+    {
+        std::vector<std::string> board(3, std::string(3, ' '));
+        for (int i = 0; i < moves.size(); i += 2)
+        {
+            board[moves[i][0]][moves[i][1]] = 'A';
+        }
+        
+        for (int i = 1; i < moves.size(); i += 2)
+        {
+            board[moves[i][0]][moves[i][1]] = 'B';
+        }
+        
+        int theWinner = getTheWinner(board);
+        if (theWinner == 1)
+            return "A";
+        if (theWinner == 2)
+            return "B";
+        
+        if (moves.size() == 9)
+            return "Draw";
+        
+        return "Pending";
+    }
+    
+private:
+    int getTheWinner(const std::vector<std::string>& board)
+    {
+        if (board[0][0] == board[0][1] && board[0][1] == board[0][2])
+        {
+            if (board[0][0] == 'A') return 1;
+            if (board[0][0] == 'B') return 2;
+        }
+        
+        if (board[1][0] == board[1][1] && board[1][1] == board[1][2])
+        {
+            if (board[1][0] == 'A') return 1;
+            if (board[1][0] == 'B') return 2;
+        }
+        
+        if (board[2][0] == board[2][1] && board[2][1] == board[2][2])
+        {
+            if (board[2][0] == 'A') return 1;
+            if (board[2][0] == 'B') return 2;
+        }
+        
+        if (board[0][0] == board[1][0] && board[1][0] == board[2][0])
+        {
+            if (board[0][0] == 'A') return 1;
+            if (board[0][0] == 'B') return 2;
+        }
+        
+        if (board[0][1] == board[1][1] && board[1][1] == board[2][1])
+        {
+            if (board[0][1] == 'A') return 1;
+            if (board[0][1] == 'B') return 2;
+        }
+        
+        if (board[0][2] == board[1][2] && board[1][2] == board[2][2])
+        {
+            if (board[0][2] == 'A') return 1;
+            if (board[0][2] == 'B') return 2;
+        }
+        
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2])
+        {
+            if (board[0][0] == 'A') return 1;
+            if (board[0][0] == 'B') return 2;
+        }
+        
+        if (board[2][0] == board[1][1] && board[1][1] == board[0][2])
+        {
+            if (board[2][0] == 'A') return 1;
+            if (board[2][0] == 'B') return 2;
+        }
+        
+        return 0;
+    }
+};

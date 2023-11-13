@@ -1,0 +1,40 @@
+https://leetcode.com/problems/find-all-anagrams-in-a-string/description/
+
+class Solution 
+{
+public:
+    vector<int> findAnagrams(const string& s, const string& p) 
+    {
+        std::vector<int> res;
+
+        if (p.length() > s.length())
+            return res;
+        
+        std::vector<int> p_freq(26, 0);
+        for (const char& c : p)
+            p_freq[c - 'a']++;
+
+        std::vector<int> s_freq(26, 0);
+        for (int i = 0; i < p.length(); i++)
+        {
+            s_freq[s[i] - 'a']++;
+        }
+
+        if (s_freq == p_freq)
+        {
+            res.push_back(0);
+        }
+
+        for (int i = 1; i <= s.length() - p.length(); i++)
+        {
+            s_freq[s[i - 1] - 'a']--;
+            s_freq[s[i + p.length() - 1] - 'a']++;
+            if (s_freq == p_freq)
+            {
+                res.push_back(i);
+            }
+        }
+
+        return res;    
+    }
+};

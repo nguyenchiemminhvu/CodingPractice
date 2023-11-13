@@ -1,0 +1,24 @@
+https://leetcode.com/problems/flip-string-to-monotone-increasing/description/
+
+class Solution 
+{
+public:
+    int minFlipsMonoIncr(const string& s) 
+    {
+        std::vector<int> counter(2, 0);
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s[i] == '1')
+            {
+                counter[1]++;
+            }
+            else
+            {
+                counter[0]++;
+                counter[0] = std::min(counter[0], counter[1]);
+            }
+        }
+
+        return counter[0];
+    }
+};

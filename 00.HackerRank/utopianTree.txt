@@ -1,0 +1,14 @@
+https://www.hackerrank.com/challenges/utopian-tree/problem
+
+int utopianTree(int n)
+{
+    int res = 1;
+      
+    while (n)
+    {
+        res = (res & 1) ? res << 1 : res + 1;
+        n--;
+    }
+      
+    return res;
+}

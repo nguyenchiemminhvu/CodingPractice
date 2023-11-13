@@ -1,0 +1,37 @@
+https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/
+
+class Solution 
+{
+public:
+    int maxScore(vector<int>& nums, int k) 
+    {
+        int res = 0;
+        
+        std::vector<int> sum(nums.begin(), nums.end());
+        for (int i = 1; i < nums.size(); i++)
+        {
+            sum[i] += sum[i - 1];
+        }
+        
+        for (int left_len = 0; left_len <= k; left_len++)
+        {
+            int right_len = k - left_len;
+            
+            int temp = 0;
+            
+            if (left_len)
+            {
+                temp += sum[left_len - 1] - sum[0] + nums[0];
+            }
+            
+            if (right_len)
+            {
+                temp += sum[nums.size() - 1] - sum[nums.size() - right_len] + nums[nums.size() - right_len];
+            }
+            
+            res = std::max(res, temp);
+        }
+        
+        return res;
+    }
+};

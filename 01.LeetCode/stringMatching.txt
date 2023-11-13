@@ -1,0 +1,34 @@
+https://leetcode.com/problems/string-matching-in-an-array/
+
+class Solution 
+{
+public:
+    vector<string> stringMatching(vector<string>& words) 
+    {
+//         std::sort
+//         (
+//             words.begin(), 
+//             words.end(),
+//             [](const std::string& a, const std::string& b)
+//             {
+//                 return a.length() < b.length();
+//             }
+//         );
+        
+        
+        std::set<std::string> res;
+        for (int i = 0; i < words.size(); i++)
+        {
+            for (int j = 0; j < words.size(); j++)
+            {
+                if (i == j)
+                    continue;
+                
+                if (words[j].find(words[i]) != std::string::npos)
+                    res.insert(words[i]);
+            }
+        }
+        
+        return { res.begin(), res.end() };
+    }
+};

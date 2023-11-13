@@ -1,0 +1,55 @@
+https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution 
+{
+public:
+    TreeNode* sortedListToBST(ListNode* head) 
+    {
+        if (!head)
+            return nullptr;
+        
+        std::vector<int> values;
+        while (head)
+        {
+            values.push_back(head->val);
+            head = head->next;
+        }
+        
+        return arrayToBST(values, 0, values.size() - 1);
+    }
+private:
+    TreeNode* arrayToBST(std::vector<int>& nums, int left, int right)
+    {
+        if (left > right)
+            return NULL;
+        
+        int mid = left + (right - left) / 2;
+        
+        TreeNode* newNode = new TreeNode(nums[mid]);
+        newNode->left = arrayToBST(nums, left, mid - 1);
+        newNode->right = arrayToBST(nums, mid + 1, right);
+        
+        return newNode;
+    }
+};

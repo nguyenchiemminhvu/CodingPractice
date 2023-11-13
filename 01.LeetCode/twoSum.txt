@@ -1,0 +1,21 @@
+https://leetcode.com/problems/two-sum/
+
+class Solution 
+{
+public:
+    vector<int> twoSum(vector<int>& nums, int target) 
+    {
+        std::unordered_map<int, int> indexes;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (indexes[target - nums[i]])
+            {
+                return {indexes[target - nums[i]] - 1, i};
+            }
+            
+            indexes[nums[i]] = i + 1;
+        }
+        
+        return {};
+    }
+};

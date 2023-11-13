@@ -1,0 +1,53 @@
+https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution 
+{
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) 
+    {
+        std::vector<TreeNode*> path_of_p;
+        std::vector<TreeNode*> path_of_q;
+        
+        pathToNode(root, p, path_of_p);
+        pathToNode(root, q, path_of_q);
+        
+        int ip = 0, iq = 0;
+        while (ip < path_of_p.size() && iq < path_of_q.size() && path_of_p[ip] == path_of_q[iq])
+        {
+            ip++;
+            iq++;
+        }
+        
+        return path_of_p[ip - 1];
+    }
+private:
+    bool pathToNode(TreeNode* root, TreeNode* node, std::vector<TreeNode*>& path)
+    {
+        if (!root)
+            return false;
+        
+        path.push_back(root);
+        if (root == node)
+        {
+            return true;
+        }
+        
+        bool check = pathToNode(root->left, node, path) || pathToNode(root->right, node, path);
+        if (check)
+            return true;
+        
+        path.pop_back();
+        
+        return false;
+    }
+};

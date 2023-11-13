@@ -1,0 +1,16 @@
+https://leetcode.com/problems/robot-return-to-origin/
+
+class Solution 
+{
+public:
+    bool judgeCircle(const string& moves) 
+    {
+        int freq[26] = { 0 };
+        for (const char& move : moves)
+        {
+            freq[move - 'A']++;
+        }
+        
+        return freq['L' - 'A'] == freq['R' - 'A'] && freq['U' - 'A'] == freq['D' - 'A'];
+    }
+};

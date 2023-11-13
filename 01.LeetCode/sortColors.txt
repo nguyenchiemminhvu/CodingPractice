@@ -1,0 +1,20 @@
+https://leetcode.com/problems/sort-colors/
+
+class Solution 
+{
+public:
+    void sortColors(vector<int>& nums) 
+    {
+        // std::sort(nums.begin(), nums.end());
+        
+        std::vector<int> colors(3, 0);
+        for (const int& n : nums)
+        {
+            colors[n]++;
+        }
+        
+        std::fill(nums.begin(), nums.begin() + colors[0], 0);
+        std::fill(nums.begin() + colors[0], nums.begin() + colors[0] + colors[1], 1);
+        std::fill(nums.begin() + colors[0] + colors[1], nums.end(), 2);
+    }
+};

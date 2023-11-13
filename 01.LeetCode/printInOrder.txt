@@ -1,0 +1,58 @@
+https://leetcode.com/problems/print-in-order/
+
+class Foo 
+{
+public:
+    Foo() 
+    {
+        pthread_mutex_init(&mut, NULL);
+    }
+
+    void first(function<void()> printFirst) 
+    {
+        pthread_mutex_lock(&mut);
+        while (cur != 1)
+            pthread_cond_wait(&cond_a, &mut);
+        
+        // printFirst() outputs "first". Do not change or remove this line.
+        printFirst();
+        
+        cur = 2;
+        pthread_cond_signal(&cond_b);
+        pthread_mutex_unlock(&mut);
+    }
+
+    void second(function<void()> printSecond) 
+    {
+        pthread_mutex_lock(&mut);
+        while (cur != 2)
+            pthread_cond_wait(&cond_b, &mut);
+        
+        // printSecond() outputs "second". Do not change or remove this line.
+        printSecond();
+        
+        cur = 3;
+        pthread_cond_signal(&cond_c);
+        pthread_mutex_unlock(&mut);
+    }
+
+    void third(function<void()> printThird) 
+    {
+        pthread_mutex_lock(&mut);
+        while (cur != 3)
+            pthread_cond_wait(&cond_c, &mut);
+        
+        // printThird() outputs "third". Do not change or remove this line.
+        printThird();
+        
+        cur = 1;
+        pthread_cond_signal(&cond_a);
+        pthread_mutex_unlock(&mut);
+    }
+private:
+    pthread_mutex_t mut;
+    pthread_cond_t cond_a;
+    pthread_cond_t cond_b;
+    pthread_cond_t cond_c;
+    int cur = 1;
+};

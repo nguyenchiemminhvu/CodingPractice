@@ -1,0 +1,44 @@
+https://www.hackerrank.com/challenges/lilys-homework/problem
+
+int solution(std::vector<int> arr)
+{
+    int res = 0;
+     
+    std::map<int, int> m;
+    for (int i = 0; i < arr.size(); i++)
+    {
+        m[arr[i]] = i;
+    }
+     
+    std::vector<int> sorted(arr.begin(), arr.end());
+    std::sort(sorted.begin(), sorted.end());
+     
+    for (int i = 0; i < arr.size(); i++)
+    {
+        if (arr[i] != sorted[i])
+        {
+            int to_swap_idx = m[sorted[i]];
+            m[arr[i]] = m[sorted[i]];
+             
+            int temp = arr[i];
+            arr[i] = sorted[i];
+            arr[to_swap_idx] = temp;
+             
+            res++;
+        }
+    }
+     
+    return res;
+}
+ 
+int lilysHomework(vector<int> arr)
+{
+    std::vector<int> rev_arr(arr.begin(), arr.end());
+    std::reverse(rev_arr.begin(), rev_arr.end());
+     
+    int candidate1 = solution(arr);
+    int candidate2 = solution(rev_arr);
+     
+    int res = candidate1 < candidate2 ? candidate1 : candidate2;
+    return res;
+}

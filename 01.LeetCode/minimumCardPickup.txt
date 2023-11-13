@@ -1,0 +1,26 @@
+https://leetcode.com/problems/minimum-consecutive-cards-to-pick-up/
+
+class Solution 
+{
+public:
+    int minimumCardPickup(vector<int>& nums) 
+    {
+        int res = INT_MAX;
+        
+        std::unordered_map<int, std::vector<int>> checker;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (checker[nums[i]].empty())
+            {
+                checker[nums[i]].push_back(i);
+            }
+            else
+            {
+                res = std::min(res, i - checker[nums[i]].back() + 1);
+                checker[nums[i]].push_back(i);
+            }
+        }
+        
+        return res == INT_MAX ? -1 : res;
+    }
+};

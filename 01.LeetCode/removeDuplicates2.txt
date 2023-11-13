@@ -1,0 +1,69 @@
+https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/
+
+class Solution 
+{
+public:
+    std::string removeDuplicates(std::string& s, int k) 
+    {
+//         while (true)
+//         {
+//             std::string temp = s;
+//             temp = removeAdjacent(s, k);
+            
+//             if (temp == s)
+//                 return temp;
+            
+//             s = temp;
+//         }
+        
+        std::stack<std::pair<char, int>> st;
+        
+        int is = 0;
+        while (is < s.length())
+        {
+            if (st.empty())
+            {
+                st.push({s[is], 1});
+                is++;
+                continue;
+            }
+            
+            if (s[is] != st.top().first)
+            {
+                st.push({s[is], 1});
+                is++;
+            }
+            else
+            {
+                std::pair<char, int> cur = st.top();
+                st.pop();
+                
+                cur.second++;
+                is++;
+                
+                if (cur.second < k)
+                    st.push(cur);
+            }
+        }
+        
+        s.clear();
+        while (!st.empty())
+        {
+            s += std::string(st.top().second, st.top().first);
+            st.pop();
+        }
+        std::reverse(s.begin(), s.end());
+        
+        return s;
+    }
+private:
+    // std::string removeAdjacent(std::string& s, int k)
+    // {
+    //     std::string reg = "([a-z]{1})";
+    //     for (int i = 0; i < k - 1; i++)
+    //     {
+    //         reg += "\\1";
+    //     }
+    //     return std::regex_replace(s, std::regex(reg), "");
+    // }
+};

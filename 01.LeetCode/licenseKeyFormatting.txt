@@ -1,0 +1,28 @@
+https://leetcode.com/problems/license-key-formatting/
+
+class Solution 
+{
+public:
+    string licenseKeyFormatting(string s, int k) 
+    {
+        s.erase(std::remove(s.begin(), s.end(), '-'), s.end());
+        
+        std::string res;
+        int temp = 0;
+        for (int i = s.length() - 1; i >= 0; i--)
+        {
+            if (temp == k)
+            {
+                temp = 0;
+                res.push_back('-');
+            }
+            res.push_back(s[i]);
+            if (std::isalpha(s[i]))
+                res.back() &= ~32;
+            temp++;
+        }
+        
+        std::reverse(res.begin(), res.end());
+        return res;
+    }
+};

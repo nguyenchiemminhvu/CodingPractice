@@ -1,0 +1,22 @@
+https://leetcode.com/problems/gray-code/
+
+class Solution 
+{
+public:
+    vector<int> grayCode(int n) 
+    {
+        std::vector<int> res;
+        
+        for (int i = 0; i < (1 << n); i++)
+        {
+            // Generating the decimal
+            // values of gray code then using
+            // bitset to convert them to binary form
+            int val = (i ^ (i >> 1));
+
+            res.push_back(val);
+        }
+        
+        return res;
+    }
+};

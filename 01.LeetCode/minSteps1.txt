@@ -1,0 +1,29 @@
+https://leetcode.com/problems/minimum-number-of-steps-to-make-two-strings-anagram/description/
+
+class Solution 
+{
+public:
+    int minSteps(const string& s, const string& t) 
+    {
+        std::vector<int> freq_s(26, 0);
+        std::vector<int> freq_t(26, 0);
+
+        for (const char& c : s)
+        {
+            freq_s[c - 'a']++;
+        }
+
+        for (const char& c : t)
+        {
+            freq_t[c - 'a']++;
+        }
+
+        int diff = 0;
+        for (int i = 0; i < 26; i++)
+        {
+            diff += std::abs(freq_s[i] - freq_t[i]);
+        }
+
+        return (diff / 2) + (diff & 1);
+    }
+};

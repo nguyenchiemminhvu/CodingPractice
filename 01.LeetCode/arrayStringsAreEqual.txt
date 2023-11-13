@@ -1,0 +1,16 @@
+https://leetcode.com/problems/check-if-two-string-arrays-are-equivalent/
+
+class Solution 
+{
+public:
+    bool arrayStringsAreEqual(vector<string>& v1, vector<string>& v2) 
+    {
+        std::string s1, s2;
+        for (std::string& s : v1)
+            s1 += s;
+        for (std::string& s : v2)
+            s2 += s;
+        
+        return s1 == s2;
+    }
+};

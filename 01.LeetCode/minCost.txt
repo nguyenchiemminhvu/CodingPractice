@@ -1,0 +1,38 @@
+https://leetcode.com/problems/minimum-time-to-make-rope-colorful/
+
+class Solution 
+{
+public:
+    int minCost(string& colors, vector<int>& neededTime) 
+    {
+        int res = 0;
+        
+        colors += "#";
+        int sum_segment = neededTime[0];
+        int max_segment = neededTime[0];
+        for (int i = 1; i < colors.length(); i++)
+        {
+            if (colors[i] == '#')
+            {
+                res += (sum_segment - max_segment);
+                break;
+            }
+            
+            if (colors[i] != colors[i - 1])
+            {
+                res += (sum_segment - max_segment);
+                
+                sum_segment = neededTime[i];
+                max_segment = neededTime[i];
+            }
+            else
+            {
+                sum_segment += neededTime[i];
+                max_segment = std::max(max_segment, neededTime[i]);
+            }
+        }
+        
+        colors.pop_back();
+        return res;
+    }
+};

@@ -1,0 +1,31 @@
+https://leetcode.com/problems/generate-parentheses/
+
+class Solution 
+{
+public:
+    vector<string> generateParenthesis(int n) 
+    {
+        std::vector<std::string> res;
+        generating(n, 0, 0, "", res);
+        return res;
+    }
+private:
+    void generating(int n, int open, int close, std::string temp, std::vector<std::string>& res)
+    {
+        if (open == n && close == n)
+        {
+            res.push_back(temp);
+            return;
+        }
+        
+        if (open < n)
+        {
+            generating(n, open + 1, close, temp + "(", res);
+        }
+        
+        if (close < open)
+        {
+            generating(n, open, close + 1, temp + ")", res);
+        }
+    }
+};

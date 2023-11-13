@@ -1,0 +1,35 @@
+https://leetcode.com/problems/determine-if-two-events-have-conflict/
+
+class Solution 
+{
+public:
+    bool haveConflict(vector<string>& a, vector<string>& b) 
+    {
+        int sha = (a[0][0] - '0') * 10 + (a[0][1] - '0');
+        int sma = (sha * 60) + (a[0][3] - '0') * 10 + (a[0][4] - '0');
+        
+        int eha = (a[1][0] - '0') * 10 + (a[1][1] - '0');
+        int ema = (eha * 60) + (a[1][3] - '0') * 10 + (a[1][4] - '0');
+        
+        int shb = (b[0][0] - '0') * 10 + (b[0][1] - '0');
+        int smb = (shb * 60) + (b[0][3] - '0') * 10 + (b[0][4] - '0');
+        
+        int ehb = (b[1][0] - '0') * 10 + (b[1][1] - '0');
+        int emb = (ehb * 60) + (b[1][3] - '0') * 10 + (b[1][4] - '0');
+        
+        if (sma > smb)
+        {
+            std::swap(sma, smb);
+            std::swap(ema, emb);
+        }
+        
+        // cout << sma << " " << ema << " " << smb << " " << emb << endl;
+        
+        return checking(sma, ema, smb, emb);
+    }
+private:
+    bool checking(int sa, int ea, int sb, int eb)
+    {
+        return (eb - sa) <= (ea - sa) + (eb - sb);
+    }
+};

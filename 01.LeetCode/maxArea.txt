@@ -1,0 +1,38 @@
+https://leetcode.com/problems/container-with-most-water/
+
+class Solution 
+{
+public:
+    int maxArea(vector<int>& height) 
+    {
+//         int res = 0;
+//         for (int i = 0; i < height.size(); i++)
+//         {
+//             for (int j = i + 1; j < height.size(); j++)
+//             {
+//                 int diff_idx = j - i;
+//                 int min_height = std::min(height[i], height[j]);
+//                 if (res < diff_idx * min_height)
+//                 {
+//                     res = diff_idx * min_height;
+//                     cout << i << " " << j << endl;
+//                 }
+//             }
+//         }
+//         return res;
+        
+        int left = 0, right = height.size() - 1;
+        int res = 0;
+        while (left < right)
+        {
+            res = std::max(res, (right - left) * std::min(height[left], height[right]));
+            
+            if (height[left] < height[right])
+                left++;
+            else
+                right--;
+        }
+        
+        return res;
+    }
+};

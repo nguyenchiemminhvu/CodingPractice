@@ -1,0 +1,30 @@
+https://leetcode.com/problems/assign-cookies/submissions/
+
+class Solution 
+{
+public:
+    int findContentChildren(vector<int>& g, vector<int>& cookies) 
+    {
+        std::sort(g.begin(), g.end());
+        std::sort(cookies.begin(), cookies.end());
+        
+        int ig = 0;
+        int ic = 0;
+        int count = 0;
+        while (ig < g.size() && ic < cookies.size())
+        {
+            if (cookies[ic] >= g[ig])
+            {
+                ic++;
+                ig++;
+                count++;
+            }
+            else
+            {
+                ic++;
+            }
+        }
+        
+        return count;
+    }
+};

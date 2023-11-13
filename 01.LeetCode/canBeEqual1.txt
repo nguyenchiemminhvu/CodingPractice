@@ -1,0 +1,15 @@
+https://leetcode.com/problems/check-if-strings-can-be-made-equal-with-operations-i/description/
+
+class Solution 
+{
+public:
+    bool canBeEqual(string& s1, string& s2) 
+    {
+        bool checker_1 = (s1[0] == s2[0] && s1[2] == s2[2]);
+        bool checker_2 = (s1[0] == s2[2] && s1[2] == s2[0]);
+        bool checker_3 = (s1[1] == s2[1] && s1[3] == s2[3]);
+        bool checker_4 = (s1[1] == s2[3] && s1[3] == s2[1]);
+        
+        return (checker_1 && checker_3) || (checker_1 && checker_4) || (checker_2 && checker_3) || (checker_2 && checker_4);
+    }
+};

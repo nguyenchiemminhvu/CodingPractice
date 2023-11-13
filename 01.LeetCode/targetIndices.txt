@@ -1,0 +1,31 @@
+https://leetcode.com/problems/find-target-indices-after-sorting-array/
+
+class Solution 
+{
+public:
+    vector<int> targetIndices(vector<int>& nums, int target) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        int found = searchUtil(nums, target);
+        std::vector<int> indices;
+        int left = found;
+        int right = found + 1;
+        while (left >= 0 && nums[left] == target)
+            indices.push_back(left--);
+        while (right < nums.size() && nums[right] == target)
+            indices.push_back(right++);
+        
+        std::sort(indices.begin(), indices.end());
+        return indices;
+    }
+private:
+    int searchUtil(const std::vector<int>& nums, int val)
+    {
+        auto it = std::lower_bound(nums.begin(), nums.end(), val);
+        if (it == nums.end() || *it != val)
+            return -1;
+        
+        return std::distance(nums.begin(), it);
+    }
+};

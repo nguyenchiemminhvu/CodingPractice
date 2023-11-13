@@ -1,0 +1,18 @@
+https://leetcode.com/problems/target-sum/
+
+class Solution 
+{
+public:
+    int findTargetSumWays(vector<int>& nums, int target) 
+    {
+        return countBT(nums, nums.size() - 1, target);
+    }
+private:
+    int countBT(const std::vector<int>& nums, int i, int target)
+    {
+        if (i < 0)
+            return target == 0;
+        
+        return countBT(nums, i - 1, target + nums[i]) + countBT(nums, i - 1, target - nums[i]);
+    }
+};

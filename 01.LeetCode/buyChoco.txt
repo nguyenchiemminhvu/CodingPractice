@@ -1,0 +1,16 @@
+https://leetcode.com/problems/buy-two-chocolates/description/
+
+class Solution 
+{
+public:
+    int buyChoco(vector<int>& prices, int money) 
+    {
+        int origin = money;
+
+        std::sort(prices.begin(), prices.end());
+        money -= prices[0];
+        money -= prices[1];
+
+        return (money >= 0) ? money : origin;
+    }
+};

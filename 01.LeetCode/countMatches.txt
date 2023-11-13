@@ -1,0 +1,32 @@
+https://leetcode.com/problems/count-items-matching-a-rule/
+
+class Solution 
+{
+public:
+    int countMatches(vector<vector<string>>& items, const string& ruleKey, const string& ruleValue) 
+    {
+        int count = 0;
+        
+        int col = -1;
+        if (ruleKey == "type")
+        {
+            col = 0;
+        }
+        else if (ruleKey == "color")
+        {
+            col = 1;
+        }
+        else
+        {
+            col = 2;
+        }
+
+        for (const std::vector<std::string>& item : items)
+        {
+            if (item[col] == ruleValue)
+                count++;
+        }
+        
+        return count;
+    }
+};

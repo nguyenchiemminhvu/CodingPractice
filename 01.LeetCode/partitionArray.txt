@@ -1,0 +1,23 @@
+https://leetcode.com/problems/partition-array-such-that-maximum-difference-is-k/
+
+class Solution 
+{
+public:
+    int partitionArray(vector<int>& nums, int k) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        int cut = 0;
+        int cur_min = nums[0];
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[i] - cur_min > k)
+            {
+                cur_min = nums[i];
+                cut++;
+            }
+        }
+        
+        return cut + 1;
+    }
+};

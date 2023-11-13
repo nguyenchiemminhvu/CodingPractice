@@ -1,0 +1,17 @@
+https://leetcode.com/problems/counting-words-with-a-given-prefix/
+
+class Solution 
+{
+public:
+    int prefixCount(vector<string>& words, const string& pref) 
+    {
+        int count = 0;
+        for (const std::string& word : words)
+        {
+            if (word.compare(0, pref.length(), pref) == 0)
+                count++;
+        }
+        
+        return count;
+    }
+};

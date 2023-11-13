@@ -1,0 +1,26 @@
+https://www.hackerrank.com/challenges/missing-numbers/problem
+
+std::vector<int> missingNumbers(std::vector<int> arr, std::vector<int> brr)
+{
+    std::map<int, int> checker;
+    for (int n : arr)
+    {
+        checker[n]++;
+    }
+     
+    for (int n : brr)
+    {
+        checker[n]--;
+    }
+     
+    std::set<int> si;
+    for (std::map<int, int>::iterator it = checker.begin(); it != checker.end(); it++)
+    {
+        if (it->second < 0)
+        {
+            si.insert(it->first);
+        }
+    }
+     
+    return std::vector<int>(si.begin(), si.end());
+}

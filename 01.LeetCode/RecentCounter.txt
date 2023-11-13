@@ -1,0 +1,28 @@
+https://leetcode.com/problems/number-of-recent-calls/
+
+class RecentCounter 
+{
+public:
+    RecentCounter() 
+    {
+        
+    }
+    
+    int ping(const int& t) 
+    {
+        counter.push(t);
+        
+        while (!counter.empty() && counter.front() + 3000 < t)
+            counter.pop();
+        
+        return counter.size();
+    }
+private:
+    std::queue<int> counter;
+};
+
+/**
+ * Your RecentCounter object will be instantiated and called as such:
+ * RecentCounter* obj = new RecentCounter();
+ * int param_1 = obj->ping(t);
+ */

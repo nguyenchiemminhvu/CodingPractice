@@ -1,0 +1,17 @@
+https://www.hackerrank.com/challenges/angry-professor/problem
+
+std::string angryProfessor(int k, std::vector<int> a)
+{
+    std::sort(a.begin(), a.end(), std::greater<int>());
+     
+    int count = 0;
+    for (int i = 0; i < a.size(); i++)
+    {
+        if (a[i] <= 0)
+            break;
+         
+        count++;
+    }
+     
+    return a.size() - count < k ? "YES" : "NO";
+}

@@ -1,0 +1,21 @@
+https://leetcode.com/problems/cells-in-a-range-on-an-excel-sheet/
+
+class Solution 
+{
+public:
+    vector<string> cellsInRange(const string& s) 
+    {
+        std::vector<std::string> res;
+        for (char col = s[0]; col <= s[3]; col++)
+        {
+            for (char row = s[1]; row <= s[4]; row++)
+            {
+                std::string temp;
+                temp += col;
+                temp += row;
+                res.push_back(temp);
+            }
+        }
+        return res;
+    }
+};

@@ -1,0 +1,39 @@
+https://leetcode.com/problems/the-number-of-weak-characters-in-the-game/
+
+class Solution 
+{
+public:
+    int numberOfWeakCharacters(vector<vector<int>>& characters) 
+    {
+        std::sort
+        (
+            characters.begin(), 
+            characters.end(), 
+            [](const std::vector<int>& a, const std::vector<int>& b)
+            {
+                if (a[0] < b[0])
+                    return true;
+                
+                if (a[0] == b[0] && a[1] > b[1])
+                    return true;
+                
+                return false;
+            }
+        );
+        
+        int count = 0;
+        
+        int max_so_far = INT_MIN;
+        for (int i = characters.size() - 1; i >= 0; i--)
+        {
+            if (characters[i][1] < max_so_far)
+            {
+                count++;
+            }
+            
+            max_so_far = std::max(max_so_far, characters[i][1]);
+        }
+        
+        return count;
+    }
+};

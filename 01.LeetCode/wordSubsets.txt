@@ -1,0 +1,55 @@
+https://leetcode.com/problems/word-subsets/
+
+class Solution 
+{
+public:
+    vector<string> wordSubsets(vector<string>& words1, vector<string>& words2) 
+    {
+        std::vector<std::string> res;
+        
+        std::vector<std::vector<int>> ff1(words1.size(), std::vector<int>(26, 0));
+        std::vector<int> ff2(26, 0);
+        
+        for (int i = 0; i < words1.size(); i++)
+        {
+            for (const char& c : words1[i])
+            {
+                ff1[i][c - 'a']++;
+            }
+        }
+        
+        for (int i = 0; i < words2.size(); i++)
+        {
+            std::vector<int> f2(26, 0);
+            for (const char& c : words2[i])
+            {
+                f2[c - 'a']++;
+            }
+            
+            for (int f = 0; f < 26; f++)
+            {
+                ff2[f] = std::max(ff2[f], f2[f]);
+            }
+        }
+        
+        for (int i = 0; i < words1.size(); i++)
+        {
+            bool isUniversal = true;
+            for (int f = 0; f < 26; f++)
+            {
+                if (ff1[i][f] < ff2[f])
+                {
+                    isUniversal = false;
+                    break;
+                }
+            }
+            
+            if (isUniversal)
+            {
+                res.push_back(words1[i]);
+            }
+        }
+        
+        return res;
+    }
+};

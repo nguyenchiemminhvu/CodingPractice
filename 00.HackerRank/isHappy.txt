@@ -1,0 +1,56 @@
+https://www.hackerrank.com/challenges/happy-ladybugs/problem
+
+bool isHappy(const string& s)
+{
+    std::string temp;
+    for (char c : s)
+    {
+        if (isupper(c))
+        {
+            if (temp.empty() || temp.back() == c)
+                temp += c;
+            else
+            {
+                if (temp.back() != c && temp.length() == 1)
+                    return false;
+                 
+                temp.clear();
+                temp += c;
+            }
+        }
+        else
+        {
+            if (temp.length() == 1)
+                return false;
+             
+            temp.clear();
+        }
+    }
+     
+    return true;
+}
+ 
+string happyLadybugs(string b)
+{
+    b.append("#");
+    if (isHappy(b))
+        return "YES";
+     
+    int num_underscore = std::count(b.begin(), b.end(), '_');
+    if (num_underscore == 0)
+        return "NO";
+     
+    int f[27] = { 0 };
+    for (char c : b)
+    {
+        f[c - 'A']++;
+    }
+     
+    for (int n : f)
+    {
+        if (n == 1)
+            return "NO";
+    }
+     
+    return "YES";
+}

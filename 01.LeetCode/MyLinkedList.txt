@@ -1,0 +1,56 @@
+https://leetcode.com/problems/design-linked-list/
+
+class MyLinkedList 
+{
+public:
+    MyLinkedList() 
+    {
+        
+    }
+    
+    int get(int index) 
+    {
+        if (index >= L.size())
+            return -1;
+        
+        return L.at(index);
+    }
+    
+    void addAtHead(int val) 
+    {
+        L.insert(L.begin(), val);
+    }
+    
+    void addAtTail(int val) 
+    {
+        L.push_back(val);
+    }
+    
+    void addAtIndex(int index, int val) 
+    {
+        if (index < 0 || index > L.size())
+            return;
+        
+        L.insert(L.begin() + index, val);
+    }
+    
+    void deleteAtIndex(int index) 
+    {
+        if (index < 0 || index >= L.size())
+            return;
+        
+        L.erase(L.begin() + index);
+    }
+private:
+    std::vector<int> L;
+};
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList* obj = new MyLinkedList();
+ * int param_1 = obj->get(index);
+ * obj->addAtHead(val);
+ * obj->addAtTail(val);
+ * obj->addAtIndex(index,val);
+ * obj->deleteAtIndex(index);
+ */

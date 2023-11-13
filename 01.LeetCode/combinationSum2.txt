@@ -1,0 +1,40 @@
+https://leetcode.com/problems/combination-sum-ii/
+
+class Solution 
+{
+public:
+    vector<vector<int>> combinationSum2(vector<int>& nums, int target) 
+    {
+        std::sort(nums.begin(), nums.end());
+        
+        std::vector<std::vector<int>> res;
+        std::vector<int> temp;
+        generating(nums, 0, target, temp, res);
+        return {res.begin(), res.end()};
+    }
+private:
+    void generating(const std::vector<int>& nums, int i, int target, std::vector<int>& temp, std::vector<std::vector<int>>& res)
+    {
+        if (target < 0)
+            return;
+        
+        if (target == 0)
+        {
+            res.push_back(temp);
+            return;
+        }
+        
+        if (i >= nums.size())
+            return;
+        
+        for (int j = i; j < nums.size(); j++)
+        {
+            if (j > i && nums[j] == nums[j - 1])
+                continue;
+            
+            temp.push_back(nums[j]);
+            generating(nums, j + 1, target - nums[j], temp, res);
+            temp.pop_back();
+        }
+    }
+};

@@ -1,0 +1,34 @@
+https://leetcode.com/problems/2-keys-keyboard/
+
+class Solution 
+{
+public:
+    int minSteps(int n) 
+    {
+        if (n == 1)
+            return 0;
+        
+        int div = findLargestDiv(n);
+        if (div == 1)
+            return n;
+        
+        return (n / div) + minSteps(div);
+    }
+private:
+    int findLargestDiv(int n)
+    {
+        int div = 2;
+        while (div <= n)
+        {
+            if (n % div == 0)
+            {
+                return n / div;
+            }
+            
+            div++;
+        }
+        
+        return 1;
+    }
+};
+

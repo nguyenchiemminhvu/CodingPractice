@@ -1,0 +1,55 @@
+https://leetcode.com/problems/add-strings/
+
+class Solution 
+{
+public:
+    string addStrings(string a, string b) 
+    {
+        if (a.length() < b.length())
+            std::swap(a, b);
+        
+        a.insert(a.begin(), '0');
+        
+        int ia = a.length() - 1;
+        int ib = b.length() - 1;
+        int temp = 0;
+        int tempa, tempb;
+        while (ia >= 0 && ib >= 0)
+        {
+            tempa = a[ia] - '0';
+            tempb = b[ib] - '0';
+            tempa += tempb + temp;
+            temp = 0;
+            if (tempa > 9)
+            {
+                tempa -= 10;
+                temp++;
+            }
+            a[ia] = tempa + '0';
+            
+            ia--;
+            ib--;
+        }
+        
+        while (temp)
+        {
+            tempa = a[ia] - '0';
+            tempa += temp;
+            temp = 0;
+            if (tempa > 9)
+            {
+                tempa -= 10;
+                temp++;
+            }
+            a[ia] = tempa + '0';
+            
+            ia--;
+        }
+        
+        
+        if (a[0] == '0')
+            a.erase(a.begin());
+        
+        return a;
+    }
+};

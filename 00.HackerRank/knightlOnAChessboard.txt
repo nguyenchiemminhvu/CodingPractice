@@ -1,0 +1,77 @@
+https://www.hackerrank.com/challenges/knightl-on-chessboard/problem
+
+bool isInBoard(int n, int r, int c)
+{
+    return r >= 0 && r < n && c >= 0 && c < n;
+}
+ 
+std::vector<std::pair<int, int>> GENERATE_STEPS(int a, int b)
+{
+    std::vector<std::pair<int, int>> steps = { {a, b}, {b, a}, {b, -a}, {a, -b}, {-a, -b}, {-b, -a}, {-b, a}, {-a, b} };
+     
+    return steps;
+}
+ 
+int BFS(int n, int endR, int endC, int curR, int curC, int moveR, int moveC, std::vector<std::vector<bool>> &check)
+{
+    std::vector<std::pair<int, int>> steps = GENERATE_STEPS(moveR, moveC);
+     
+    std::queue<std::pair<int, std::pair<int, int>>> Q;
+    Q.push(make_pair(0, make_pair(curR, curC)));
+     
+    while (!Q.empty())
+    {
+        std::pair<int, std::pair<int, int>> curPos = Q.front();
+        Q.pop();
+         
+        if (curPos.second.first == endR && curPos.second.second == endC)
+        {
+            return curPos.first;
+        }
+         
+        for (int i = 0; i < 8; i++)
+        {
+            std::pair<int, int> nextPos;
+            nextPos.first = curPos.second.first + steps[i].first;
+            nextPos.second = curPos.second.second + steps[i].second;
+             
+            if (isInBoard(n, nextPos.first, nextPos.second) && !check[nextPos.first][nextPos.second])
+            {
+                Q.push(make_pair(curPos.first + 1, nextPos));
+                check[nextPos.first][nextPos.second] = true;
+            }
+        }
+    }
+     
+    return -1;
+}
+ 
+vector<vector<int>> knightlOnAChessboard(int n)
+{
+    std::vector<std::vector<int>> res(n, std::vector<int>(n, -1));
+     
+    for (int a = 0; a < n; a++)
+    {
+        for (int b = 0; b <= a; b++)
+        {
+            std::vector<std::vector<bool>> check(n, std::vector<bool>(n, false));
+            res[a][b] = BFS(n, n - 1, n - 1, 0, 0, a + 1, b + 1, check);
+        }
+    }
+     
+    for (auto &v : res)
+    {
+        v.pop_back();
+    }
+    res.pop_back();
+     
+    for (int j = 0; j < res.size(); j++)
+    {
+        for (int i = 0; i < j; i++)
+        {
+            res[i][j] = res[j][i];
+        }
+    }
+     
+    return res;
+}

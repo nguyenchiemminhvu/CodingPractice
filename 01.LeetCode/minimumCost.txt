@@ -1,0 +1,23 @@
+https://leetcode.com/problems/minimum-cost-of-buying-candies-with-discount/
+
+class Solution 
+{
+public:
+    int minimumCost(vector<int>& cost) 
+    {
+        int s = 0;
+        for (const int& n : cost)
+        {
+            s += n;
+        }
+        
+        std::sort(cost.begin(), cost.end(), std::greater<int>());
+        
+        for (int i = 2; i < cost.size(); i += 3)
+        {
+            s -= cost[i];
+        }
+        
+        return s;
+    }
+};

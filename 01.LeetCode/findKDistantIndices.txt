@@ -1,0 +1,24 @@
+https://leetcode.com/problems/find-all-k-distant-indices-in-an-array/
+
+class Solution 
+{
+public:
+    vector<int> findKDistantIndices(vector<int>& nums, int key, int k) 
+    {
+        std::vector<int> res;
+        
+        for (int i = 0; i < nums.size(); i++)
+        {
+            for (int cur = i - k; cur <= i + k; cur++)
+            {
+                if (cur >= 0 && cur < nums.size() && nums[cur] == key)
+                {
+                    res.push_back(i);
+                    break;
+                }
+            }
+        }
+        
+        return res;
+    }
+};

@@ -1,0 +1,81 @@
+https://leetcode.com/problems/number-of-provinces/description/
+
+class UnionFind 
+{
+public:
+    vector<int> parent;
+    vector<int> size;
+    int count;
+
+    UnionFind(int n) 
+    {
+        parent.resize(n);
+        size.resize(n, 1);
+        count = n;
+        for (int i = 0; i < n; i++) 
+        {
+            parent[i] = i;
+        }
+    }
+
+    int find(int x) 
+    {
+        while (x != parent[x]) 
+        {
+            parent[x] = parent[parent[x]];
+            x = parent[x];
+        }
+        return x;
+    }
+
+    bool unite(int x, int y) 
+    {
+        int rootX = find(x);
+        int rootY = find(y);
+        if (rootX == rootY) 
+        {
+            return false;
+        }
+
+        if (size[rootX] < size[rootY]) 
+        {
+            swap(rootX, rootY);
+        }
+
+        parent[rootY] = rootX;
+        size[rootX] += size[rootY];
+        count--;
+        return true;
+    }
+
+    int countParents() 
+    {
+        unordered_set<int> parents;
+        for (int i = 0; i < parent.size(); i++) 
+        {
+            parents.insert(find(i));
+        }
+        return parents.size();
+    }
+};
+
+class Solution 
+{
+public:
+    int findCircleNum(vector<vector<int>>& isConnected) 
+    {
+        UnionFind uf(isConnected.size());
+        for (int i = 0; i < isConnected.size(); i++)
+        {
+            for (int j = 0; j < isConnected.size(); j++)
+            {
+                if (isConnected[i][j] == 1)
+                {
+                    uf.unite(i, j);
+                }
+            }
+        }
+
+        return uf.count;
+    }
+};

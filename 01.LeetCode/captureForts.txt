@@ -1,0 +1,50 @@
+https://leetcode.com/problems/maximum-enemy-forts-that-can-be-captured/description/
+
+class Solution 
+{
+public:
+    int captureForts(vector<int>& forts) 
+    {
+        std::vector<int> my_forts;
+        std::vector<int> enemy_forts;
+
+        for (int i = 0; i < forts.size(); i++)
+        {
+            if (forts[i] == 1)
+            {
+                my_forts.push_back(i);
+            }
+            else if (forts[i] == -1)
+            {
+                enemy_forts.push_back(i);
+            }
+        }
+
+        int res = 0;
+        int im = 0;
+        int ie = 0;
+        while (im < my_forts.size() && ie < enemy_forts.size())
+        {
+            int min_of_max = INT_MAX;
+            if (my_forts[im] < enemy_forts[ie])
+            {
+                while (im < my_forts.size() && my_forts[im] < enemy_forts[ie])
+                {
+                    min_of_max = std::min(min_of_max, enemy_forts[ie] - my_forts[im] - 1);
+                    im++;
+                }
+            }
+            else
+            {
+                while (ie < enemy_forts.size() && enemy_forts[ie] < my_forts[im])
+                {
+                    min_of_max = std::min(min_of_max, my_forts[im] - enemy_forts[ie] - 1);
+                    ie++;
+                }
+            }
+            
+            res = std::max(res, min_of_max);
+        }
+        return res;
+    }
+};

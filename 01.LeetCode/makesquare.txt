@@ -1,0 +1,64 @@
+https://leetcode.com/problems/matchsticks-to-square/
+
+class Solution 
+{
+public:
+    bool makesquare(vector<int>& nums) 
+    {
+        int sum = 0;
+        for (const int& n : nums)
+            sum += n;
+        
+        if (sum % 4 != 0)
+            return false;
+        
+        sum /= 4;
+        
+        std::vector<int> segments(4, 0);
+        std::vector<bool> visited(nums.size(), false);
+        
+        return checking(nums, 0, segments, 0, sum, visited);
+    }
+private:
+    bool checking(const std::vector<int>& nums, int in, std::vector<int>& segments, int is, int sum, std::vector<bool>& visited)
+    {      
+        if (in >= nums.size())
+        {
+            if (is < segments.size() - 1)
+                return false;
+            
+            for (int n : segments)
+            {
+                if (n != sum)
+                    return false;
+            }
+            
+            return true;
+        }
+        
+        if (is >= segments.size())
+        {
+            return false;
+        }
+        
+        if (segments[is] > sum)
+            return false;
+        else if (segments[is] == sum)
+            return checking(nums, in, segments, is + 1, sum, visited);
+        
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (!visited[i])
+            {
+                visited[i] = true;
+                segments[is] += nums[i];
+                if (checking(nums, in + 1, segments, is, sum, visited))
+                    return true;
+                segments[is] -= nums[i];
+                visited[i] = false;
+            }
+        }
+        
+        return false;
+    }
+};

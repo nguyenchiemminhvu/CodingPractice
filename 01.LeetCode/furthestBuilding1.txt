@@ -1,0 +1,64 @@
+https://leetcode.com/problems/furthest-building-you-can-reach/
+
+class Solution 
+{
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) 
+    {
+        // heights.push_back(INT_MAX);
+        // return movingBT(heights, 0, bricks, ladders, 0);
+        return movingDP(heights, bricks, ladders);
+    }
+private:
+    int movingBT(const std::vector<int>& h, int i, int bricks, int ladders, int item)
+    {
+        if (i >= h.size() - 1)
+            return h.size() - 2;
+        
+        if (i > 0 && h[i] > h[i - 1])
+        {
+            cout << i << " " << h[i] - h[i - 1] << " " << item << endl;
+        }
+        
+        if (h[i] >= h[i + 1])
+        {
+            return movingBT(h, i + 1, bricks, ladders, 0);
+        }
+        else
+        {
+            int res = i;
+            if (ladders > 0)
+            {
+                res = std::max(res, movingBT(h, i + 1, bricks, ladders - 1, 2));
+            }
+            if (h[i + 1] - h[i] <= bricks)
+            {
+                res = std::max(res, movingBT(h, i + 1, bricks - (h[i + 1] - h[i]), ladders, 1));
+            }
+            return res;
+        }
+    }
+    
+    int movingDP(const std::vector<int>& h, int bricks, int ladders)
+    {
+        std::priority_queue<int, std::vector<int>, std::greater<int>> Q;
+        int required_bricks = 0;
+        for (int i = 1; i < h.size(); i++)
+        {
+            if (h[i] > h[i - 1])
+            {
+                Q.push(h[i] - h[i - 1]);
+                while (!Q.empty() && Q.size() > ladders)
+                {
+                    required_bricks += Q.top();
+                    Q.pop();
+                }
+                
+                if (Q.size() == ladders && required_bricks > bricks)
+                    return i - 1;
+            }
+        }
+        
+        return h.size() - 1;
+    }
+};

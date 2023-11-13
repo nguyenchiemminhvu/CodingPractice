@@ -1,0 +1,26 @@
+https://leetcode.com/problems/minimum-moves-to-equal-array-elements-ii/
+
+class Solution 
+{
+public:
+    int minMoves2(vector<int>& nums) 
+    {
+        std::sort(nums.begin(), nums.end());
+        int med = medium(nums);
+        
+        int res = 0;
+        for (const int& n : nums)
+        {
+            res += std::abs(n - med);
+        }
+        return res;
+    }
+private:
+    int medium(const std::vector<int>& sorted)
+    {
+        if (sorted.size() & 1)
+            return sorted[sorted.size() / 2];
+        
+        return (sorted[sorted.size() / 2] + sorted[(sorted.size() + 1) / 2]) / 2;
+    }
+};

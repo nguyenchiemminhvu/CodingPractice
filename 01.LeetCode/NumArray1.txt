@@ -1,0 +1,39 @@
+https://leetcode.com/problems/range-sum-query-mutable/
+
+class NumArray 
+{
+public:
+    NumArray(vector<int>& nums) 
+    {
+        arr.swap(nums);
+        sum = arr;
+        for (int i = 1; i < sum.size(); i++)
+            sum[i] += sum[i - 1];
+    }
+    
+    void update(int index, int val) 
+    {
+        int diff = val - arr[index];
+        arr[index] = val;
+        
+        for (int i = index; i < sum.size(); i++)
+        {
+            sum[i] += diff;
+        }
+    }
+    
+    int sumRange(int left, int right) 
+    {
+        return sum[right] - sum[left] + arr[left];
+    }
+private:
+    std::vector<int> arr;
+    std::vector<int> sum;
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * obj->update(index,val);
+ * int param_2 = obj->sumRange(left,right);
+ */

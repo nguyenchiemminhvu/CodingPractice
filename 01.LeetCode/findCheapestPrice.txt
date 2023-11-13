@@ -1,0 +1,53 @@
+https://leetcode.com/problems/cheapest-flights-within-k-stops/description/
+
+class Solution 
+{
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) 
+    {
+        std::vector<std::vector<int>> graph(n, std::vector<int>(n, INT_MAX));
+        for (int i = 0; i < n; i++)
+        {
+            graph[i][i] = 0;
+        }
+
+        for (const std::vector<int>& flight : flights)
+        {
+            graph[flight[0]][flight[1]] = flight[2];
+        }
+
+        std::vector<int> dp(n, INT_MAX);
+        dp[src] = 0;
+
+        std::vector<bool> visited(n, false);
+        visited[src] = true;
+
+        int res = INT_MAX;
+        DFS(graph, visited, src, dst, k, dp, res);
+        
+        return res == INT_MAX ? -1 : res;
+    }
+private:
+    void DFS(const std::vector<std::vector<int>>& graph, std::vector<bool>& visited, int from, int to, int k, std::vector<int>& dp, int& res)
+    {
+        if (k < 0)
+            return;
+
+        for (int i = 0; i < graph.size(); i++)
+        {
+            if (!visited[i] && graph[from][i] != INT_MAX)
+            {
+                visited[i] = true;
+                int prev = dp[i];
+                dp[i] = std::min(dp[i], dp[from] + graph[from][i]);
+                if (i == to)
+                {
+                    res = std::min(res, dp[i]);
+                }
+                DFS(graph, visited, i, to, k - 1, dp, res);
+                dp[i] = prev;
+                visited[i] = false;
+            }
+        }
+    }
+};

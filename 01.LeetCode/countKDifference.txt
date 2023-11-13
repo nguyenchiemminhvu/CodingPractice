@@ -1,0 +1,27 @@
+https://leetcode.com/problems/count-number-of-pairs-with-absolute-difference-k/
+
+class Solution 
+{
+public:
+    int countKDifference(vector<int>& nums, int k) 
+    {
+        int res = 0;
+        
+        std::unordered_map<int, int> freq;
+        for (const int& n : nums)
+        {
+            if (freq[n - k])
+            {
+                res += freq[n - k];
+            }
+            if (freq[n + k])
+            {
+                res += freq[n + k];
+            }
+            
+            freq[n]++;
+        }
+        
+        return res;
+    }
+};

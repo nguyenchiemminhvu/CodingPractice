@@ -1,0 +1,34 @@
+https://leetcode.com/problems/minimum-string-length-after-removing-substrings/description/
+
+class Solution 
+{
+public:
+    int minLength(const string& s) 
+    {
+        std::stack<char> st;
+        for (const char& c : s)
+        {
+            if (c == 'B')
+            {
+                if (!st.empty() && st.top() == 'A')
+                {
+                    st.pop();
+                    continue;
+                }
+            }
+            
+            if (c == 'D')
+            {
+                if (!st.empty() && st.top() == 'C')
+                {
+                    st.pop();
+                    continue;
+                }
+            }
+            
+            st.push(c);
+        }
+
+        return st.size();
+    }
+};

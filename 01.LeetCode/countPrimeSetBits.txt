@@ -1,0 +1,29 @@
+https://leetcode.com/problems/prime-number-of-set-bits-in-binary-representation/
+
+class Solution 
+{
+public:
+    int countPrimeSetBits(int left, int right) 
+    {
+        char primes[8] = { 2, 3, 5, 7, 11, 13, 17, 19 };
+        
+        int res = 0;
+        for (int n = left; n <= right; n++)
+        {
+            if (std::binary_search(primes, primes + 8, countSetBit(n)))
+                res++;
+        }
+        return res;
+    }
+private:
+    int countSetBit(int n)
+    {
+        int count = 0;
+        while (n)
+        {
+            n &= (n - 1);
+            count++;
+        }
+        return count;
+    }
+};

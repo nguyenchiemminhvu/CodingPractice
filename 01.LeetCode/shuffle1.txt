@@ -1,0 +1,41 @@
+https://leetcode.com/problems/shuffle-an-array/
+
+class Solution 
+{
+public:
+    Solution(vector<int>& arr) 
+    {
+        nums.swap(arr);
+        srand(time(NULL));
+    }
+    
+    vector<int> reset() 
+    {
+        return nums;
+    }
+    
+    vector<int> shuffle() 
+    {
+        std::vector<int> res(nums.begin(), nums.end());
+        int n = res.size();
+        
+        while (n)
+        {
+            int ran = rand() % n;
+            std::swap(res[ran], res[n - 1]);
+            
+            n--;
+        }
+        
+        return res;
+    }
+private:
+    std::vector<int> nums;
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(nums);
+ * vector<int> param_1 = obj->reset();
+ * vector<int> param_2 = obj->shuffle();
+ */
