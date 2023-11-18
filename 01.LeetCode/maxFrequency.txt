@@ -1,0 +1,23 @@
+https://leetcode.com/problems/frequency-of-the-most-frequent-element/
+
+class Solution 
+{
+public:
+    int maxFrequency(vector<int>& nums, int k) 
+    {
+        std::sort(nums.begin(), nums.end());
+        long long res = 1, sum = 0;
+        for (long long l = 0, r = 0; r < nums.size(); ++r) 
+        {
+            sum += nums[r];
+            while ((long long)nums[r] * (r - l + 1) - sum > k) 
+            {
+                sum -= nums[l];
+                ++l;
+            }
+            res = std::max(res, r - l + 1);
+        }
+        return res;
+    }
+};
+
