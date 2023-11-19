@@ -1,0 +1,41 @@
+https://leetcode.com/problems/reduction-operations-to-make-the-array-elements-equal/
+
+class Solution 
+{
+public:
+    int reductionOperations(vector<int>& nums)
+    {
+        std::sort(nums.begin(), nums.end(), std::greater<int>());
+        
+        int count_different = 1;
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (nums[i] != nums[i - 1])
+            {
+                count_different++;
+            }
+        }
+
+        int num_operation = 0;
+        int count_reduction = count_different - 1;
+        int cur_value = nums[0];
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (count_reduction == 0)
+            {
+                break;
+            }
+            
+            if (nums[i] != cur_value)
+            {
+                cur_value = nums[i];
+                count_reduction--;
+            }
+            
+            num_operation += count_reduction;
+        }
+
+        return num_operation;
+    }
+};
+
