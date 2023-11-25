@@ -1,0 +1,31 @@
+https://leetcode.com/problems/sum-of-absolute-differences-in-a-sorted-array/
+
+class Solution 
+{
+public:
+    vector<int> getSumAbsoluteDifferences(vector<int>& nums) 
+    {
+        std::vector<int> res(nums.size());
+
+        std::vector<int> prefix(nums.begin(), nums.end());
+        std::vector<int> suffix(nums.begin(), nums.end());
+        for (int i = 1; i < prefix.size(); i++)
+        {
+            prefix[i] += prefix[i - 1];
+        }
+        for (int i = suffix.size() - 2; i >= 0; i--)
+        {
+            suffix[i] += suffix[i + 1];
+        }
+
+        for (int i = 0; i < nums.size(); i++)
+        {
+            res[i] = nums[i] * i - (prefix[i] - nums[i]);
+            res[i] += (suffix[i] - nums[i]);
+            res[i] -= nums[i] * (nums.size() - i - 1);
+        }
+
+        return res;
+    }
+};
+
