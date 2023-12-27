@@ -1,0 +1,9 @@
+https://leetcode.com/problems/find-unique-binary-string/
+
+class Solution:
+    def findDifferentBinaryString(self, nums: List[str]) -> str:
+        n = len(nums[0])
+        for i in range(0, 2 ** n + 1):
+            b_str = "{0:b}".format(i).zfill(n)
+            if (b_str not in nums):
+                return b_str
