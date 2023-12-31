@@ -1,0 +1,27 @@
+https://leetcode.com/problems/merge-two-2d-arrays-by-summing-values/description/
+
+class Solution 
+{
+public:
+    vector<vector<int>> mergeArrays(vector<vector<int>>& nums1, vector<vector<int>>& nums2)
+    {
+        std::vector<std::vector<int>> res;
+
+        std::map<int, int> m;
+        for (const std::vector<int>& v : nums1)
+        {
+            m[v[0]] += v[1];
+        }
+        for (const std::vector<int>& v : nums2)
+        {
+            m[v[0]] += v[1];
+        }
+
+        for (const auto& p : m)
+        {
+            res.push_back({p.first, p.second});
+        }
+
+        return res;
+    }
+};
