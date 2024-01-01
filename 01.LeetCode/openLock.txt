@@ -1,0 +1,26 @@
+class Solution:
+    def openLock(self, deadends: List[str], target: str) -> int:
+        def bfs_string_level_order_with_deadends(start, target, deadends):
+            queue = deque([(start, 0)])  # Add level information to the queue
+            visited = {start}  # Store the visited strings
+            deadends = set(deadends)  # Convert deadends to a set for efficient lookup
+
+            while queue:
+                current, level = queue.popleft()
+                if current == target:
+                    return level  # Return the level when the target string is found
+
+                if current in deadends:
+                    continue  # Skip the current string if it's a deadend
+
+                for i in range(len(current)):
+                    for diff in [-1, 1]:
+                        new_digit = (int(current[i]) + diff) % 10
+                        new_string = current[:i] + str(new_digit) + current[i+1:]
+                        if new_string not in visited and new_string not in deadends:
+                            visited.add(new_string)
+                            queue.append((new_string, level + 1))  # Add level information to the new strings
+
+            return -1  # Return -1 if the target string is not found
+        
+        return bfs_string_level_order_with_deadends("0000", target, deadends)
