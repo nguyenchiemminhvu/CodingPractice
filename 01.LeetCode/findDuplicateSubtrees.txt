@@ -1,0 +1,27 @@
+class Solution
+{
+public:
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root)
+    {
+        vector<TreeNode*> res;
+        unordered_map<string, int> count;
+        traversal(root, count, res);
+        return res;
+    }
+
+private:
+    string traversal(TreeNode* root, unordered_map<string, int>& count, vector<TreeNode*>& res)
+    {
+        if (root == nullptr)
+            return "#";
+        
+        std::string key = std::to_string(root->val) + " " + traversal(root->left, count, res) + " " + traversal(root->right, count, res);
+        if (count[key] == 1)
+        {
+            res.push_back(root);
+        }
+        count[key]++;
+        
+        return key;
+    }
+};

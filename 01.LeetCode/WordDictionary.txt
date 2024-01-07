@@ -1,0 +1,137 @@
+struct TrieNode
+{
+    char ch;
+    bool completed = false;
+    std::unordered_map<char, TrieNode*> nodes;
+};
+
+class Trie
+{
+public:
+    Trie()
+    {
+        root = new TrieNode();
+    }
+    
+    ~Trie()
+    {
+        delete root;
+    }
+    
+    void insert(const std::string& key)
+    {
+        TrieNode* p = root;
+        for (size_t i = 0; i < key.length(); i++)
+        {
+            if (p->nodes[key[i]] == nullptr)
+            {
+                p->nodes[key[i]] = createNode(key[i]);
+            }
+            
+            p = p->nodes[key[i]];
+            if (i == key.length() - 1)
+            {
+                p->completed = true;
+            }
+        }
+    }
+    
+    bool search(const std::string& key)
+    {
+        return searchWildCard(key, 0, root);
+    }
+    
+    void debug()
+    {
+        std::string temp;
+        for (std::pair<char, TrieNode*> p : root->nodes)
+        {
+            debug(p.second, temp);
+        }
+    }
+    
+private:
+    TrieNode* root;
+    
+    TrieNode* createNode(char c, bool com = false)
+    {
+        TrieNode* node = new TrieNode();
+        node->ch = c;
+        node->completed = com;
+        return node;
+    }
+    
+    bool searchWildCard(const std::string& key, size_t i, TrieNode* cur)
+    {
+        if (i == key.length())
+            return cur && cur->completed;
+        
+        if (key[i] == '.')
+        {
+            for (const auto& p : cur->nodes)
+            {
+                if (p.second && searchWildCard(key, i + 1, p.second))
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            if (cur->nodes[key[i]] == nullptr)
+            {
+                return false;
+            }
+            return searchWildCard(key, i + 1, cur->nodes[key[i]]);
+        }
+        
+        return false;
+    }
+    
+    void debug(TrieNode* root, std::string& temp)
+    {
+        if (!root)
+            return;
+        
+        temp += root->ch;
+        if (root->completed)
+        {
+            cout << temp << endl;
+        }
+        
+        for (std::pair<char, TrieNode*> p : root->nodes)
+        {
+            debug(p.second, temp);
+        }
+        temp.pop_back();
+    }
+};
+
+
+class WordDictionary
+{
+public:
+    WordDictionary()
+    {
+        
+    }
+    
+    void addWord(const string& word)
+    {
+        dict.insert(word);
+    }
+    
+    bool search(const string& word)
+    {
+        return dict.search(word);
+    }
+private:
+    Trie dict;
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
