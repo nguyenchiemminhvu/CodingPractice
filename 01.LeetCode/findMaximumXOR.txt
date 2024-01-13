@@ -1,0 +1,59 @@
+struct TrieNode
+{
+    TrieNode* bits[2];
+    TrieNode()
+    {
+        bits[0] = nullptr;
+        bits[1] = nullptr;
+    }
+};
+
+class Solution
+{
+public:
+    int findMaximumXOR(vector<int>& nums)
+    {
+        TrieNode* root = new TrieNode();
+        for (int n : nums)
+        {
+            insert(root, n);
+        }
+        
+        int max_xor = 0;
+        for (int n : nums)
+        {
+            TrieNode* p = root;
+            int cur_xor = 0;
+            for (int i = 31; i >= 0; i--)
+            {
+                int bit = (n >> i) & 1;
+                if (p->bits[bit ^ 1] != nullptr)
+                {
+                    cur_xor += (1 << i);
+                    p = p->bits[bit ^ 1];
+                }
+                else
+                {
+                    p = p->bits[bit];
+                }
+            }
+            
+            max_xor = std::max(max_xor, cur_xor);
+        }
+        return max_xor;
+    }
+private:
+    void insert(TrieNode* root, int num)
+    {
+        TrieNode* p = root;
+        for (int i = 31; i >= 0; i--)
+        {
+            int bit = (num >> i) & 1;
+            if (p->bits[bit] == nullptr)
+            {
+                p->bits[bit] = new TrieNode();
+            }
+            p = p->bits[bit];
+        }
+    }
+};

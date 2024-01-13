@@ -1,0 +1,60 @@
+class Solution
+{
+public:
+    void solveSudoku(vector<vector<char>>& board)
+    {
+        std::vector<std::set<char>> check_rows(9);
+        std::vector<std::set<char>> check_cols(9);
+        std::vector<std::set<char>> check_area(9);
+        
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if (board[i][j] != '.')
+                {
+                    check_rows[i].insert(board[i][j]);
+                    check_cols[j].insert(board[i][j]);
+                    check_area[i / 3 * 3 + j / 3].insert(board[i][j]);
+                }
+            }
+        }
+        
+        bool res = solving(board, 0, 0, check_rows, check_cols, check_area);
+    }
+private:
+    bool solving(std::vector<std::vector<char>>& board, int row, int col, std::vector<std::set<char>>& check_rows, std::vector<std::set<char>>& check_cols, std::vector<std::set<char>>& check_area)
+    {
+        if (row >= 9)
+            return true;
+
+        if (col >= 9)
+        {
+            return solving(board, row + 1, 0, check_rows, check_cols, check_area);
+        }
+
+        if (board[row][col] != '.')
+        {
+            return solving(board, row, col + 1, check_rows, check_cols, check_area);
+        }
+
+        for (char val = '1'; val <= '9'; val++)
+        {
+            if (!check_rows[row].count(val) && !check_cols[col].count(val) && !check_area[row / 3 * 3 + col / 3].count(val))
+            {
+                check_rows[row].insert(val);
+                check_cols[col].insert(val);
+                check_area[row / 3 * 3 + col / 3].insert(val);
+                board[row][col] = val;
+                if (solving(board, row, col + 1, check_rows, check_cols, check_area)) {
+                    return true;
+                }
+                board[row][col] = '.';
+                check_rows[row].erase(val);
+                check_cols[col].erase(val);
+                check_area[row / 3 * 3 + col / 3].erase(val);
+            }
+        }
+        return false;
+    }
+};
