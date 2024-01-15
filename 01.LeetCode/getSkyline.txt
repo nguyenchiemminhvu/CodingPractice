@@ -1,0 +1,120 @@
+class Solution
+{
+    struct Building
+    {
+        int left;
+        int right;
+        int height;
+    };
+
+    struct Strip
+    {
+        int left;
+        int height;
+        
+        Strip(int l = 0, int h = 0)
+        {
+            left = l;
+            height = h;
+        }
+    };
+    
+    std::vector<Strip> mergeStrip(const std::vector<Strip>& left_line, const std::vector<Strip>& right_line)
+    {
+        std::vector<Strip> merged;
+        
+        int h_left = 0;
+        int h_right = 0;
+        
+        int i_left = 0;
+        int i_right = 0;
+        while (i_left < left_line.size() && i_right < right_line.size())
+        {
+            if (left_line[i_left].left < right_line[i_right].left)
+            {
+                int x_left = left_line[i_left].left;
+                h_left = left_line[i_left].height;
+                int maxH = std::max(h_left, h_right);
+                if (merged.empty() || maxH != merged.back().height)
+                {
+                    merged.push_back(Strip(x_left, maxH));
+                }
+                i_left++;
+            }
+            else if (left_line[i_left].left > right_line[i_right].left)
+            {
+                int x_left = right_line[i_right].left;
+                h_right = right_line[i_right].height;
+                int maxH = std::max(h_left, h_right);
+                if (merged.empty() || maxH != merged.back().height)
+                {
+                    merged.push_back(Strip(x_left, maxH));
+                }
+                i_right++;
+            }
+            else
+            {
+                int x_left = left_line[i_left].left;
+                h_left = left_line[i_left].height;
+                h_right = right_line[i_right].height;
+                int maxH = std::max(h_left, h_right);
+                if (merged.empty() || maxH != merged.back().height)
+                {
+                    merged.push_back(Strip(x_left, maxH));
+                }
+                i_left++;
+                i_right++;
+            }
+        }
+        
+        while (i_left < left_line.size())
+        {
+            merged.push_back(left_line[i_left]);
+            i_left++;
+        }
+        
+        while (i_right < right_line.size())
+        {
+            merged.push_back(right_line[i_right]);
+            i_right++;
+        }
+        
+        return merged;
+    }
+    
+    std::vector<Strip> getSkylineRecursive(const std::vector<Building>& building_list, int left, int right)
+    {
+        if (left == right)
+        {
+            std::vector<Strip> strip;
+            strip.push_back({building_list[left].left, building_list[left].height});
+            strip.push_back({building_list[left].right, 0});
+            return strip;
+        }
+        
+        int mid = (left + right) / 2;
+        std::vector<Strip> left_line = getSkylineRecursive(building_list, left, mid);
+        std::vector<Strip> right_line = getSkylineRecursive(building_list, mid + 1, right);
+        return mergeStrip(left_line, right_line);
+    }
+    
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings)
+    {
+        std::vector<std::vector<int>> res;
+        
+        std::vector<Building> building_list;
+        for (const std::vector<int>& building : buildings)
+        {
+            building_list.push_back({building[0], building[1], building[2]});
+        }
+        
+        std::vector<Strip> strip = getSkylineRecursive(building_list, 0, building_list.size() - 1);
+        for (const Strip& s : strip)
+        {
+            res.push_back({s.left, s.height});
+        }
+        
+        return res;
+    }
+};
