@@ -1,0 +1,70 @@
+https://leetcode.com/problems/create-binary-tree-from-descriptions/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution
+{
+public:
+    TreeNode* createBinaryTree(vector<vector<int>>& desc)
+    {
+        std::unordered_map<int, std::pair<int, int>> child_map;
+        int root_value = findRoot(desc, child_map);
+
+        return buildTree(root_value, child_map);
+    }
+private:
+    int findRoot(const std::vector<std::vector<int>>& desc, std::unordered_map<int, std::pair<int, int>>& child_map)
+    {
+        int root = -1;
+        std::unordered_set<int> child;
+        for (const std::vector<int>& d : desc)
+        {
+            child.insert(d[1]);
+        }
+
+        for (const std::vector<int>& d : desc)
+        {
+            if (child.count(d[0]) == 0)
+            {
+                root = d[0];
+            }
+
+            if (d[2])
+            {
+                child_map[d[0]].first = d[1];
+            }
+            else
+            {
+                child_map[d[0]].second = d[1];
+            }
+        }
+
+        return root;
+    }
+
+    TreeNode* buildTree(int root_value, std::unordered_map<int, std::pair<int, int>>& child_map)
+    {
+        TreeNode* root = new TreeNode(root_value);
+
+        if (child_map[root_value].first != 0)
+        {
+            root->left = buildTree(child_map[root_value].first, child_map);
+        }
+
+        if (child_map[root_value].second != 0)
+        {
+            root->right = buildTree(child_map[root_value].second, child_map);
+        }
+
+        return root;
+    }
+};
