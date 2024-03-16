@@ -1,0 +1,34 @@
+https://leetcode.com/problems/contiguous-array/
+
+class Solution 
+{
+public:
+    int findMaxLength(vector<int>& nums) 
+    {
+        for (int& n : nums)
+            if (n == 0)
+                n--;
+        
+        int res = 0;
+
+        int cur_sum = 0;
+        std::unordered_map<int, int> prefix_sum;
+        prefix_sum[0] = -1;
+
+        for (int i = 0; i < nums.size(); i++)
+        {
+            cur_sum += nums[i];
+
+            if (prefix_sum.count(cur_sum))
+            {
+                res = std::max(res, i - prefix_sum[cur_sum]);
+            }
+            else
+            {
+                prefix_sum[cur_sum] = i;
+            }
+        }
+
+        return res;
+    }
+};
