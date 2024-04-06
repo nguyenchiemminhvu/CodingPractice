@@ -6,41 +6,51 @@
 #include <cstdint>
 #include <climits>
 #include <vector>
+#include <unordered_map>
+#include <limits>
 #include <string>
 #include <numeric>
 #include <algorithm>
 
-int64_t minElectricBill(
-    int64_t cur_bat, 
-    int64_t cap_bat, 
-    int64_t num_day, 
-    const std::vector<int64_t>& possible_charge, 
-    const std::vector<int64_t>& consume, 
-    const std::vector<int64_t>& price_rate)
+#define ll long long
+ll original_bat;
+ll cur_bat;
+ll cap_bat;
+ll num_day;
+ll charge[1001];
+ll rate[1001];
+ll consume[1001];
+ll DP[1001][1001];
+
+ll minElectricBill(ll ith_day, ll cur_bat)
 {
-	std::cout << "cur_bat: " << cur_bat << std::endl;
-    std::cout << "cap_bat: " << cap_bat << std::endl;
-    std::cout << "num_day: " << num_day << std::endl;
-
-    std::cout << "possible_charge: ";
-    for (const auto& charge : possible_charge) {
-        std::cout << charge << " ";
+    if (ith_day >= num_day)
+    {
+        if (original_bat <= cur_bat)
+            return 0;
+        return LLONG_MAX;
     }
-    std::cout << std::endl;
 
-    std::cout << "consume: ";
-    for (const auto& c : consume) {
-        std::cout << c << " ";
+    if (DP[ith_day][cur_bat] != -1)
+    {
+        return DP[ith_day][cur_bat];
     }
-    std::cout << std::endl;
 
-    std::cout << "price_rate: ";
-    for (const auto& rate : price_rate) {
-        std::cout << rate << " ";
+    ll use_electric = LLONG_MAX;
+    ll use_battery = LLONG_MAX;
+    use_electric = std::min(use_electric, rate[ith_day] * consume[ith_day] + minElectricBill(ith_day + 1, std::min(cur_bat + charge[ith_day], cap_bat)));
+    if (cur_bat >= consume[ith_day])
+    {
+        use_battery = minElectricBill(ith_day + 1, cur_bat - consume[ith_day]);
     }
-    std::cout << std::endl;
-    
-    return 0;
+
+    if (use_electric < 0)
+    {
+        use_electric = LLONG_MAX;
+    }
+
+    DP[ith_day][cur_bat] = std::min(use_electric, use_battery);
+    return DP[ith_day][cur_bat];
 }
 
 int32_t main()
@@ -49,34 +59,38 @@ int32_t main()
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    int T;
+    ll T;
     std::cin >> T;
 
-    for (int64_t t = 0; t < T; t++)
+    for (ll t = 0; t < T; t++)
     {
-        int64_t N, C, B;
-        std::cin >> N >> B >> C;
+        std::cin >> num_day >> cur_bat >> cap_bat;
 
-        std::vector<int64_t> P(N, 0);
-        std::vector<int64_t> F(N, 0);
-        std::vector<int64_t> D(N, 0);
-
-        for (int i = 0; i < N; i++)
+        for (ll i = 0; i < num_day; i++)
         {
-            std::cin >> P[i];
+            std::cin >> charge[i];
         }
 
-        for (int i = 0; i < N; i++)
+        for (ll i = 0; i < num_day; i++)
         {
-            std::cin >> F[i];
+            std::cin >> rate[i];
         }
 
-        for (int i = 0; i < N; i++)
+        for (ll i = 0; i < num_day; i++)
         {
-            std::cin >> D[i];
+            std::cin >> consume[i];
         }
 
-        std::cout << minElectricBill(B, C, N, P, D, F) << std::endl;
+        for (ll i = 0; i < num_day; i++)
+        {
+            for(ll j = 0; j <= cap_bat; j++)
+            {
+                DP[i][j] = -1;
+            }
+        }
+
+        original_bat = cur_bat;
+        std::cout << minElectricBill(0, cur_bat) << std::endl;
     }
 
     return 0;
