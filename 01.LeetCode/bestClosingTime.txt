@@ -1,0 +1,39 @@
+https://leetcode.com/problems/minimum-penalty-for-a-shop/
+
+class Solution
+{
+public:
+    int bestClosingTime(const string& customers)
+    {
+        int min_pen = INT_MAX;
+        int best_closing_time = -1;
+
+        int sum_Y = 0;
+        int sum_N = 0;
+        for (char c : customers)
+        {
+            sum_Y += (c == 'Y');
+            sum_N += (c == 'N');
+        }
+
+        int cur_Y = 0;
+        int cur_N = 0;
+        for (int closingIdx = 0; closingIdx <= customers.size(); closingIdx++)
+        {
+            int cur_pen = cur_N + (sum_Y - cur_Y);
+            if (min_pen > cur_pen)
+            {
+                min_pen = cur_pen;
+                best_closing_time = closingIdx;
+            }
+
+            if (closingIdx >= customers.size())
+                break;
+            
+            cur_Y += (customers[closingIdx] == 'Y');
+            cur_N += (customers[closingIdx] == 'N');
+        }
+
+        return best_closing_time;
+    }
+};
