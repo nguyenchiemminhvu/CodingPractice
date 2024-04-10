@@ -1,0 +1,34 @@
+https://leetcode.com/problems/minimum-number-of-swaps-to-make-the-string-balanced/
+
+class Solution
+{
+public:
+    int minSwaps(string& s)
+    {
+        if (s.empty())
+            return 0;
+        
+        int count_swap = 0;
+        int count_open = 0;
+        int count_close = 0;
+        for (char c : s)
+        {
+            if (c == '[')
+            {
+                count_open++;
+            }
+            else
+            {
+                count_close++;
+                if (count_close > count_open)
+                {
+                    count_open++;
+                    count_close--;
+                    count_swap++;
+                }
+            }
+        }
+
+        return count_swap;
+    }
+};
