@@ -1,0 +1,30 @@
+https://leetcode.com/problems/max-increase-to-keep-city-skyline/description/
+
+class Solution
+{
+public:
+    int maxIncreaseKeepingSkyline(vector<vector<int>>& grid)
+    {
+        std::vector<int> max_rows(grid.size(), 0);
+        std::vector<int> max_cols(grid[0].size(), 0);
+
+        for (int i = 0; i < grid.size(); i++)
+        {
+            for (int j = 0; j < grid[0].size(); j++)
+            {
+                max_rows[i] = std::max(max_rows[i], grid[i][j]);
+                max_cols[j] = std::max(max_cols[j], grid[i][j]);
+            }
+        }
+
+        int res = 0;
+        for (int i = 0; i < grid.size(); i++)
+        {
+            for (int j = 0; j < grid[0].size(); j++)
+            {
+                res += std::min(max_rows[i], max_cols[j]) - grid[i][j];
+            }
+        }
+        return res;
+    }
+};
