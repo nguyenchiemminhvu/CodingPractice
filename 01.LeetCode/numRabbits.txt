@@ -1,0 +1,33 @@
+https://leetcode.com/problems/rabbits-in-forest/
+
+class Solution
+{
+public:
+    int numRabbits(vector<int>& answers)
+    {
+        int count = 0;
+
+        std::unordered_map<int, int> hash_answer;
+        for (int answer : answers)
+        {
+            if (answer == 0)
+            {
+                count++;
+            }
+            else
+            {
+                if (hash_answer[answer] == 0)
+                {
+                    hash_answer[answer] = answer;
+                    count += answer + 1;
+                }
+                else
+                {
+                    hash_answer[answer]--;
+                }
+            }
+        }
+
+        return count;
+    }
+};
