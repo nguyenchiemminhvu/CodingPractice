@@ -1,0 +1,33 @@
+https://leetcode.com/problems/maximum-score-from-removing-stones/
+
+class Solution
+{
+public:
+    int maximumScore(int a, int b, int c)
+    {
+        // std::vector<int> v = {a, b, c};
+        // std::sort(v.begin(), v.end(), std::greater<int>());
+        // return picking(v);
+
+        int high = std::max({a, b, c});
+        int low = std::min({a, b, c});
+        int mid = a + b + c - high - low;
+        if (low + mid <= high)
+        {
+            return low + mid;
+        }
+
+        return (a + b + c) / 2;
+    }
+private:
+    int picking(std::vector<int>& v)
+    {
+        if (v[1] == 0)
+            return 0;
+        
+        v[0]--;
+        v[1]--;
+        std::sort(v.begin(), v.end(), std::greater<int>());
+        return 1 + picking(v);
+    }
+};
