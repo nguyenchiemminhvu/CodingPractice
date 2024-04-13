@@ -1,0 +1,68 @@
+https://leetcode.com/problems/pancake-sorting/
+
+/*
+3 2 (4) 1, find max
+4 2 3 1, flip begin to max
+1 3 2, 4 flip begin to end -> reduce end to 1
+
+1 (3) 2, find max
+3 1 2, flip begin to max
+2 1, 3 flip begin to end -> reduce end to 1
+
+(2) 1, find max
+2 1, flip begin to max
+1, 2 flip begin to end -> reduce end to 1
+
+end == 0? break loop
+*/
+class Solution
+{
+public:
+    vector<int> pancakeSort(vector<int>& arr)
+    {
+        std::vector<int> k_arr;
+        if (isSorted(arr))
+            return k_arr;
+        
+        int right = arr.size();
+        while (right > 1)
+        {
+            int max_idx = findMaxIdx(arr, right);
+            k_arr.push_back(max_idx + 1);
+            std::reverse(arr.begin(), arr.begin() + max_idx + 1);
+
+            k_arr.push_back(right);
+            std::reverse(arr.begin(), arr.begin() + right);
+
+            right--;
+        }
+
+        return k_arr;    
+    }
+private:
+    bool isSorted(const std::vector<int>& arr)
+    {
+        for (int i = 1; i < arr.size(); i++)
+        {
+            if (arr[i] <= arr[i - 1])
+                return false;
+        }
+        return true;
+    }
+
+    int findMaxIdx(const std::vector<int>& arr, int right)
+    {
+        int max_idx = 0;
+        int max_val = arr[0];
+        for (int i = 0; i < right; i++)
+        {
+            if (max_val < arr[i])
+            {
+                max_val = arr[i];
+                max_idx = i;
+            }
+        }
+
+        return max_idx;
+    }
+};
