@@ -1,0 +1,61 @@
+https://leetcode.com/problems/two-city-scheduling/
+
+class Solution
+{
+public:
+    int twoCitySchedCost(vector<vector<int>>& costs)
+    {
+        std::vector<int> a_city;
+        std::vector<int> b_city;
+
+        int min_cost = 0;
+        for (int i = 0; i < costs.size(); i++)
+        {
+            if (costs[i][0] <= costs[i][1])
+            {
+                min_cost += costs[i][0];
+                a_city.push_back(i);
+            }
+            else
+            {
+                min_cost += costs[i][1];
+                b_city.push_back(i);
+            }
+        }
+
+        if (a_city.size() == b_city.size())
+            return min_cost;
+
+        if (a_city.size() > b_city.size())
+        {
+            return minCostAfterBalancing(costs, min_cost, a_city, 0);
+        }
+        else
+        {
+            return minCostAfterBalancing(costs, min_cost, b_city, 1);
+        }
+    }
+private:
+    int minCostAfterBalancing(const std::vector<std::vector<int>>& costs, int min_cost, std::vector<int>& overflow, int col)
+    {
+        int n = costs.size() / 2;      
+        int n_transfer = overflow.size() - n;
+        int other_col = (col + 1) % 2;
+        std::sort(
+            overflow.begin(), 
+            overflow.end(),
+            [=](int ia, int ib)
+            {
+                return (costs[ia][other_col] - costs[ia][col]) < (costs[ib][other_col] - costs[ib][col]);
+            }
+        );
+
+        for (int i = 0; i < n_transfer; i++)
+        {
+            min_cost += (costs[overflow[i]][other_col] - costs[overflow[i]][col]);
+        }
+
+        return min_cost;
+    }
+};
+
