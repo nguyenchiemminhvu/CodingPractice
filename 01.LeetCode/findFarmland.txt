@@ -1,0 +1,46 @@
+https://leetcode.com/problems/find-all-groups-of-farmland/
+
+class Solution
+{
+public:
+    vector<vector<int>> findFarmland(vector<vector<int>>& land)
+    {
+        int m = land.size();
+        int n = land[0].size();
+        vector<vector<int>> result;
+        
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (land[i][j] == 1)
+                {
+                    int r2 = i, c2 = j;
+                    
+                    while(r2 < m && land[r2][j])
+                    {
+                        r2++;
+                    }
+                    
+                    while(c2 < n && land[i][c2])
+                    {
+                        c2++;
+                    }
+                    
+                    // Mark the group as visited
+                    for (int r = i; r < r2; r++)
+                    {
+                        for (int c = j; c < c2; c++)
+                        {
+                            land[r][c] = -1;
+                        }
+                    }
+                    
+                    result.push_back({i, j, r2 - 1, c2 - 1});
+                }
+            }
+        }
+        
+        return result;
+    }
+};
