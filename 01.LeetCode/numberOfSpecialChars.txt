@@ -1,0 +1,21 @@
+https://leetcode.com/problems/count-the-number-of-special-characters-i
+
+class Solution
+{
+public:
+    int numberOfSpecialChars(const string& word)
+    {
+        std::vector<bool> checker(128, false);
+        for (char c : word)
+        {
+            checker[c] = true;
+        }
+
+        int res = 0;
+        for (char c = 'a'; c <= 'z'; c++)
+        {
+            res += (checker[c] && checker[c & ~32]);
+        }
+        return res;
+    }
+};
