@@ -1,0 +1,71 @@
+https://leetcode.com/problems/minimum-height-trees/
+
+class Solution
+{
+public:
+    vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges)
+    {
+        if (n == 1)
+        {
+            return {0};
+        }
+        
+        vector<int> indegree(n, 0);
+        vector<vector<int>> adjList(n, vector<int>());
+        
+        for (const vector<int>& edge : edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+            
+            adjList[u].push_back(v);
+            adjList[v].push_back(u);
+            
+            indegree[u]++;
+            indegree[v]++;
+        }
+        
+        queue<int> leaves;
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (indegree[i] == 1)
+            {
+                leaves.push(i);
+            }
+        }
+        
+        int remainingNodes = n;
+        
+        while (remainingNodes > 2)
+        {
+            int numLeaves = leaves.size();
+            remainingNodes -= numLeaves;
+            
+            for (int i = 0; i < numLeaves; i++)
+            {
+                int leaf = leaves.front();
+                leaves.pop();
+                
+                for (int neighbor : adjList[leaf])
+                {
+                    indegree[neighbor]--;
+                    if (indegree[neighbor] == 1)
+                    {
+                        leaves.push(neighbor);
+                    }
+                }
+            }
+        }
+        
+        vector<int> minHeightTrees;
+        
+        while (!leaves.empty())
+        {
+            minHeightTrees.push_back(leaves.front());
+            leaves.pop();
+        }
+        
+        return minHeightTrees;
+    }
+};
