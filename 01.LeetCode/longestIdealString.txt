@@ -1,0 +1,30 @@
+https://leetcode.com/problems/longest-ideal-subsequence/
+
+class Solution
+{
+public:
+    int longestIdealString(const string& s, int k)
+    {
+        int n = s.length();
+        vector<int> lastOccur(26, -1);
+        vector<int> dp(n, 1);
+        
+        int maxLen = 1;
+        
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < 26; j++)
+            {
+                if (lastOccur[j] != -1 && abs(s[i] - 'a' - j) <= k)
+                {
+                    dp[i] = max(dp[i], dp[lastOccur[j]] + 1);
+                }
+            }
+            
+            lastOccur[s[i] - 'a'] = i;
+            maxLen = max(maxLen, dp[i]);
+        }
+        
+        return maxLen;
+    }
+};
