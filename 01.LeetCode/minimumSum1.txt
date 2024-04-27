@@ -1,0 +1,33 @@
+https://leetcode.com/problems/determine-the-minimum-sum-of-a-k-avoiding-array/
+
+class Solution
+{
+public:
+    int minimumSum(int n, int k)
+    {
+        int res = 0;
+        std::vector<bool> avoiding(k + 1, false);
+
+        int cur = 1;
+        int count = 0;
+        while (count < n)
+        {
+            if (k - cur >= 0 && avoiding[k - cur])
+            {
+                cur++;
+            }
+            else
+            {
+                res += cur;
+                if (cur <= k)
+                {
+                    avoiding[cur] = true;
+                }
+                cur++;
+                count++;
+            }
+        }
+
+        return res;
+    }
+};
