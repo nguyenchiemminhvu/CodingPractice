@@ -12,8 +12,7 @@ public:
         int right = people.size() - 1;
         while (left <= right)
         {
-            int remain = limit - people[left];
-            if (remain >= people[right])
+            if (people[left] + people[right] <= limit)
             {
                 right--;
             }
