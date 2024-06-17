@@ -1,0 +1,20 @@
+https://leetcode.com/problems/sum-of-square-numbers
+
+class Solution
+{
+public:
+    bool judgeSquareSum(int c) 
+    {
+        int root_c = sqrt(c);
+        for (int i = 0; i <= root_c; i++) 
+        {
+            int remain = c - i * i;
+            int root_remain = sqrt(remain);
+            if (root_remain * root_remain == remain) 
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+};
