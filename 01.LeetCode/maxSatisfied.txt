@@ -1,0 +1,32 @@
+https://leetcode.com/problems/grumpy-bookstore-owner/description/
+
+class Solution
+{
+public:
+    int maxSatisfied(vector<int>& customers, vector<int>& grumpy, int minutes)
+    {
+        int max_cover = 0;
+        int total_lost = 0;
+        
+        for (int i = 0; i < minutes; i++)
+        {
+            total_lost += customers[i] * grumpy[i];
+        }
+        
+        max_cover = total_lost;
+        
+        for (int i = minutes; i < grumpy.size(); i++)
+        {
+            total_lost += customers[i] * grumpy[i] - customers[i - minutes] * grumpy[i - minutes];
+            max_cover = max(max_cover, total_lost);
+        }
+
+        int res = 0;
+        for (int i = 0; i < customers.size(); i++)
+        {
+            res += customers[i] * ((grumpy[i] + 1) % 2);
+        }
+
+        return res + max_cover;
+    }
+};
