@@ -1,0 +1,31 @@
+https://leetcode.com/problems/count-number-of-nice-subarrays/
+
+class Solution
+{
+public:
+    int numberOfSubarrays(vector<int>& nums, int k)
+    {
+        int res = 0;
+
+        int count_odd = 0;
+        std::unordered_map<int, int> freq;
+        freq[0] = 1;
+
+        for (int n : nums)
+        {
+            if (n % 2 == 1)
+            {
+                count_odd++;
+            }
+
+            if (freq.find(count_odd - k) != freq.end())
+            {
+                res += freq[count_odd - k];
+            }
+
+            freq[count_odd]++;
+        }
+
+        return res;
+    }
+};
