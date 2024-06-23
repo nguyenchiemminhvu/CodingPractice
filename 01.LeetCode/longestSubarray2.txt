@@ -1,0 +1,50 @@
+https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/
+
+class Solution
+{
+public:
+    int longestSubarray(vector<int>& nums, int limit)
+    {
+        int res = 0;
+
+        int n = nums.size();
+        int left = 0;
+        int right = 0;
+
+        std::deque<int> maxQ;
+        std::deque<int> minQ;
+        while (right < n)
+        {
+            while (!maxQ.empty() && nums[right] > maxQ.back())
+            {
+                maxQ.pop_back();
+            }
+            maxQ.push_back(nums[right]);
+
+            while (!minQ.empty() && nums[right] < minQ.back())
+            {
+                minQ.pop_back();
+            }
+            minQ.push_back(nums[right]);
+
+            while (maxQ.front() - minQ.front() > limit)
+            {
+                if (maxQ.front() == nums[left])
+                {
+                    maxQ.pop_front();
+                }
+                if (minQ.front() == nums[left])
+                {
+                    minQ.pop_front();
+                }
+
+                left++;
+            }
+
+            res = std::max(res, right - left + 1);
+            right++;
+        }
+
+        return res;
+    }
+};
