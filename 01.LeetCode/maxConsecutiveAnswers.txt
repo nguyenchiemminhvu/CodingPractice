@@ -1,0 +1,45 @@
+https://leetcode.com/problems/maximize-the-confusion-of-an-exam/
+
+class Solution
+{
+public:
+    int maxConsecutiveAnswers(const string& keys, int k)
+    {
+        return std::max(maxUtil(keys, k, 'T'), maxUtil(keys, k, 'F'));
+    }
+
+private:
+    int maxUtil(const std::string& keys, int k, char ch)
+    {
+        int res = 0;
+
+        int n = keys.length();
+        int left = 0;
+        int right = 0;
+        int ch_count = 0;
+        while (right < n)
+        {
+            if (keys[right] == ch)
+            {
+                ch_count++;
+            }
+
+            if (ch_count > k)
+            {
+                while (ch_count > k)
+                {
+                    if (keys[left] == ch)
+                    {
+                        ch_count--;
+                    }
+                    left++;
+                }
+            }
+
+            res = std::max(res, right - left + 1);
+            right++;
+        }
+
+        return res;
+    }
+};
