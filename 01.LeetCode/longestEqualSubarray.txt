@@ -1,0 +1,50 @@
+https://leetcode.com/problems/find-the-longest-equal-subarray/
+
+class Solution
+{
+public:
+    int longestEqualSubarray(std::vector<int>& nums, int k)
+    {
+        int n = nums.size();
+        int res = 0;
+        
+        // Map to store the indices of each element
+        std::unordered_map<int, std::vector<int>> indices;
+        for (int i = 0; i < n; ++i)
+        {
+            indices[nums[i]].push_back(i);
+        }
+
+        // Iterate over each unique element and process its indices
+        for (const auto& entry : indices)
+        {
+            const std::vector<int>& idx = entry.second;
+            int m = idx.size();
+            int left = 0, right = 0;
+            int max_len = 0;
+            
+            // Sliding window to find the maximum equal subarray length
+            while (right < m)
+            {
+                int current_length = (right - left + 1);
+                int deletions_needed = (idx[right] - idx[left] + 1) - current_length;
+
+                if (deletions_needed <= k)
+                {
+                    // Valid window, update the result
+                    max_len = std::max(max_len, current_length);
+                    ++right;
+                }
+                else
+                {
+                    // Move the left bound to reduce deletions needed
+                    ++left;
+                }
+            }
+            
+            res = std::max(res, max_len);
+        }
+
+        return res;
+    }
+};
