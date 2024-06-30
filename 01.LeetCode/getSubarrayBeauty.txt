@@ -1,0 +1,137 @@
+https://leetcode.com/problems/sliding-subarray-beauty/
+
+class Solution
+{
+public:
+    vector<int> getSubarrayBeauty(vector<int>& nums, int k, int x)
+    {
+        ios::sync_with_stdio(false);
+        cin.tie(nullptr);
+        cout.tie(0);
+        
+        std::vector<int> res;
+
+        std::multiset<int> S;
+        for (int i = 0; i < k; i++)
+        {
+            if (nums[i] < 0)
+            {
+                S.insert(nums[i]);
+            }
+        }
+
+        auto fBeauty = [&S, x]()
+        {
+            if (S.size() < x)
+                return 0;
+            auto it = S.begin();
+            std::advance(it, x - 1);
+            return *it;
+        };
+
+        res.push_back(fBeauty());
+        for (int i = k; i < nums.size(); i++)
+        {
+            if (nums[i - k] < 0)
+            {
+                S.erase(S.find(nums[i - k]));
+            }
+            if (nums[i] < 0)
+            {
+                S.insert(nums[i]);
+            }
+
+            res.push_back(fBeauty());
+        }
+
+        return res;    
+    }
+};
+
+//////////////////////////////////////
+
+class FenwickTree
+{
+public:
+    FenwickTree(int size) : tree(size + 1, 0) {}
+
+    void update(int index, int delta)
+    {
+        for (; index < tree.size(); index += index & -index)
+        {
+            tree[index] += delta;
+        }
+    }
+
+    int query(int index) const
+    {
+        int sum = 0;
+        for (; index > 0; index -= index & -index)
+        {
+            sum += tree[index];
+        }
+        return sum;
+    }
+
+private:
+    std::vector<int> tree;
+};
+
+class Solution
+{
+public:
+    std::vector<int> getSubarrayBeauty(std::vector<int>& nums, int k, int x)
+    {
+        const int OFFSET = 51;  // Offset to handle negative indices
+        const int MAX_VAL = 101; // The range of values we are dealing with is [-50, 50]
+        FenwickTree fenwickTree(MAX_VAL);
+
+        std::vector<int> result;
+
+        // Initialize the Fenwick Tree with the first window
+        for (int i = 0; i < k; ++i)
+        {
+            if (nums[i] < 0)
+            {
+                fenwickTree.update(nums[i] + OFFSET, 1);
+            }
+        }
+
+        // Function to get the x-th smallest negative number
+        auto getBeauty = [&fenwickTree, x]()
+        {
+            int left = 1, right = 50; // We only care about negative numbers in the range [1, 50] after offset
+            while (left < right)
+            {
+                int mid = left + (right - left) / 2;
+                if (fenwickTree.query(mid) >= x)
+                {
+                    right = mid;
+                }
+                else
+                {
+                    left = mid + 1;
+                }
+            }
+            return (fenwickTree.query(left) >= x) ? (left - OFFSET) : 0;
+        };
+
+        result.push_back(getBeauty());
+
+        // Slide the window across the array
+        for (int i = k; i < nums.size(); ++i)
+        {
+            if (nums[i - k] < 0)
+            {
+                fenwickTree.update(nums[i - k] + OFFSET, -1);
+            }
+            if (nums[i] < 0)
+            {
+                fenwickTree.update(nums[i] + OFFSET, 1);
+            }
+            result.push_back(getBeauty());
+        }
+
+        return result;
+    }
+};
